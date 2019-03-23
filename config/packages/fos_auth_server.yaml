@@ -4,3 +4,5 @@ fos_oauth_server:
   access_token_class: App\Entity\Auth\AccessToken
   refresh_token_class: App\Entity\Auth\RefreshToken
   auth_code_class: App\Entity\Auth\AuthCode
+  service:
+    user_provider: security.user.provider.concrete.app_user_provider
