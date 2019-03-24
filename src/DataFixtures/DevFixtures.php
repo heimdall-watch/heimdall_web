@@ -5,6 +5,7 @@ namespace App\DataFixtures;
 use App\Entity\Admin;
 use App\Entity\Auth\Client;
 use App\Entity\Student;
+use App\Entity\Teacher;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -47,7 +48,7 @@ class DevFixtures extends Fixture
         $manager->persist($sosthen);
 
         // Teacher 1
-        $jfpp = new Student();
+        $jfpp = new Teacher();
         $jfpp->setUsername("Jfpp")
                 ->setEmail("sosthen.gaillard@gmail.com")
                 ->setPassword($this->encoder->encodePassword($jfpp, "jfpp"));

@@ -11,7 +11,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @ORM\InheritanceType("JOINED")
  * @ORM\DiscriminatorColumn(name="type", type="string")
  */
-class User implements UserInterface
+abstract class User implements UserInterface
 {
     /**
      * @ORM\Id()
@@ -124,5 +124,9 @@ class User implements UserInterface
         $this->email = $email;
 
         return $this;
+    }
+
+    public function getType() {
+        return (new \ReflectionClass($this))->getShortName();
     }
 }
