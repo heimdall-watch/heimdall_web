@@ -3,14 +3,17 @@ security:
         App\Entity\User:
             algorithm: argon2i
 
-    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
-        # used to reload user from session & other features (e.g. switch_user)
         app_user_provider:
             entity:
                 class: App\Entity\User
                 property: username
+
     firewalls:
+
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
 
         oauth_token:
             pattern:    ^/oauth/v2/token
@@ -22,24 +25,18 @@ security:
             stateless:  true
             anonymous:  false
 
-        dev:
-            pattern: ^/(_(profiler|wdt)|css|images|js)/
-            security: false
-
-# TODO : Firewall front web
-#        main:
-#            anonymous: true
-
-            # activate different ways to authenticate
-
-            # http_basic: true
-            # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
-
-            # form_login: true
-            # https://symfony.com/doc/current/security/form_login_setup.html
+        main:
+            anonymous: ~
+            guard:
+                authenticators:
+                    - App\Security\Authenticator
+            logout:
+                path: app_logout
+                target: app_login
 
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        - { path: ^/api, roles: [ ROLE_STUDENT, ROLE_TEACHER ] }
+        - { path: ^/api, roles: IS_AUTHENTICATED_REMEMBERED }
         - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/, roles: IS_AUTHENTICATED_ANONYMOUSLY }

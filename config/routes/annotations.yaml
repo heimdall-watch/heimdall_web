@@ -1,3 +1,15 @@
-controllers:
-    resource: ../../src/Controller/
+api_controllers:
+    resource: ../../src/Controller/Api
+    type: annotation
+    name_prefix: api_
+    prefix: /api
+
+admin_controllers:
+    resource: ../../src/Controller/Admin
+    type: annotation
+    name_prefix: admin_
+    prefix: /admin
+
+security_controller:
+    resource: ../../src/Controller/SecurityController.php
     type: annotation

@@ -2,11 +2,12 @@
 
 namespace App\Controller\Api;
 
+use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ApiTestController extends AbstractController
+class SecurityController extends AbstractController
 {
     /**
      * @Route("/api/test", name="api_test")
@@ -14,6 +15,12 @@ class ApiTestController extends AbstractController
     public function index()
     {
         return $this->json(['ok']);
+    }
+
+    // TODO
+    public function userDetails()
+    {
+
     }
 
     /**
