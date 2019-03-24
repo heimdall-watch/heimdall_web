@@ -2,7 +2,9 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Admin;
 use App\Entity\Auth\Client;
+use App\Entity\Student;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -31,20 +33,25 @@ class DevFixtures extends Fixture
         $manager->persist($client_oauth);
 
         // Brahim
-        $brahim = new User();
+        $brahim = new Admin();
         $brahim->setUsername("Brahim")
                ->setEmail("sosthen.gaillard@gmail.com")
-               ->setPassword($this->encoder->encodePassword($brahim, "brahim"))
-               ->setRoles(['ROLE_ADMIN']);
+               ->setPassword($this->encoder->encodePassword($brahim, "brahim"));
         $manager->persist($brahim);
 
         // Student 1
-        $sosthen = new User();
+        $sosthen = new Student();
         $sosthen->setUsername("Sosthen")
                ->setEmail("sosthen.gaillard@gmail.com")
-               ->setPassword($this->encoder->encodePassword($sosthen, "sosthen"))
-               ->setRoles(['ROLE_STUDENT']);
+               ->setPassword($this->encoder->encodePassword($sosthen, "sosthen"));
         $manager->persist($sosthen);
+
+        // Teacher 1
+        $jfpp = new Student();
+        $jfpp->setUsername("Jfpp")
+                ->setEmail("sosthen.gaillard@gmail.com")
+                ->setPassword($this->encoder->encodePassword($jfpp, "jfpp"));
+        $manager->persist($jfpp);
 
         $manager->flush();
     }
