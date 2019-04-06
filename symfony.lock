@@ -93,12 +93,6 @@
     "doctrine/reflection": {
         "version": "v1.0.0"
     },
-    "friendsofsymfony/oauth-server-bundle": {
-        "version": "1.6.2"
-    },
-    "friendsofsymfony/oauth2-php": {
-        "version": "1.2.3"
-    },
     "friendsofsymfony/rest-bundle": {
         "version": "2.2",
         "recipe": {
@@ -110,6 +104,9 @@
         "files": [
             "config/packages/fos_rest.yaml"
         ]
+    },
+    "gesdinet/jwt-refresh-token-bundle": {
+        "version": "v0.6.2"
     },
     "hoa/compiler": {
         "version": "3.17.08.08"
@@ -172,6 +169,24 @@
             "config/packages/jms_serializer.yaml",
             "config/packages/prod/jms_serializer.yaml"
         ]
+    },
+    "lcobucci/jwt": {
+        "version": "3.2.5"
+    },
+    "lexik/jwt-authentication-bundle": {
+        "version": "2.5",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "2.5",
+            "ref": "509b1542f3180a1cfe248ade8b7bf5092c2d4127"
+        },
+        "files": [
+            "config/packages/lexik_jwt_authentication.yaml"
+        ]
+    },
+    "namshi/jose": {
+        "version": "7.2.3"
     },
     "nikic/php-parser": {
         "version": "v4.2.1"

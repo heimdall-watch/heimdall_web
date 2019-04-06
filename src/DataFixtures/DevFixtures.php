@@ -25,14 +25,6 @@ class DevFixtures extends Fixture
 
     public function load(ObjectManager $manager)
     {
-        // Client oAuth2
-        $client_oauth = new Client();
-        $client_oauth->setRandomId("10hitwtgqdesw4k8sc44wgsogcos8840owcso0ok04cwgskkwg");
-        $client_oauth->setRedirectUris(["http://dev.heimdall.watch"]);
-        $client_oauth->setSecret("1wk8ojwd5ts00osos8wssgkcowooowgs84444ocsc444wg0wcw");
-        $client_oauth->setAllowedGrantTypes(["password", "refresh_token"]);
-        $manager->persist($client_oauth);
-
         // Brahim
         $brahim = new Admin();
         $brahim->setUsername("Brahim")

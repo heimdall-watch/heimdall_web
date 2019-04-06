@@ -10,21 +10,23 @@ use Symfony\Component\Routing\Annotation\Route;
 class SecurityController extends AbstractController
 {
     /**
-     * @Route("/api/test", name="api_test")
+     * @Route("/", name="api_ping", methods={"GET"})
      */
-    public function index()
+    public function ping()
     {
-        return $this->json(['ok']);
-    }
-
-    // TODO
-    public function userDetails()
-    {
-
+        return $this->json(['result' => 'heimdall', 'message' => 'This is a functional Heimdall server.']);
     }
 
     /**
-     * @Route("/api/logout", name="api_logout")
+     * @Route("/test", name="api_test")
+     */
+    public function index() // TEMP
+    {
+        return $this->json(['Logged in as ' . $this->getUser()->getUsername() . ' : ' . implode(', ', $this->getUser()->getRoles())]);
+    }
+
+    /**
+     * @Route("/logout", name="api_logout")
      */
     public function logout() {
         // TODO : Requête dans access_token et refresh_token pour supprimer les enregistrements de l'user

@@ -25,3 +25,9 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    event.authentication_success_listener:
+        class: App\EventListener\ApiAuthenticationSuccessListener
+        arguments: ["%lexik_jwt_authentication.token_ttl%", "%gesdinet_jwt_refresh_token.ttl%"]
+        tags:
+            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_authentication_success, priority: -1, method: onAuthenticationSuccess }

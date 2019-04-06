@@ -1,4 +1,3 @@
-
 ###> symfony/framework-bundle ###
 /.env.local
 /.env.local.php
@@ -6,8 +5,13 @@
 /public/bundles/
 /var/
 /vendor/
+/config/jwt/
 ###< symfony/framework-bundle ###
 
-## Intellik
-.idea/
+## Intellij
+.idea/*
 *.iml
+
+###> lexik/jwt-authentication-bundle ###
+/config/jwt/*.pem
+###< lexik/jwt-authentication-bundle ###
