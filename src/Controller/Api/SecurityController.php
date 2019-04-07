@@ -2,34 +2,54 @@
 
 namespace App\Controller\Api;
 
+use Doctrine\Common\Collections\Collection;
+use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
+use Gesdinet\JWTRefreshTokenBundle\Entity\RefreshToken;
 
-class SecurityController extends AbstractController
+/**
+ * Class SecurityController
+ * @package App\Controller\Api
+ */
+class SecurityController extends AbstractFOSRestController
 {
     /**
-     * @Route("/", name="api_ping", methods={"GET"})
+     * @Rest\Get("/", name="ping")
      */
     public function ping()
     {
-        return $this->json(['result' => 'heimdall', 'message' => 'This is a functional Heimdall server.']);
+        return [
+            'result' => 'heimdall',
+            'message' => 'This is a functional Heimdall server.',
+            'version' => $this->getParameter('heimdall_version')
+        ];
     }
 
     /**
-     * @Route("/test", name="api_test")
+     * @Rest\Get("/test", name="test")
      */
-    public function index() // TEMP
+    public function test() // TEMP
     {
-        return $this->json(['Logged in as ' . $this->getUser()->getUsername() . ' : ' . implode(', ', $this->getUser()->getRoles())]);
+        return ['Logged in as ' . $this->getUser()->getUsername() . ' : ' . implode(', ', $this->getUser()->getRoles())];
     }
 
     /**
-     * @Route("/logout", name="api_logout")
+     * @Rest\Delete("/token/refresh", name="delete_refresh")
      */
-    public function logout() {
-        // TODO : Requête dans access_token et refresh_token pour supprimer les enregistrements de l'user
-        // TODO : Bouger ça dans un vrai controller
+    public function deleteRefreshToken() {
+        $em = $this->getDoctrine()->getManager();
+        /** @var Collection|RefreshToken[] $refreshTokens */
+        $refreshTokens = $em->getRepository(RefreshToken::class)->findBy(['username' => $this->getUser()->getUsername()]);
+        foreach ($refreshTokens as $refreshToken) {
+            $em->remove($refreshToken);
+        }
+
+        try {
+            $em->flush();
+        } catch (\Exception $e) {
+            return false;
+        }
+
+        return true;
     }
 }

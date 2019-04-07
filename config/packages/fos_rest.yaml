@@ -1,15 +1,16 @@
 # Read the documentation: https://symfony.com/doc/master/bundles/FOSRestBundle/index.html
-fos_rest: ~
-#    param_fetcher_listener:  true
-#    allowed_methods_listener:  true
-#    routing_loader: true
-#    view:
-#        view_response_listener:  true
-#    exception:
-#        codes:
-#            App\Exception\MyException: 403
-#        messages:
-#            App\Exception\MyException: Forbidden area.
-#    format_listener:
-#        rules:
-#            - { path: ^/api, prefer_extension: true, fallback_format: json, priorities: [ json, html ] }
+fos_rest:
+  allowed_methods_listener: true
+  access_denied_listener:
+    json: true
+  exception:
+    enabled: true
+  routing_loader: # https://symfony.com/doc/master/bundles/FOSRestBundle/7-manual-route-definition.html#method-name-prefix
+    prefix_methods: false
+  format_listener: # https://symfony.com/doc/master/bundles/FOSRestBundle/format_listener.html
+    enabled: true
+    rules:
+      - { path: ^/api, prefer_extension: false, fallback_format: json, priorities: [ json ] }
+      - { path: ^/, stop: true }
+  view:
+    view_response_listener: 'force'

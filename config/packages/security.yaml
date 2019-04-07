@@ -15,7 +15,7 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
-        login:
+        api_login:
             pattern:  ^/api/login
             stateless: true
             anonymous: true
@@ -24,11 +24,13 @@ security:
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
 
-        refresh:
+        api_refresh:
             pattern:  ^/api/token/refresh
+            methods: [GET]
             stateless: true
             anonymous: true
 
+        # Used by the mobile app to know if this is an heimdall server
         api_ping:
             pattern: ^/api/$
             anonymous: true
@@ -40,7 +42,7 @@ security:
                 authenticators:
                     - lexik_jwt_authentication.jwt_token_authenticator
 
-        main:
+        web:
             anonymous: ~
             guard:
                 authenticators:
@@ -53,7 +55,8 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/api/token/refresh, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/token/refresh, roles: IS_AUTHENTICATED_ANONYMOUSLY, methods: [GET] }
+        - { path: ^/api/token/refresh, roles: IS_AUTHENTICATED_FULLY, methods: [DELETE] }
         - { path: ^/api/$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/admin, roles: ROLE_ADMIN }
