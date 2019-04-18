@@ -2,8 +2,11 @@
 
 namespace App\Form;
 
+use App\Entity\ClassGroup;
 use App\Entity\Teacher;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -13,10 +16,12 @@ class TeacherType extends AbstractType
     {
         $builder
             ->add('username')
-            ->add('roles')
-            ->add('password')
-            ->add('email')
-            ->add('classGroups')
+            ->add('email', EmailType::class)
+            ->add('classGroups', EntityType::class, [
+                'class' => ClassGroup::class,
+                'choice_label' => 'name',
+                'multiple' => true,
+            ])
         ;
     }
 

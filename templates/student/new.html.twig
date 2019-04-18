@@ -5,7 +5,7 @@
 {% block body %}
     <h1>Create new Student</h1>
 
-    {{ include('admin/student/_form.html.twig') }}
+    {{ include('student/_form.html.twig') }}
 
-    <a href="{{ path('admin_student_index') }}">back to list</a>
+    <a href="{{ path('student_index') }}">back to list</a>
 {% endblock %}

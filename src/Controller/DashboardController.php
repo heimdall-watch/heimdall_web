@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Admin;
+namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -12,7 +12,7 @@ class DashboardController extends AbstractController
      */
     public function index()
     {
-        return $this->render('admin/index.html.twig', [
+        return $this->render('index.html.twig', [
             'controller_name' => 'DashboardController',
         ]);
     }

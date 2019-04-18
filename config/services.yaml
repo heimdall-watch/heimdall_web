@@ -33,3 +33,4 @@ services:
         tags:
             - { name: kernel.event_listener, event: lexik_jwt_authentication.on_authentication_success, priority: -1, method: onAuthenticationSuccess }
             - { name: kernel.event_listener, event: gesdinet.refresh_token, method: onTokenRefresh }
+

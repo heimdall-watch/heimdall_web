@@ -108,6 +108,9 @@
     "gesdinet/jwt-refresh-token-bundle": {
         "version": "v0.6.2"
     },
+    "hackzilla/password-generator": {
+        "version": "1.4.0"
+    },
     "hoa/compiler": {
         "version": "3.17.08.08"
     },

@@ -8,14 +8,13 @@
     <body>
         {% block body %}{% endblock %}
         {% block javascripts %}
-
-            {% for label,messages in app.flashs %}
-            {% for message in messages %}
-            alert('{{ label }}: {{ message }}');
-            {% endfor %}
-            {% endfor %}
-
-
+            <script type="text/javascript">
+                {% for label,messages in app.flashes %}
+                    {% for message in messages %}
+                        alert('{{ label }}: {{ message }}');
+                    {% endfor %}
+                {% endfor %}
+            </script>
         {% endblock %}
     </body>
 </html>
