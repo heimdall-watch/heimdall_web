@@ -7,6 +7,15 @@
     </head>
     <body>
         {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
+        {% block javascripts %}
+
+            {% for label,messages in app.flashs %}
+            {% for message in messages %}
+            alert('{{ label }}: {{ message }}');
+            {% endfor %}
+            {% endfor %}
+
+
+        {% endblock %}
     </body>
 </html>
