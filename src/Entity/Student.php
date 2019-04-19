@@ -15,6 +15,7 @@ class Student extends User
 
     /**
      * @ORM\ManyToOne(targetEntity="ClassGroup", inversedBy="students")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $classGroup;
 

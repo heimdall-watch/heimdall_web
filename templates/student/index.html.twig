@@ -12,7 +12,9 @@
                 <th>Photo</th>
                 <th>Username</th>
                 <th>Email</th>
+                <th>Groupe</th>
                 <th>actions</th>
+
             </tr>
         </thead>
         <tbody>
@@ -22,6 +24,7 @@
                 <td>{{ student.photo }}</td>
                 <td>{{ student.username }}</td>
                 <td>{{ student.email }}</td>
+                <td>{{ student.ClassGroup.name }}</td>
                 <td>
                     <a href="{{ path('student_show', {'id': student.id}) }}">show</a>
                     <a href="{{ path('student_edit', {'id': student.id}) }}">edit</a>
