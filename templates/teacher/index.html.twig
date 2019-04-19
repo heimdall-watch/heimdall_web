@@ -10,8 +10,6 @@
             <tr>
                 <th>Id</th>
                 <th>Username</th>
-                <th>Roles</th>
-                <th>Password</th>
                 <th>Email</th>
                 <th>actions</th>
             </tr>
@@ -21,8 +19,6 @@
             <tr>
                 <td>{{ teacher.id }}</td>
                 <td>{{ teacher.username }}</td>
-                <td>{{ teacher.roles ? teacher.roles|json_encode : '' }}</td>
-                <td>{{ teacher.password }}</td>
                 <td>{{ teacher.email }}</td>
                 <td>
                     <a href="{{ path('teacher_show', {'id': teacher.id}) }}">show</a>
