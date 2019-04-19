@@ -22,6 +22,14 @@
         </tbody>
     </table>
 
+    <h1>Groupes</h1>
+    <ul>
+        {% for classGroups in teacher.classGroups%}
+            <li>{{ classGroups.name }}</li>
+            <br>
+        {% endfor %}
+    </ul>
+
     <a href="{{ path('teacher_index') }}">back to list</a>
 
     <a href="{{ path('teacher_edit', {'id': teacher.id}) }}">edit</a>

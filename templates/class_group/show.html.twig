@@ -18,6 +18,24 @@
         </tbody>
     </table>
 
+    <h1>Students</h1>
+    <ul>
+        {% for student in class_group.students %}
+            <li>{{ student.id }}</li>
+            <li>{{ student.username }}</li>
+            <br>
+        {% endfor %}
+    </ul>
+
+    <h1>Teachers</h1>
+    <ul>
+        {% for teacher in class_group.teachers %}
+            <li>{{ teacher.id }}</li>
+            <li>{{ teacher.username }}</li>
+            <br>
+        {% endfor %}
+    </ul>
+
     <a href="{{ path('class_group_index') }}">back to list</a>
 
     <a href="{{ path('class_group_edit', {'id': class_group.id}) }}">edit</a>

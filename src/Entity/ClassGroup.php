@@ -29,6 +29,11 @@ class ClassGroup
     private $students;
 
     /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Teacher", mappedBy="classGroups")
+     */
+    private $teachers;
+
+    /**
      * @ORM\OneToMany(targetEntity="RollCall", mappedBy="classGroup")
      */
     private $rollCalls;
@@ -36,6 +41,7 @@ class ClassGroup
     public function __construct()
     {
         $this->students = new ArrayCollection();
+        $this->teachers = new ArrayCollection();
         $this->rollCalls = new ArrayCollection();
     }
 
@@ -117,4 +123,37 @@ class ClassGroup
 
         return $this;
     }
+
+
+    /**
+     * @return Collection|User[]
+     */
+    public function getTeachers(): Collection
+    {
+        return $this->teachers;
+    }
+
+    public function addTeacher(User $teacher): self
+    {
+        if (!$this->teachers->contains($teacher)) {
+            $this->teachers[] = $teacher;
+            $teacher->setClassGroup($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTeacher(User $teacher): self
+    {
+        if ($this->teachers->contains($teacher)) {
+            $this->teachers->removeElement($teacher);
+            // set the owning side to null (unless already changed)
+            if ($teacher->getClassGroup() === $this) {
+                $teacher->setClassGroup(null);
+            }
+        }
+
+        return $this;
+    }
+
 }
