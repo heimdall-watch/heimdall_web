@@ -31,6 +31,9 @@
     <ul>
         {% for presence in student.presences %}
             <li>{{ presence.id }}</li>
+            <li>{{ presence.rollcall.date|date("Y-m-d")}}</li>
+            <li>{{ presence.rollcall.duration}}</li>
+            <li>{{ presence.present ? 'oui' : 'non'}}</li>
         {% endfor %}
     </ul>
 
