@@ -1,0 +1,9 @@
+<form method="post" action="{{ path(path, {'id': id}) }}" onsubmit="return confirm('{{ 'delete_confirm'|trans }}');" {% if (min is defined) %}class="d-inline"{% endif %}>
+    <input type="hidden" name="_method" value="DELETE">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ id) }}">
+    {% if (min is defined) %}
+        <button class="btn btn-link btn-xs text-danger" title="{{ 'delete'|trans }}" data-toggle="tooltip"><i class="fa fa-trash"></i></button>
+    {% else %}
+        <button class="btn btn-danger ml-4"><i class="fa fa-trash"></i> {{ 'delete'|trans }}</button>
+    {% endif %}
+</form>

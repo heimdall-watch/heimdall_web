@@ -8,7 +8,6 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Username</th>
                 <th>Email</th>
                 <th>actions</th>
@@ -17,12 +16,12 @@
         <tbody>
         {% for admin in admins %}
             <tr>
-                <td>{{ admin.id }}</td>
                 <td>{{ admin.username }}</td>
                 <td>{{ admin.email }}</td>
                 <td>
-                    <a href="{{ path('admin_show', {'id': admin.id}) }}">show</a>
-                    <a href="{{ path('admin_edit', {'id': admin.id}) }}">edit</a>
+                    <a class="btn btn-link btn-xs text-info" title="{{ 'see_details'|trans }}" data-toggle="tooltip" href="{{ path('admin_show', {'id': admin.id}) }}"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                    <a class="btn btn-link btn-xs text-warning" title="{{ 'edit'|trans }}" data-toggle="tooltip" href="{{ path('admin_edit', {'id': admin.id}) }}"><i class="fa fa-edit" aria-hidden="true"></i></a>
+                    {% include 'ui/_delete_form.html.twig' with { id: admin.id, path: 'admin_delete', min: true } %}
                 </td>
             </tr>
         {% else %}
@@ -33,5 +32,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('admin_new') }}">Create new</a>
+    <a href="{{ path('admin_new') }}" class="btn btn-success">Create new</a>
 {% endblock %}

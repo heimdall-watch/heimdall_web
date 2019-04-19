@@ -8,7 +8,6 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Photo</th>
                 <th>Username</th>
                 <th>Email</th>
@@ -20,15 +19,14 @@
         <tbody>
         {% for student in students %}
             <tr>
-                <td>{{ student.id }}</td>
-                <td> {% if(student.photo is not null ) %}<img src="{{asset('/students/photos/') ~ student.photo }}"/>{% endif %}</td>
-                <td> {{asset('/public/students/photos/'~student.photo) }}</td>
+                <td>{% if student.photo is not null %}<img src="{{ asset('/students/photos/') ~ student.photo }}" alt="photo">{% endif %}</td>
                 <td>{{ student.username }}</td>
                 <td>{{ student.email }}</td>
                 <td>{{ student.ClassGroup.name }}</td>
                 <td>
-                    <a href="{{ path('student_show', {'id': student.id}) }}">show</a>
-                    <a href="{{ path('student_edit', {'id': student.id}) }}">edit</a>
+                    <a class="btn btn-link btn-xs text-info" title="{{ 'see_details'|trans }}" data-toggle="tooltip" href="{{ path('student_show', {'id': student.id}) }}"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                    <a class="btn btn-link btn-xs text-warning" title="{{ 'edit'|trans }}" data-toggle="tooltip" href="{{ path('student_edit', {'id': student.id}) }}"><i class="fa fa-edit" aria-hidden="true"></i></a>
+                    {% include 'ui/_delete_form.html.twig' with { id: student.id, path: 'student_delete', min: true } %}
                 </td>
             </tr>
         {% else %}
@@ -39,5 +37,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('student_new') }}">Create new</a>
+    <a href="{{ path('student_new') }}" class="btn btn-success">Create new</a>
 {% endblock %}

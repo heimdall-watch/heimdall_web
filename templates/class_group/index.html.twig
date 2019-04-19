@@ -8,7 +8,6 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Name</th>
                 <th>actions</th>
             </tr>
@@ -16,11 +15,11 @@
         <tbody>
         {% for class_group in class_groups %}
             <tr>
-                <td>{{ class_group.id }}</td>
                 <td>{{ class_group.name }}</td>
                 <td>
-                    <a href="{{ path('class_group_show', {'id': class_group.id}) }}">show</a>
-                    <a href="{{ path('class_group_edit', {'id': class_group.id}) }}">edit</a>
+                    <a class="btn btn-link btn-xs text-info" title="{{ 'see_details'|trans }}" data-toggle="tooltip" href="{{ path('class_group_show', {'id': class_group.id}) }}"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                    <a class="btn btn-link btn-xs text-warning" title="{{ 'edit'|trans }}" data-toggle="tooltip" href="{{ path('class_group_edit', {'id': class_group.id}) }}"><i class="fa fa-edit" aria-hidden="true"></i></a>
+                    {% include 'ui/_delete_form.html.twig' with { id: class_group.id, path: 'class_group_delete', min: true } %}
                 </td>
             </tr>
         {% else %}
@@ -31,5 +30,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('class_group_new') }}">Create new</a>
+    <a href="{{ path('class_group_new') }}" class="btn btn-success">Create new</a>
 {% endblock %}
