@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ClassGroup index{% endblock %}
+
+{% block body %}
+    <h1>ClassGroup index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for class_group in class_groups %}
+            <tr>
+                <td>{{ class_group.id }}</td>
+                <td>{{ class_group.name }}</td>
+                <td>
+                    <a href="{{ path('class_group_show', {'id': class_group.id}) }}">show</a>
+                    <a href="{{ path('class_group_edit', {'id': class_group.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('class_group_new') }}">Create new</a>
+{% endblock %}

@@ -26,6 +26,16 @@
         </tbody>
     </table>
 
+
+    <h1>Presence of the student</h1>
+    <ul>
+        {% for presence in student.presences %}
+            <li>{{ presence.id }}</li>
+        {% endfor %}
+    </ul>
+
+
+
     <a href="{{ path('student_index') }}">back to list</a>
 
     <a href="{{ path('student_edit', {'id': student.id}) }}">edit</a>
