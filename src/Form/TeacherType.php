@@ -19,8 +19,8 @@ class TeacherType extends AbstractType
             ->add('email', EmailType::class)
             ->add('classGroups', EntityType::class, [
                 'class' => ClassGroup::class,
-                'choice_label' => 'name',
                 'multiple' => true,
+                'choice_label' => 'name',
             ])
         ;
     }

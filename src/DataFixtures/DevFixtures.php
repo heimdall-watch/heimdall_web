@@ -42,6 +42,10 @@ class DevFixtures extends Fixture
                ->setPassword($this->encoder->encodePassword($sosthen, "sosthen"));
         $manager->persist($sosthen);
 
+        $miage = new ClassGroup();
+        $miage->setName('MIAGE')->addStudent($sosthen);
+        $manager->persist($miage);
+
         // Teacher 1
         $jfpp = new Teacher();
         $jfpp->setUsername("Jfpp")

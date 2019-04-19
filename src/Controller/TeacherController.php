@@ -38,6 +38,8 @@ class TeacherController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
             $teacher->setPassword($passwordEncoder->encodePassword($teacher, $teacher->getPassword()));
+
+
             $entityManager->persist($teacher);
             $entityManager->flush();
 
