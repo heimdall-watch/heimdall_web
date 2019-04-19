@@ -14,7 +14,7 @@ class Teacher extends User
     protected $roles = ['ROLE_TEACHER'];
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\ClassGroup")
+     * @ORM\ManyToMany(targetEntity="App\Entity\ClassGroup", inversedBy="teachers")
      */
     private $classGroups;
 
