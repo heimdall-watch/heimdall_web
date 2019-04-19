@@ -5,10 +5,12 @@ namespace App\Controller;
 use App\Entity\Admin;
 use App\Form\AdminType;
 use App\Repository\AdminRepository;
+use Hackzilla\PasswordGenerator\Generator\ComputerPasswordGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
  * @Route("/admin")
@@ -28,7 +30,7 @@ class AdminController extends AbstractController
     /**
      * @Route("/new", name="admin_new", methods={"GET","POST"})
      */
-    public function new(Request $request): Response
+    public function new(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
     {
         $admin = new Admin();
         $form = $this->createForm(AdminType::class, $admin);
@@ -36,6 +38,20 @@ class AdminController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
+
+            $passwordGenerator = new ComputerPasswordGenerator();
+            $passwordGenerator
+                ->setUppercase()
+                ->setLowercase()
+                ->setNumbers()
+                ->setSymbols(false)
+                ->setLength(10);
+            $password = $passwordGenerator->generatePassword();
+            $admin->setPassword($passwordEncoder->encodePassword($admin, $password));
+
+            // TEMP
+            $this->addFlash('info', $password);
+
             $entityManager->persist($admin);
             $entityManager->flush();
 

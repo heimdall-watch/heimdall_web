@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Admin;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -13,9 +14,7 @@ class AdminType extends AbstractType
     {
         $builder
             ->add('username')
-            ->add('roles')
-            ->add('password')
-            ->add('email')
+            ->add('email', EmailType::class)
         ;
     }
 
