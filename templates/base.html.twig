@@ -2,16 +2,23 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
+        <title>{% block title %}Heimdall{% endblock %}</title>
+        {% block stylesheets %}
+            {{ encore_entry_link_tags('app') }}
+        {% endblock %}
     </head>
     <body>
+    <div class="container">
+
         {% block body %}{% endblock %}
+    </div>
         {% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
             <script type="text/javascript">
+                {# Flash messages #}
                 {% for label,messages in app.flashes %}
                     {% for message in messages %}
-                        alert('{{ label }}: {{ message }}');
+                        $.notify('{{ message|e('js') }}', { type: '{{ label }}' });
                     {% endfor %}
                 {% endfor %}
             </script>
