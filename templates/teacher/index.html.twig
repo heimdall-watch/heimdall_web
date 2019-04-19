@@ -8,7 +8,6 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Username</th>
                 <th>Email</th>
                 <th>actions</th>
@@ -17,12 +16,12 @@
         <tbody>
         {% for teacher in teachers %}
             <tr>
-                <td>{{ teacher.id }}</td>
                 <td>{{ teacher.username }}</td>
                 <td>{{ teacher.email }}</td>
                 <td>
-                    <a href="{{ path('teacher_show', {'id': teacher.id}) }}">show</a>
-                    <a href="{{ path('teacher_edit', {'id': teacher.id}) }}">edit</a>
+                    <a class="btn btn-link btn-xs text-info" title="{{ 'see_details'|trans }}" data-toggle="tooltip" href="{{ path('teacher_show', {'id': teacher.id}) }}"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                    <a class="btn btn-link btn-xs text-warning" title="{{ 'edit'|trans }}" data-toggle="tooltip" href="{{ path('teacher_edit', {'id': teacher.id}) }}"><i class="fa fa-edit" aria-hidden="true"></i></a>
+                    {% include 'ui/_delete_form.html.twig' with { id: teacher.id, path: 'teacher_delete', min: true } %}
                 </td>
             </tr>
         {% else %}
@@ -33,5 +32,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('teacher_new') }}">Create new</a>
+    <a href="{{ path('teacher_new') }}" class="btn btn-success">Create new</a>
 {% endblock %}

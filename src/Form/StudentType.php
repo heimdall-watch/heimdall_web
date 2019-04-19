@@ -11,6 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class StudentType extends AbstractType
 {
@@ -19,8 +20,9 @@ class StudentType extends AbstractType
         $builder
             ->add('username')
             ->add('email', EmailType::class)
-            ->add('photo', FileType::class, [
+            ->add('photoFile', VichImageType::class, [
                 'required' => false,
+                'allow_delete' => true
             ])
             ->add('classGroup', EntityType::class, [
                 'class' => ClassGroup::class,
