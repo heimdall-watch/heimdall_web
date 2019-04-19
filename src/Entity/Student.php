@@ -5,9 +5,12 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\StudentRepository")
+ * @Vich\Uploadable
  */
 class Student extends User
 {
@@ -24,10 +27,20 @@ class Student extends User
      */
     private $presences;
 
+
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $photo;
+
+    /**
+     * @Vich\UploadableField(mapping="students_photos", fileNameProperty="photo")
+     * @var File
+     */
+    private $photoFile;
+
+
+
 
     public function __construct()
     {
@@ -77,15 +90,25 @@ class Student extends User
         return $this;
     }
 
-    public function getPhoto(): ?string
+    public function setPhotoFile(File $photo = null)
+    {
+        $this->photoFile = $photo;
+        return $this;
+    }
+    public function getPhotoFile()
+    {
+        return $this->photoFile;
+    }
+
+    public function setPhoto($photo)
+    {
+        $this->photo = $photo;
+        return $this;
+    }
+
+    public function getPhoto()
     {
         return $this->photo;
     }
 
-    public function setPhoto(?string $photo): self
-    {
-        $this->photo = $photo;
-
-        return $this;
-    }
 }

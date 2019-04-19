@@ -21,7 +21,8 @@
         {% for student in students %}
             <tr>
                 <td>{{ student.id }}</td>
-                <td>{{ student.photo }}</td>
+                <td> {% if(student.photo is not null ) %}<img src="{{asset('/students/photos/') ~ student.photo }}"/>{% endif %}</td>
+                <td> {{asset('/public/students/photos/'~student.photo) }}</td>
                 <td>{{ student.username }}</td>
                 <td>{{ student.email }}</td>
                 <td>{{ student.ClassGroup.name }}</td>
