@@ -19,18 +19,11 @@ class SecurityController extends AbstractFOSRestController
     public function ping()
     {
         return [
+            'server_name' => getenv('SERVER_NAME'),
             'result' => 'heimdall',
             'message' => 'This is a functional Heimdall server.',
             'version' => $this->getParameter('heimdall_version')
         ];
-    }
-
-    /**
-     * @Rest\Get("/test", name="test")
-     */
-    public function test() // TEMP
-    {
-        return ['Logged in as ' . $this->getUser()->getUsername() . ' : ' . implode(', ', $this->getUser()->getRoles())];
     }
 
     /**

@@ -38,7 +38,7 @@ class ApiAuthenticationListener
             $data['refresh_token_expires'] = $now_milli + $this->refreshTokenExpires;
         }
 
-        $data['user'] = ['username' => $user->getUsername(), 'type' => $user->getType()];
+        $data['user'] = ['username' => $user->getUsername(), 'type' => $user->getType(), 'lastLogin' => $user->getLastLogin()];
 
         $event->setData($data);
     }

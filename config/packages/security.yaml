@@ -26,7 +26,7 @@ security:
 
         api_refresh:
             pattern:  ^/api/token/refresh
-            methods: [GET]
+            methods: [POST]
             stateless: true
             anonymous: true
 
@@ -56,7 +56,7 @@ security:
     access_control:
         # API
         - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/api/token/refresh, roles: IS_AUTHENTICATED_ANONYMOUSLY, methods: [GET] }
+        - { path: ^/api/token/refresh, roles: IS_AUTHENTICATED_ANONYMOUSLY, methods: [POST] }
         - { path: ^/api/token/refresh, roles: IS_AUTHENTICATED_FULLY, methods: [DELETE] }
         - { path: ^/api/$, roles: IS_AUTHENTICATED_ANONYMOUSLY, methods: [GET] }
         - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }

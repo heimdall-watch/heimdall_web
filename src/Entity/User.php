@@ -41,6 +41,15 @@ abstract class User implements UserInterface
      */
     protected $email;
 
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $lastLogin;
+
+    public function getType() {
+        return (new \ReflectionClass($this))->getShortName();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -124,7 +133,15 @@ abstract class User implements UserInterface
         return $this;
     }
 
-    public function getType() {
-        return (new \ReflectionClass($this))->getShortName();
+    public function getLastLogin(): ?\DateTimeInterface
+    {
+        return $this->lastLogin;
+    }
+
+    public function setLastLogin(?\DateTimeInterface $lastLogin): self
+    {
+        $this->lastLogin = $lastLogin;
+
+        return $this;
     }
 }
