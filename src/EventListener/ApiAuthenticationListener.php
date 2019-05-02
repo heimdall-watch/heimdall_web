@@ -6,16 +6,19 @@ use App\Entity\User;
 use Gesdinet\JWTRefreshTokenBundle\Event\RefreshEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
 use Psr\Log\LoggerInterface;
+use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 
 class ApiAuthenticationListener
 {
     private $logger;
+    private $uploaderHelper;
     private $tokenExpires;
     private $refreshTokenExpires;
 
-    public function __construct($tokenExpires, $refreshTokenExpires, LoggerInterface $logger)
+    public function __construct($tokenExpires, $refreshTokenExpires, LoggerInterface $logger, UploaderHelper $uploaderHelper)
     {
         $this->logger = $logger;
+        $this->uploaderHelper = $uploaderHelper;
         $this->tokenExpires = $tokenExpires * 1000;
         $this->refreshTokenExpires = $refreshTokenExpires * 1000;
     }
@@ -38,7 +41,8 @@ class ApiAuthenticationListener
             $data['refresh_token_expires'] = $now_milli + $this->refreshTokenExpires;
         }
 
-        $data['user'] = ['username' => $user->getUsername(), 'type' => $user->getType(), 'lastLogin' => $user->getLastLogin()];
+        // TODO : JMSSerializer
+        $data['user'] = ['username' => $user->getUsername(), 'type' => $user->getType(), 'lastLogin' => $user->getLastLogin(), 'photo' => $this->uploaderHelper->asset($user, 'photoFile')];
 
         $event->setData($data);
     }

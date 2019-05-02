@@ -6,8 +6,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\Validator\Constraints as Assert;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\StudentRepository")
@@ -48,7 +48,12 @@ class Student extends User
      */
     private $photoFile;
 
-
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     *
+     * @var \DateTime
+     */
+    private $updatedAt;
 
 
     public function __construct()
@@ -102,6 +107,11 @@ class Student extends User
     public function setPhotoFile(File $photo = null)
     {
         $this->photoFile = $photo;
+
+        if (null !== $photo) {
+            $this->updatedAt = new \DateTime();
+        }
+
         return $this;
     }
     public function getPhotoFile()
@@ -118,6 +128,24 @@ class Student extends User
     public function getPhoto()
     {
         return $this->photo;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getUpdatedAt(): \DateTime
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * @param \DateTime $updatedAt
+     * @return Student
+     */
+    public function setUpdatedAt(\DateTime $updatedAt): Student
+    {
+        $this->updatedAt = $updatedAt;
+        return $this;
     }
 
 }
