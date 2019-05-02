@@ -26,5 +26,5 @@
 
     <a href="{{ path('admin_edit', {'id': admin.id}) }}">edit</a>
 
-    {{ include('admin/_delete_form.html.twig') }}
+    {{ include('ui/_delete_form.html.twig', { path: 'admin_delete', id: admin.id }) }}
 {% endblock %}
