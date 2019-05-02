@@ -19,7 +19,7 @@
         <tbody>
         {% for student in students %}
             <tr>
-                <td>{% if student.photo is not null %}<img src="{{ asset('/students/photos/') ~ student.photo }}" alt="photo">{% endif %}</td>
+                <td>{% if student.photo is not null %}<img src="{{ asset('/students/photos/') ~ student.photo }}" alt="photo" width="60px">{% endif %}</td>
                 <td>{{ student.username }}</td>
                 <td>{{ student.email }}</td>
                 <td>{{ student.ClassGroup.name }}</td>

@@ -1,12 +1,11 @@
 {# templates/email/email_creation.html.twig #}
-<h3>You did it! You registered!</h3>
+<h3>Compte Heimdall</h3>
 
-Hi {{ 'name' }}! You're successfully registered.
+Bonjour {{ name }}!
+Votre identifiant est : {{ name }}
+votre password est : {{ password }}
 
 {# example, assuming you have a route named "login" #}
-To login, go to: <a href="{{ url('login') }}">...</a>.
+Pour se connecter et changer de mot de passe, aller sur : <a href="{{ url('app_login') }}">Connexion</a>.
 
-Thanks!
-
-{# Makes an absolute URL to the /images/logo.png file #}
-<img src="{{ absolute_url(asset('images/logo.png')) }}">
+Merci!
