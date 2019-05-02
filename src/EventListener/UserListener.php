@@ -8,27 +8,26 @@ use App\Entity\User;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use Swift_Mailer;
 use Swift_Message;
+use Twig\Environment;
 
 class UserListener
 {
     private $mailer;
+    private $twig;
 
-    public function __construct(Swift_Mailer $mailer)
+    public function __construct(Swift_Mailer $mailer, Environment $twig)
     {
         $this->mailer = $mailer;
+        $this->twig = $twig;
     }
 
-    public function postPersist(LifecycleEventArgs $args)
+    public function postPersist(User $user)
     {
-        /**
-         * @var User $user
-         */
-        $user = $args->getObject();
         $message = (new Swift_Message('Inscription'))
             ->setFrom('send@example.com')
             ->setTo($user->getEmail())
             ->setBody(
-                $this->renderView(
+                $this->twig->render(
                     'email/email_creation.html.twig',
                     ['name' => $user->getUsername(),
                     'password' => $user->getPassword()]
@@ -37,7 +36,7 @@ class UserListener
             )
         ;
 
-        //$mailer->send($message);
+        $this->mailer->send($message);
     }
 
 
