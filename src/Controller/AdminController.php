@@ -23,7 +23,7 @@ class AdminController extends AbstractController
     public function index(AdminRepository $adminRepository): Response
     {
         return $this->render('admin/index.html.twig', [
-            'admins' => $adminRepository->findAll(),
+            'admins' => $adminRepository->findAllAdmins(),
         ]);
     }
 
@@ -69,6 +69,9 @@ class AdminController extends AbstractController
      */
     public function show(Admin $admin): Response
     {
+        if ($admin->hasRole('ROLE_SUPER_ADMIN')) {
+            throw $this->createAccessDeniedException();
+        }
         return $this->render('admin/show.html.twig', [
             'admin' => $admin,
         ]);
@@ -79,6 +82,9 @@ class AdminController extends AbstractController
      */
     public function edit(Request $request, Admin $admin): Response
     {
+        if ($admin->hasRole('ROLE_SUPER_ADMIN')) {
+            throw $this->createAccessDeniedException();
+        }
         $form = $this->createForm(AdminType::class, $admin);
         $form->handleRequest($request);
 
@@ -101,6 +107,9 @@ class AdminController extends AbstractController
      */
     public function delete(Request $request, Admin $admin): Response
     {
+        if ($admin->hasRole('ROLE_SUPER_ADMIN')) {
+            throw $this->createAccessDeniedException();
+        }
         if ($this->isCsrfTokenValid('delete'.$admin->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($admin);

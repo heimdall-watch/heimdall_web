@@ -38,22 +38,6 @@ abstract class User implements UserInterface
 
     protected $plainPassword;
 
-    /**
-     * @return mixed
-     */
-    public function getPlainPassword()
-    {
-        return $this->plainPassword;
-    }
-
-    /**
-     * @param mixed $plainPassword
-     */
-    public function setPlainPassword($plainPassword): void
-    {
-        $this->plainPassword = $plainPassword;
-    }
-
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -101,6 +85,15 @@ abstract class User implements UserInterface
         return array_unique($roles);
     }
 
+    /**
+     * @param string $role
+     * @return bool
+     */
+    public function hasRole(string $role): bool
+    {
+        return \array_search($role, $this->roles) !== false;
+    }
+
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;
@@ -129,6 +122,18 @@ abstract class User implements UserInterface
     public function getSalt()
     {
         // not needed when using the "bcrypt" algorithm in security.yaml
+    }
+
+    public function getPlainPassword(): ?string
+    {
+        return $this->plainPassword;
+    }
+
+    public function setPlainPassword(string $plainPassword): self
+    {
+        $this->plainPassword = $plainPassword;
+
+        return $this;
     }
 
     /**
