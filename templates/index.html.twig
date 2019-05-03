@@ -3,5 +3,18 @@
 {% block title %}Dashboard - Heimdall{% endblock %}
 
 {% block body %}
-TODO QUELQUE CHOSE
+    {% for studentpresence in absences %}
+        <h1>Absence du jour {{ studentpresence.rollcall.date|date("Y-m-d")}} </h1>
+        <ul class="list-group">
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                {{ studentpresence.student.username}} -
+                {{ studentpresence.rollcall.classgroup.name}}
+                <span class="badge badge-primary badge-pill">{{ studentpresence.rollcall.duration}}h</span>
+            </li>
+        </ul>
+    {% else %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            Il n'y a pas d'absence aujourdh'ui.
+        </li>
+    {% endfor %}
 {% endblock %}
