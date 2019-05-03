@@ -23,14 +23,14 @@ class AdminController extends AbstractController
     public function index(AdminRepository $adminRepository): Response
     {
         return $this->render('admin/index.html.twig', [
-            'admins' => $adminRepository->findAll(),
+            'admins' => $adminRepository->findAllAdmins(),
         ]);
     }
 
     /**
      * @Route("/new", name="admin_new", methods={"GET","POST"})
      */
-    public function new(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
+    public function new(Request $request): Response
     {
         $admin = new Admin();
         $form = $this->createForm(AdminType::class, $admin);
@@ -47,7 +47,7 @@ class AdminController extends AbstractController
                 ->setSymbols(false)
                 ->setLength(10);
             $password = $passwordGenerator->generatePassword();
-            $admin->setPassword($passwordEncoder->encodePassword($admin, $password));
+            $admin->setPlainPassword($password);
 
             // TEMP
             $this->addFlash('info', $password);
@@ -69,6 +69,9 @@ class AdminController extends AbstractController
      */
     public function show(Admin $admin): Response
     {
+        if ($admin->hasRole('ROLE_SUPER_ADMIN')) {
+            throw $this->createAccessDeniedException();
+        }
         return $this->render('admin/show.html.twig', [
             'admin' => $admin,
         ]);
@@ -79,6 +82,9 @@ class AdminController extends AbstractController
      */
     public function edit(Request $request, Admin $admin): Response
     {
+        if ($admin->hasRole('ROLE_SUPER_ADMIN')) {
+            throw $this->createAccessDeniedException();
+        }
         $form = $this->createForm(AdminType::class, $admin);
         $form->handleRequest($request);
 
@@ -101,6 +107,9 @@ class AdminController extends AbstractController
      */
     public function delete(Request $request, Admin $admin): Response
     {
+        if ($admin->hasRole('ROLE_SUPER_ADMIN')) {
+            throw $this->createAccessDeniedException();
+        }
         if ($this->isCsrfTokenValid('delete'.$admin->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($admin);

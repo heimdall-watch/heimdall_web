@@ -34,8 +34,7 @@ class StudentController extends AbstractController
         if (!$passwordEncoder->isPasswordValid($student, $request->request->get('oldPassword'))) {
             throw new HttpException(403, "Mot de passe actuel incorrect");
         }
-//        $student->setPlainPassword($newPassword); // TODO (en attente push Flo/Julie)
-        $student->setPassword($passwordEncoder->encodePassword($student, $request->request->get('newPassword')));
+        $student->setPlainPassword($request->request->get('newPassword'));
         $this->getDoctrine()->getManager()->flush();
 
         return true;

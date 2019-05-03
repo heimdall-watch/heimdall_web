@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\StudentPresence;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use Symfony\Component\Validator\Tests\Fixtures\ToString;
 
 /**
  * @method StudentPresence|null find($id, $lockMode = null, $lockVersion = null)
@@ -22,19 +23,21 @@ class StudentPresenceRepository extends ServiceEntityRepository
     // /**
     //  * @return UserAttendance[] Returns an array of UserAttendance objects
     //  */
-    /*
-    public function findByExampleField($value)
+
+    public function findByDate(\DateTime $date)
     {
         return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('u.id', 'ASC')
-            ->setMaxResults(10)
+            ->join('u.rollCall','r')
+            ->andWhere('r.date BETWEEN :min_date AND :max_date')
+            ->andWhere('u.present = false')
+            ->setParameter('min_date', $date)
+            ->setParameter('max_date', (clone $date)->modify('+ 23 hours 59 minutes 59 seconde'))
+            ->setMaxResults(30)
             ->getQuery()
             ->getResult()
         ;
     }
-    */
+
 
     /*
     public function findOneBySomeField($value): ?UserAttendance

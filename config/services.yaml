@@ -37,4 +37,5 @@ services:
     user_listener:
         class: App\EventListener\UserListener
         tags:
-            - {name: 'doctrine.orm.entity_listener' , event: 'postPersist' , entity: 'App\Entity\User' }
+            - {name: 'doctrine.orm.entity_listener' , event: 'prePersist' , entity: 'App\Entity\User' }
+            - {name: 'doctrine.orm.entity_listener' , event: 'preFlush' , entity: 'App\Entity\User' }

@@ -36,6 +36,9 @@ abstract class User implements UserInterface
      */
     protected $password;
 
+    protected $plainPassword;
+
+
     /**
      * @ORM\Column(type="string", length=255)
      */
@@ -82,6 +85,15 @@ abstract class User implements UserInterface
         return array_unique($roles);
     }
 
+    /**
+     * @param string $role
+     * @return bool
+     */
+    public function hasRole(string $role): bool
+    {
+        return \array_search($role, $this->roles) !== false;
+    }
+
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;
@@ -112,13 +124,25 @@ abstract class User implements UserInterface
         // not needed when using the "bcrypt" algorithm in security.yaml
     }
 
+    public function getPlainPassword(): ?string
+    {
+        return $this->plainPassword;
+    }
+
+    public function setPlainPassword(string $plainPassword): self
+    {
+        $this->plainPassword = $plainPassword;
+
+        return $this;
+    }
+
     /**
      * @see UserInterface
      */
     public function eraseCredentials()
     {
         // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
+         $this->plainPassword = null;
     }
 
     public function getEmail(): ?string

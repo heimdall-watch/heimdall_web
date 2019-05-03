@@ -16,15 +16,6 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class DevFixtures extends Fixture
 {
-    /**
-     * @var UserPasswordEncoderInterface
-     */
-    private $encoder;
-
-    public function __construct(UserPasswordEncoderInterface $encoder)
-    {
-        $this->encoder = $encoder;
-    }
 
     public function load(ObjectManager $manager)
     {
@@ -32,14 +23,14 @@ class DevFixtures extends Fixture
         $brahim = new Admin();
         $brahim->setUsername("Brahim")
                ->setEmail("sosthen.gaillard@gmail.com")
-               ->setPassword($this->encoder->encodePassword($brahim, "brahim"));
+               ->setPlainPassword("brahim");
         $manager->persist($brahim);
 
         // Student 1
         $sosthen = new Student();
         $sosthen->setUsername("Sosthen")
                ->setEmail("sosthen.gaillard@gmail.com")
-               ->setPassword($this->encoder->encodePassword($sosthen, "sosthen"));
+               ->setPlainPassword("sosthen");
         $manager->persist($sosthen);
 
         $miage = new ClassGroup();
@@ -50,7 +41,7 @@ class DevFixtures extends Fixture
         $jfpp = new Teacher();
         $jfpp->setUsername("Jfpp")
                 ->setEmail("sosthen.gaillard@gmail.com")
-                ->setPassword($this->encoder->encodePassword($jfpp, "jfpp"));
+                ->setPlainPassword("jfpp");
         $manager->persist($jfpp);
 
         // Group M2 APP
@@ -70,7 +61,7 @@ class DevFixtures extends Fixture
         // Student Presence 1
         $presenceTest = new StudentPresence();
         $presenceTest->setStudent($sosthen)
-                    ->setPresent(true)
+                    ->setPresent(false)
                     ->setRollcall($rollcallTest);
         $manager->persist($presenceTest);
 
