@@ -29,6 +29,7 @@ class StudentPresenceRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('u')
             ->join('u.rollCall','r')
             ->andWhere('r.date BETWEEN :min_date AND :max_date')
+            ->andWhere('u.present = false')
             ->setParameter('min_date', $date)
             ->setParameter('max_date', (clone $date)->modify('+ 23 hours 59 minutes 59 seconde'))
             ->setMaxResults(30)

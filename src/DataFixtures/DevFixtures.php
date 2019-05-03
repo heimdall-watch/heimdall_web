@@ -61,7 +61,7 @@ class DevFixtures extends Fixture
         // Student Presence 1
         $presenceTest = new StudentPresence();
         $presenceTest->setStudent($sosthen)
-                    ->setPresent(true)
+                    ->setPresent(false)
                     ->setRollcall($rollcallTest);
         $manager->persist($presenceTest);
 
