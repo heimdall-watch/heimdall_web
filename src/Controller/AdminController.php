@@ -30,7 +30,7 @@ class AdminController extends AbstractController
     /**
      * @Route("/new", name="admin_new", methods={"GET","POST"})
      */
-    public function new(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
+    public function new(Request $request): Response
     {
         $admin = new Admin();
         $form = $this->createForm(AdminType::class, $admin);
@@ -47,7 +47,7 @@ class AdminController extends AbstractController
                 ->setSymbols(false)
                 ->setLength(10);
             $password = $passwordGenerator->generatePassword();
-            $admin->setPassword($passwordEncoder->encodePassword($admin, $password));
+            $admin->setPlainPassword($password);
 
             // TEMP
             $this->addFlash('info', $password);

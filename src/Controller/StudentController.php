@@ -34,7 +34,7 @@ class StudentController extends AbstractController
     /**
      * @Route("/new", name="student_new", methods={"GET","POST"})
      */
-    public function new(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
+    public function new(Request $request): Response
     {
         $student = new Student();
         $form = $this->createForm(StudentType::class, $student);
@@ -50,7 +50,7 @@ class StudentController extends AbstractController
                 ->setSymbols(false)
                 ->setLength(10);
             $password = $passwordGenerator->generatePassword();
-            $student->setPassword($passwordEncoder->encodePassword($student, $password));
+            $student->setPlainPassword($password);
 
             // TEMP
             $this->addFlash('info', $password);

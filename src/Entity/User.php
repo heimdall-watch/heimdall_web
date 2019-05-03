@@ -36,6 +36,25 @@ abstract class User implements UserInterface
      */
     protected $password;
 
+    protected $plainPassword;
+
+    /**
+     * @return mixed
+     */
+    public function getPlainPassword()
+    {
+        return $this->plainPassword;
+    }
+
+    /**
+     * @param mixed $plainPassword
+     */
+    public function setPlainPassword($plainPassword): void
+    {
+        $this->plainPassword = $plainPassword;
+    }
+
+
     /**
      * @ORM\Column(type="string", length=255)
      */
@@ -118,7 +137,7 @@ abstract class User implements UserInterface
     public function eraseCredentials()
     {
         // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
+         $this->plainPassword = null;
     }
 
     public function getEmail(): ?string

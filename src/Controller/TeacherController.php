@@ -29,7 +29,7 @@ class TeacherController extends AbstractController
     /**
      * @Route("/new", name="teacher_new", methods={"GET","POST"})
      */
-    public function new(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
+    public function new(Request $request): Response
     {
         $teacher = new Teacher();
         $form = $this->createForm(TeacherType::class, $teacher);
@@ -37,7 +37,7 @@ class TeacherController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
-            $teacher->setPassword($passwordEncoder->encodePassword($teacher, $teacher->getPassword()));
+            $teacher->setPlainPassword($teacher->getPassword());
 
 
             $entityManager->persist($teacher);
