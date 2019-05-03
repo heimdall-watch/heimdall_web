@@ -40,5 +40,5 @@
 
     <a href="{{ path('class_group_edit', {'id': class_group.id}) }}">edit</a>
 
-    {{ include('class_group/_delete_form.html.twig') }}
+    {{ include('ui/_delete_form.html.twig', { path: 'class_group_delete', id: class_group.id }) }}
 {% endblock %}

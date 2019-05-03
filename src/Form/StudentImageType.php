@@ -2,24 +2,28 @@
 
 namespace App\Form;
 
-use App\Entity\ClassGroup;
+use App\Entity\Student;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 
-class ClassGroupType extends AbstractType
+class StudentImageType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name')
+            ->add('photoFile', VichImageType::class, [
+                'required' => true,
+            ])
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => ClassGroup::class,
+            'data_class' => Student::class,
+            'csrf_protection' => false,
         ]);
     }
 }
