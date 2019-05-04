@@ -19,7 +19,7 @@ class SecurityController extends AbstractFOSRestController
     public function ping()
     {
         return [
-            'server_name' => getenv('SERVER_NAME'),
+            'server_name' => getenv('HEIMDALL_SERVER_NAME'),
             'result' => 'heimdall',
             'message' => 'This is a functional Heimdall server.',
             'version' => $this->getParameter('heimdall_version')
