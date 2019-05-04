@@ -3,6 +3,10 @@ fos_rest:
   allowed_methods_listener: true
   access_denied_listener:
     json: true
+  body_converter:
+    enabled: true
+    validate: true
+    validation_errors_argument: errors
   exception:
     enabled: true
   routing_loader: # https://symfony.com/doc/master/bundles/FOSRestBundle/7-manual-route-definition.html#method-name-prefix
@@ -14,3 +18,5 @@ fos_rest:
       - { path: ^/, stop: true }
   view:
     view_response_listener: 'force'
+  serializer:
+    serialize_null: true

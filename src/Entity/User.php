@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -33,9 +34,14 @@ abstract class User implements UserInterface
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
+     * @Serializer\Exclude()
      */
     protected $password;
 
+    /**
+     * @var string
+     * @Serializer\Exclude()
+     */
     protected $plainPassword;
 
 

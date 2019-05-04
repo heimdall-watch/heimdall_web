@@ -5,6 +5,8 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serializer;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\RollCallRepository")
@@ -21,29 +23,38 @@ class RollCall
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\ClassGroup", inversedBy="rollCalls")
      * @ORM\JoinColumn(nullable=false)
+     * @Serializer\Type("EntityId<App\Entity\ClassGroup>")
+     * @Assert\NotBlank()
      */
     private $classGroup;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Teacher", inversedBy="rollCalls")
      * @ORM\JoinColumn(nullable=false)
+     * @Serializer\Type("EntityId<App\Entity\Teacher>")
+     * @Assert\NotBlank()
      */
     private $teacher;
 
     /**
-     * @ORM\OneToMany(targetEntity="StudentPresence", mappedBy="rollCall", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="StudentPresence", mappedBy="rollCall", orphanRemoval=true, cascade={"persist"})
+     * @Assert\Valid()
      */
     private $studentPresences;
 
     /**
      * @ORM\Column(type="datetime")
+     * @var \DateTime
+     * @Assert\DateTime()
      */
-    private $date;
+    private $dateStart;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="datetime")
+     * @var \DateTime
+     * @Assert\DateTime()
      */
-    private $duration;
+    private $dateEnd;
 
     public function __construct()
     {
@@ -87,50 +98,55 @@ class RollCall
         return $this->studentPresences;
     }
 
-    public function addUserAttendance(StudentPresence $userAttendance): self
+    public function addStudentPresence(StudentPresence $studentPresence): self
     {
-        if (!$this->studentPresences->contains($userAttendance)) {
-            $this->studentPresences[] = $userAttendance;
-            $userAttendance->setRollcall($this);
+        if (!$this->studentPresences->contains($studentPresence)) {
+            $this->studentPresences[] = $studentPresence;
+            $studentPresence->setRollcall($this);
         }
 
         return $this;
     }
 
-    public function removeUserAttendance(StudentPresence $userAttendance): self
+    public function removeStudentPresence(StudentPresence $studentPresence): self
     {
-        if ($this->studentPresences->contains($userAttendance)) {
-            $this->studentPresences->removeElement($userAttendance);
+        if ($this->studentPresences->contains($studentPresence)) {
+            $this->studentPresences->removeElement($studentPresence);
             // set the owning side to null (unless already changed)
-            if ($userAttendance->getRollcall() === $this) {
-                $userAttendance->setRollcall(null);
+            if ($studentPresence->getRollcall() === $this) {
+                $studentPresence->setRollcall(null);
             }
         }
 
         return $this;
     }
 
-    public function getDate(): ?\DateTimeInterface
+    public function getDateStart(): ?\DateTimeInterface
     {
-        return $this->date;
+        return $this->dateStart;
     }
 
-    public function setDate(\DateTimeInterface $date): self
+    public function setDateStart(\DateTimeInterface $dateStart): self
     {
-        $this->date = $date;
+        $this->dateStart = $dateStart;
 
         return $this;
     }
 
-    public function getDuration(): ?int
+    public function getDateEnd(): ?\DateTimeInterface
     {
-        return $this->duration;
+        return $this->dateEnd;
     }
 
-    public function setDuration(int $duration): self
+    public function setDateEnd(\DateTimeInterface $dateEnd): self
     {
-        $this->duration = $duration;
+        $this->dateEnd = $dateEnd;
 
         return $this;
+    }
+
+    public function getDuration(): int
+    {
+        return $this->dateStart->diff($this->dateEnd)->h;
     }
 }

@@ -35,7 +35,7 @@
 
         {% for presence in student.presences %}
             <li class="list-group-item d-flex justify-content-between align-items-center">
-                {{ presence.rollcall.date|date("Y-m-d")}} -
+                {{ presence.rollcall.dateStart|date("Y-m-d H:i:s")}} -
                 {{ presence.present ? 'Présent' : 'Absence'}}
                 <span class="badge badge-primary badge-pill">{{ presence.rollcall.duration}}h</span>
             </li>

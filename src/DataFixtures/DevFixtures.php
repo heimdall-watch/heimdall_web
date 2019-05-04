@@ -9,10 +9,8 @@ use App\Entity\RollCall;
 use App\Entity\Student;
 use App\Entity\StudentPresence;
 use App\Entity\Teacher;
-use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class DevFixtures extends Fixture
 {
@@ -54,8 +52,8 @@ class DevFixtures extends Fixture
         $rollcallTest = new RollCall();
         $rollcallTest->setClassGroup($group)
                     ->setTeacher($jfpp)
-                    ->setDate($date)
-                    ->setDuration(1);
+                    ->setDateStart($date)
+                    ->setDateEnd((clone $date)->modify('+ 2 hours'));
         $manager->persist($rollcallTest);
 
         // Student Presence 1

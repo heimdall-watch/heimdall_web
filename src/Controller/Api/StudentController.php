@@ -8,6 +8,7 @@ use App\HttpFoundation\File\ApiUploadedFile;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
@@ -19,6 +20,7 @@ use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
  */
 class StudentController extends AbstractController
 {
+    // TODO : AccountController ?
     /**
      * @Rest\Post("/update_password", name="student_update_password")
      *
@@ -60,7 +62,7 @@ class StudentController extends AbstractController
         $form->submit(['photoFile' => ['file' => $file]]);
 
         if (!$form->isSubmitted() || !$form->isValid()) {
-            throw new HttpException(400, "Envoi de la photo impossible");
+            throw new HttpException(Response::HTTP_BAD_REQUEST, "Envoi de la photo impossible");
         }
 
         $em = $this->getDoctrine()->getManager();

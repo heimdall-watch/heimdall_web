@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serializer;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\StudentPresenceRepository")
@@ -30,16 +32,22 @@ class StudentPresence
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Student", inversedBy="presences")
      * @ORM\JoinColumn(nullable=false)
+     * @Serializer\Type("EntityId<App\Entity\Student>")
+     * @Assert\NotBlank()
      */
     private $student;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Assert\Type("boolean")
      */
     private $present;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Assert\Type("integer")
+     * @Assert\GreaterThan(0)
+     * @Assert\LessThan(propertyPath="rollCall.getDuration()")
      */
     private $late;
 
@@ -55,6 +63,7 @@ class StudentPresence
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
+     * @Assert\Type("boolean")
      */
     private $excuseValidated;
 

@@ -2,6 +2,7 @@
 
 namespace App\EventListener;
 
+use App\Entity\Student;
 use App\Entity\User;
 use Gesdinet\JWTRefreshTokenBundle\Event\RefreshEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
@@ -41,8 +42,10 @@ class ApiAuthenticationListener
             $data['refresh_token_expires'] = $now_milli + $this->refreshTokenExpires;
         }
 
-        // TODO : JMSSerializer
-        $data['user'] = ['username' => $user->getUsername(), 'type' => $user->getType(), 'lastLogin' => $user->getLastLogin(), 'photo' => $this->uploaderHelper->asset($user, 'photoFile')];
+        $data['user'] = ['username' => $user->getUsername(), 'type' => $user->getType(), 'lastLogin' => $user->getLastLogin()];
+        if ($user instanceof Student) {
+            $data['user']['photo'] = $this->uploaderHelper->asset($user, 'photoFile');
+        }
 
         $event->setData($data);
     }
