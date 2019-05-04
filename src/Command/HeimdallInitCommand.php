@@ -32,6 +32,8 @@ class HeimdallInitCommand extends Command
             ->setDescription('Initialize the Heimdall server and create a super admin account.')
             ->addArgument('username', InputArgument::REQUIRED, 'The superadmin username')
             ->addArgument('email', InputArgument::REQUIRED, 'The superadmin email')
+            ->addOption('firstname', null, InputOption::VALUE_OPTIONAL, 'The superadmin firstname')
+            ->addOption('lastname', null, InputOption::VALUE_OPTIONAL, 'The superadmin lastname')
             ->addOption('force', null, InputOption::VALUE_NONE, 'WARNING: THIS WILL EMPTY ALL THE DATABASE!')
         ;
     }
@@ -68,6 +70,8 @@ class HeimdallInitCommand extends Command
         $superadmin->setRoles(['ROLE_SUPER_ADMIN'])
             ->setUsername($username)
             ->setPlainPassword($password)
+            ->setFirstname($input->getOption('firstname') ? $input->getOption('firstname') : $username)
+            ->setLastname($input->getOption('lastname') ? $input->getOption('lastname') : $username)
             ->setEmail($email);
         $this->em->persist($superadmin);
         $this->em->flush();
