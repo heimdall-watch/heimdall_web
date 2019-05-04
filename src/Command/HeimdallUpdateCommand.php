@@ -67,6 +67,9 @@ class HeimdallUpdateCommand extends Command
         $doctrine_update = $this->getApplication()->find('doctrine:schema:update');
         $doctrine_update->run(new ArrayInput(['--force' => true]), $output);
 
+        $doctrine_update = $this->getApplication()->find('cache:clear');
+        $doctrine_update->run(new ArrayInput([]), $output);
+
         $io->success('The Heimdall server has been updated!');
     }
 }
