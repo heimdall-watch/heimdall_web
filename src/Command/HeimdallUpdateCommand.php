@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Process\Process;
@@ -29,6 +30,7 @@ class HeimdallUpdateCommand extends Command
     {
         $this
             ->setDescription('Update the Heimdall server')
+            ->addOption('hard', 'h', InputOption::VALUE_OPTIONAL, 'Reset hard instead of git pull (any uncommitted change will be lost)')
         ;
     }
 
@@ -40,10 +42,24 @@ class HeimdallUpdateCommand extends Command
             $io->write($buffer);
         };
 
-        $git_pull = new Process(['git', 'pull'], '/home/www/heimdall_web');
-        $git_pull->run($output_callback);
-        if (!$git_pull->isSuccessful()) {
-            throw new \Exception("Git pull failed: " . $git_pull->getErrorOutput());
+        if ($input->getOption('hard') === true) {
+            $git_pull = new Process(['git', 'fetch', '--all'], '/home/www/heimdall_web');
+            $git_pull->run($output_callback);
+            if (!$git_pull->isSuccessful()) {
+                throw new \Exception("Git fetch -all failed: " . $git_pull->getErrorOutput());
+            }
+
+            $git_pull = new Process(['git', 'reset', '--hard', 'origin/master'], '/home/www/heimdall_web');
+            $git_pull->run($output_callback);
+            if (!$git_pull->isSuccessful()) {
+                throw new \Exception("Git reset hard: " . $git_pull->getErrorOutput());
+            }
+        } else {
+            $git_pull = new Process(['git', 'pull'], '/home/www/heimdall_web');
+            $git_pull->run($output_callback);
+            if (!$git_pull->isSuccessful()) {
+                throw new \Exception("Git pull failed (to overwrite your changes, run with the --hard option): " . $git_pull->getErrorOutput());
+            }
         }
 
         $composer_install = new Process(['composer', 'install'], '/home/www/heimdall_web');
