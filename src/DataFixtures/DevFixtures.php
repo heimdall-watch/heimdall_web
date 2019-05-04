@@ -20,6 +20,8 @@ class DevFixtures extends Fixture
         // Brahim
         $brahim = new Admin();
         $brahim->setUsername("Brahim")
+               ->setFirstname("Brahim")
+               ->setLastname("Lastname")
                ->setEmail("sosthen.gaillard@gmail.com")
                ->setPlainPassword("brahim");
         $manager->persist($brahim);
@@ -27,8 +29,10 @@ class DevFixtures extends Fixture
         // Student 1
         $sosthen = new Student();
         $sosthen->setUsername("Sosthen")
-               ->setEmail("sosthen.gaillard@gmail.com")
-               ->setPlainPassword("sosthen");
+                ->setFirstname("Sosthen")
+                ->setLastname("Lastname")
+                ->setEmail("sosthen.gaillard@gmail.com")
+                ->setPlainPassword("sosthen");
         $manager->persist($sosthen);
 
         $miage = new ClassGroup();
@@ -38,8 +42,10 @@ class DevFixtures extends Fixture
         // Teacher 1
         $jfpp = new Teacher();
         $jfpp->setUsername("Jfpp")
-                ->setEmail("sosthen.gaillard@gmail.com")
-                ->setPlainPassword("jfpp");
+             ->setFirstname("Jfpp")
+             ->setLastname("Lastname")
+             ->setEmail("sosthen.gaillard@gmail.com")
+             ->setPlainPassword("jfpp");
         $manager->persist($jfpp);
 
         // Group M2 APP

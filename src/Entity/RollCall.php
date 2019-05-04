@@ -17,6 +17,8 @@ class RollCall
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     *
+     * @Serializer\Groups({"Default", "GetRollcall", "Deserialization"})
      */
     private $id;
 
@@ -24,6 +26,7 @@ class RollCall
      * @ORM\ManyToOne(targetEntity="App\Entity\ClassGroup", inversedBy="rollCalls")
      * @ORM\JoinColumn(nullable=false)
      * @Serializer\Type("EntityId<App\Entity\ClassGroup>")
+     * @Serializer\Groups({"Default", "Deserialization"})
      * @Assert\NotBlank()
      */
     private $classGroup;
@@ -32,12 +35,14 @@ class RollCall
      * @ORM\ManyToOne(targetEntity="App\Entity\Teacher", inversedBy="rollCalls")
      * @ORM\JoinColumn(nullable=false)
      * @Serializer\Type("EntityId<App\Entity\Teacher>")
+     * @Serializer\Groups({"Default", "Deserialization"})
      * @Assert\NotBlank()
      */
     private $teacher;
 
     /**
      * @ORM\OneToMany(targetEntity="StudentPresence", mappedBy="rollCall", orphanRemoval=true, cascade={"persist"})
+     * @Serializer\Groups({"Default", "Deserialization"})
      * @Assert\Valid()
      */
     private $studentPresences;
@@ -45,6 +50,7 @@ class RollCall
     /**
      * @ORM\Column(type="datetime")
      * @var \DateTime
+     * @Serializer\Groups({"Default", "GetRollcall", "Deserialization"})
      * @Assert\DateTime()
      */
     private $dateStart;
@@ -52,6 +58,7 @@ class RollCall
     /**
      * @ORM\Column(type="datetime")
      * @var \DateTime
+     * @Serializer\Groups({"Default", "GetRollcall", "Deserialization"})
      * @Assert\DateTime()
      */
     private $dateEnd;
@@ -66,6 +73,13 @@ class RollCall
         return $this->id;
     }
 
+    /**
+     * @Serializer\VirtualProperty("getClassGroup")
+     * @Serializer\Groups({"GetRollcall"})
+     * @Serializer\Type("App\Entity\ClassGroup")
+     * @Serializer\MaxDepth(1)
+     * @return ClassGroup|null
+     */
     public function getClassGroup(): ?ClassGroup
     {
         return $this->classGroup;
@@ -78,6 +92,13 @@ class RollCall
         return $this;
     }
 
+    /**
+     * @Serializer\VirtualProperty("getTeacher")
+     * @Serializer\Groups({"GetRollcall"})
+     * @Serializer\Type("App\Entity\Teacher")
+     * @Serializer\MaxDepth(1)
+     * @return Teacher|null
+     */
     public function getTeacher(): ?Teacher
     {
         return $this->teacher;
@@ -91,6 +112,9 @@ class RollCall
     }
 
     /**
+     * @Serializer\VirtualProperty("getStudentPresences")
+     * @Serializer\Groups({"GetRollcall"})
+     * @Serializer\MaxDepth(2)
      * @return Collection|StudentPresence[]
      */
     public function getStudentPresences(): Collection

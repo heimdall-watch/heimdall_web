@@ -20,12 +20,14 @@ class StudentPresence
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Serializer\Groups({"Default", "GetRollcall", "Deserialization"})
      */
     private $id;
 
     /**
      * @ORM\ManyToOne(targetEntity="RollCall", inversedBy="studentPresences")
      * @ORM\JoinColumn(nullable=false)
+     * @Serializer\Groups({"Default", "Deserialization"})
      */
     private $rollCall;
 
@@ -33,18 +35,21 @@ class StudentPresence
      * @ORM\ManyToOne(targetEntity="App\Entity\Student", inversedBy="presences")
      * @ORM\JoinColumn(nullable=false)
      * @Serializer\Type("EntityId<App\Entity\Student>")
+     * @Serializer\Groups({"Default", "Deserialization"})
      * @Assert\NotBlank()
      */
     private $student;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Serializer\Groups({"Default", "GetRollcall", "Deserialization"})
      * @Assert\Type("boolean")
      */
     private $present;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Serializer\Groups({"Default", "GetRollcall", "Deserialization"})
      * @Assert\Type("integer")
      * @Assert\GreaterThan(0)
      * @Assert\LessThan(propertyPath="rollCall.getDuration()")
@@ -53,16 +58,19 @@ class StudentPresence
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Serializer\Groups({"Default", "GetRollcall", "Deserialization"})
      */
     private $excuse; // TODO : Constantes + Possibilité d'entrer un intitulé manuellement ?
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Serializer\Groups({"Default", "GetRollcall", "Deserialization"})
      */
     private $excuseProof; // TODO Lien vers le justificatif uploadé ?
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
+     * @Serializer\Groups({"Default", "GetRollcall", "Deserialization"})
      * @Assert\Type("boolean")
      */
     private $excuseValidated;
@@ -84,6 +92,13 @@ class StudentPresence
         return $this;
     }
 
+    /**
+     * @Serializer\VirtualProperty("getStudent")
+     * @Serializer\Groups({"GetRollcall"})
+     * @Serializer\Type("App\Entity\Student")
+     * @Serializer\MaxDepth(1)
+     * @return Student|null
+     */
     public function getStudent(): ?Student
     {
         return $this->student;

@@ -18,16 +18,19 @@ abstract class User implements UserInterface
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Serializer\Groups({"Default", "GetRollcall", "Deserialization"})
      */
     protected $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Serializer\Groups({"Default", "GetRollcall", "Deserialization"})
      */
     protected $username;
 
     /**
      * @ORM\Column(type="json")
+     * @Serializer\Exclude()
      */
     protected $roles = [];
 
@@ -47,13 +50,27 @@ abstract class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Serializer\Groups({"Default", "Deserialization"})
      */
     protected $email;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Serializer\Groups({"Default", "Deserialization"})
      */
     private $lastLogin;
+
+    /**
+     * @ORM\Column(type="string", length=100)
+     * @Serializer\Groups({"Default", "GetRollcall", "Deserialization"})
+     */
+    private $firstname;
+
+    /**
+     * @ORM\Column(type="string", length=100)
+     * @Serializer\Groups({"Default", "GetRollcall", "Deserialization"})
+     */
+    private $lastname;
 
     public function getType() {
         return (new \ReflectionClass($this))->getShortName();
@@ -171,6 +188,30 @@ abstract class User implements UserInterface
     public function setLastLogin(?\DateTimeInterface $lastLogin): self
     {
         $this->lastLogin = $lastLogin;
+
+        return $this;
+    }
+
+    public function getFirstname(): ?string
+    {
+        return $this->firstname;
+    }
+
+    public function setFirstname(string $firstname): self
+    {
+        $this->firstname = $firstname;
+
+        return $this;
+    }
+
+    public function getLastname(): ?string
+    {
+        return $this->lastname;
+    }
+
+    public function setLastname(string $lastname): self
+    {
+        $this->lastname = $lastname;
 
         return $this;
     }

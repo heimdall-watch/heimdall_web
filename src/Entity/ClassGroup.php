@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\GroupRepository")
@@ -15,26 +16,31 @@ class ClassGroup
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Serializer\Groups({"Default", "GetRollcall", "Deserialization"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=50)
+     * @Serializer\Groups({"Default", "GetRollcall", "Deserialization"})
      */
     private $name;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Student", mappedBy="classGroup")
+     * @Serializer\Groups({"Default", "Deserialization"})
      */
     private $students;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Teacher", mappedBy="classGroups")
+     * @Serializer\Groups({"Default", "Deserialization"})
      */
     private $teachers;
 
     /**
      * @ORM\OneToMany(targetEntity="RollCall", mappedBy="classGroup")
+     * @Serializer\Groups({"Default", "Deserialization"})
      */
     private $rollCalls;
 

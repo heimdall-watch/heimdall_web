@@ -50,4 +50,27 @@ class RollCallController extends AbstractController
 
         return View::create($rollCall, Response::HTTP_CREATED, ['Location' => null]); // TODO : Location should be the path to get the entity details (REST)
     }
+
+    /**
+     * @Rest\Get("/{id}", name="rollcall_get")
+     * @Rest\View(serializerGroups={"GetRollcall"}, serializerEnableMaxDepthChecks=true)
+     *
+     * @param RollCall $rollCall
+     * @return RollCall
+     */
+    public function getRollcall(RollCall $rollCall)
+    {
+        return $rollCall;
+    }
+
+    /**
+     * @Rest\Get("/", name="rollcall_get_all")
+     * @Rest\View(serializerGroups={"GetRollcall"}, serializerEnableMaxDepthChecks=true)
+     *
+     * @return RollCall
+     */
+    public function getRollcalls()
+    {
+        return $this->getDoctrine()->getManager()->getRepository(RollCall::class)->findBy(['teacher' => $this->getUser()]);
+    }
 }

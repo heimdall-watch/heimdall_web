@@ -42,7 +42,14 @@ class ApiAuthenticationListener
             $data['refresh_token_expires'] = $now_milli + $this->refreshTokenExpires;
         }
 
-        $data['user'] = ['username' => $user->getUsername(), 'type' => $user->getType(), 'lastLogin' => $user->getLastLogin()];
+        $data['user'] = [
+            'id ' => $user->getId(),
+            'type' => $user->getType(),
+            'username' => $user->getUsername(),
+            'firstname' => $user->getFirstname(),
+            'lastname' => $user->getLastname(),
+            'last_login' => $user->getLastLogin()->format('c'),
+        ];
         if ($user instanceof Student) {
             $data['user']['photo'] = $this->uploaderHelper->asset($user, 'photoFile');
         }
