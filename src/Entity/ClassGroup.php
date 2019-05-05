@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\GroupRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\ClassGroupRepository")
  */
 class ClassGroup
 {
@@ -16,13 +16,13 @@ class ClassGroup
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Serializer\Groups({"Default", "GetRollcall", "Deserialization"})
+     * @Serializer\Groups({"Default", "GetRollcall", "Deserialization", "GetClass"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=50)
-     * @Serializer\Groups({"Default", "GetRollcall", "Deserialization"})
+     * @Serializer\Groups({"Default", "GetRollcall", "Deserialization", "GetClass"})
      */
     private $name;
 

@@ -8,6 +8,7 @@ use FOS\RestBundle\View\View;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Routing\Annotation\Route;
@@ -17,6 +18,7 @@ use Symfony\Component\Validator\ConstraintViolationList;
  * Class RollCallController
  * @package App\Controller\Api
  *
+ * @IsGranted("ROLE_TEACHER")
  * @Route("/rollcall")
  */
 class RollCallController extends AbstractController
@@ -24,7 +26,6 @@ class RollCallController extends AbstractController
     /**
      * @Rest\Post("/", name="rollcall_create")
      * @ParamConverter("rollCall", converter="fos_rest.request_body")
-     * @IsGranted("ROLE_TEACHER")
      *
      * @param RollCall $rollCall
      * @param ConstraintViolationList $errors
@@ -67,10 +68,10 @@ class RollCallController extends AbstractController
      * @Rest\Get("/", name="rollcall_get_all")
      * @Rest\View(serializerGroups={"GetRollcall"}, serializerEnableMaxDepthChecks=true)
      *
-     * @return RollCall
+     * @return RollCall[]
      */
-    public function getRollcalls()
+    public function getRollcalls(Request $request)
     {
-        return $this->getDoctrine()->getManager()->getRepository(RollCall::class)->findBy(['teacher' => $this->getUser()]);
+        return $this->getDoctrine()->getManager()->getRepository(RollCall::class)->findBy(['teacher' => $this->getUser()], ['dateStart' => 'DESC'], $request->query->get('limit', null));
     }
 }

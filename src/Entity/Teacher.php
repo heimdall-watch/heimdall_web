@@ -15,6 +15,7 @@ class Teacher extends User
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\ClassGroup", inversedBy="teachers")
+     * @ORM\OrderBy({"name" = "ASC"})
      */
     private $classGroups;
 

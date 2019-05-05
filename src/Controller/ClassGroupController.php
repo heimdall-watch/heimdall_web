@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Entity\ClassGroup;
 use App\Form\ClassGroupType;
-use App\Repository\GroupRepository;
+use App\Repository\ClassGroupRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,7 +18,7 @@ class ClassGroupController extends AbstractController
     /**
      * @Route("/", name="class_group_index", methods={"GET"})
      */
-    public function index(GroupRepository $groupRepository): Response
+    public function index(ClassGroupRepository $groupRepository): Response
     {
         return $this->render('class_group/index.html.twig', [
             'class_groups' => $groupRepository->findAll(),
