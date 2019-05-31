@@ -28,6 +28,7 @@ class ClassGroup
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Student", mappedBy="classGroup")
+     * @ORM\OrderBy({"lastname" = "ASC", "firstname" = "ASC"})
      * @Serializer\Groups({"Default", "Deserialization"})
      */
     private $students;
