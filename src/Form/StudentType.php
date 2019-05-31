@@ -19,6 +19,8 @@ class StudentType extends AbstractType
     {
         $builder
             ->add('username')
+            ->add('firstname')
+            ->add('lastname')
             ->add('email', EmailType::class)
             ->add('photoFile', VichImageType::class, [
                 'required' => false,

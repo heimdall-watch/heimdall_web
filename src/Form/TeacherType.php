@@ -16,6 +16,8 @@ class TeacherType extends AbstractType
     {
         $builder
             ->add('username')
+            ->add('firstname')
+            ->add('lastname')
             ->add('email', EmailType::class)
             ->add('classGroups', EntityType::class, [
                 'class' => ClassGroup::class,
