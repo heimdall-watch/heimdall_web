@@ -3,6 +3,7 @@
 namespace App\Controller\Api;
 
 use App\Entity\ClassGroup;
+use App\Entity\Student;
 use App\Entity\Teacher;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -29,5 +30,18 @@ class ClassGroupController extends AbstractController
         /** @var Teacher $teacher */
         $teacher = $this->getUser();
         return $teacher->getClassGroups();
+    }
+
+    /**
+     * @Rest\Get("/{classGroup}/students", name="class_get_students")
+     * @Rest\View(serializerGroups={"GetClassStudents"}, serializerEnableMaxDepthChecks=true)
+     * @IsGranted("ROLE_TEACHER")
+     *
+     * @param ClassGroup $classGroup
+     * @return Student[]
+     */
+    public function getClassStudents(ClassGroup $classGroup)
+    {
+        return $classGroup->getStudents();
     }
 }

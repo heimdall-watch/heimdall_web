@@ -21,18 +21,20 @@ class Student extends User
     /**
      * @ORM\ManyToOne(targetEntity="ClassGroup", inversedBy="students")
      * @ORM\JoinColumn(nullable=false)
+     * @Serializer\Groups({"Default"})
      */
     private $classGroup;
 
     /**
      * @ORM\OneToMany(targetEntity="StudentPresence", mappedBy="student")
+     * @Serializer\Groups({"Default"})
      */
     private $presences;
 
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Serializer\Groups({"Default", "GetRollcall", "Deserialization"})
+     * @Serializer\Groups({"Default", "GetRollcall", "Deserialization", "GetClassStudents"})
      */
     private $photo;
 
@@ -55,6 +57,7 @@ class Student extends User
      * @ORM\Column(type="datetime", nullable=true)
      *
      * @var \DateTime
+     * @Serializer\Exclude()
      */
     private $updatedAt;
 
