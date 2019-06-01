@@ -3,17 +3,17 @@
 namespace App\Controller;
 
 use App\Entity\Student;
+use App\Form\StudentImportType;
 use App\Form\StudentType;
 use App\Repository\StudentRepository;
-use Hackzilla\PasswordGenerator\Generator\AbstractPasswordGenerator;
-use Hackzilla\PasswordGenerator\Generator\ComputerPasswordGenerator;
-use Hackzilla\PasswordGenerator\Generator\HybridPasswordGenerator;
-use Hackzilla\PasswordGenerator\Generator\PasswordGeneratorInterface;
+use Port\Csv\CsvReader;
+use Port\Doctrine\DoctrineWriter;
+use Port\Spreadsheet\SpreadsheetReader;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 
 /**
@@ -21,6 +21,69 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
  */
 class StudentController extends AbstractController
 {
+    /**
+     * @Route("/import", name="student_import", methods={"GET", "POST"})
+     */
+    public function import(Request $request)
+    {
+        $data = [];
+        $importForm = $this->createForm(StudentImportType::class, $data);
+        $importForm->handleRequest($request);
+
+        if ($importForm->isSubmitted()) {
+            if ($importForm->isValid()) {
+                $data = $importForm->getData();
+                $classGroup = $data['classGroup'];
+
+                /** @var UploadedFile $uploadedFile */
+                $uploadedFile = $importForm['file']->getData();
+                $mimeType = $uploadedFile->getMimeType();
+
+                $file = new \SplFileObject($uploadedFile->getRealPath());
+
+                if ($mimeType === 'text/plain' || $mimeType === 'text/csv') {
+                    $reader = new CsvReader($file);
+                } else {
+                    // TODO : Wait for https://github.com/portphp/portphp/issues/99, or fork
+                    throw new \LogicException('Not implemented yet.');
+                    $reader = new SpreadsheetReader($file);
+
+                }
+                $writer = new DoctrineWriter($this->getDoctrine()->getManager(), Student::class);
+                $writer->disableTruncate();
+
+                $writer->prepare();
+
+                // Skip firstline if headers
+                $firstline = true;
+                foreach ($reader as $row) {
+                    if ($firstline) {
+                        $firstline = false;
+                        if ($data['firstLineIsHeaders']) {
+                            continue;
+                        }
+                    }
+                    $associatedRow = [
+                        'username' => $row[$data['username']-1],
+                        'firstname' => $row[$data['firstname']-1],
+                        'lastname' => $row[$data['lastname']-1],
+                        'email' => $row[$data['email']-1],
+                        'classGroup' => $classGroup,
+                    ];
+
+                    $writer->writeItem($associatedRow);
+                }
+
+                $writer->finish();
+            }
+        }
+
+        return $this->render('student/import.html.twig', [
+            'import_form' => $importForm->createView(),
+            'mime_types' => implode(',', StudentImportType::IMPORT_MIME_TYPES),
+        ]);
+    }
+
     /**
      * @Route("/", name="student_index", methods={"GET"})
      */
@@ -42,18 +105,6 @@ class StudentController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
-            $passwordGenerator = new ComputerPasswordGenerator();
-            $passwordGenerator
-                ->setUppercase()
-                ->setLowercase()
-                ->setNumbers()
-                ->setSymbols(false)
-                ->setLength(10);
-            $password = $passwordGenerator->generatePassword();
-            $student->setPlainPassword($password);
-
-            // TEMP
-            $this->addFlash('info', $password);
 
             $entityManager->persist($student);
             $entityManager->flush();
@@ -104,7 +155,7 @@ class StudentController extends AbstractController
      */
     public function delete(Request $request, Student $student): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$student->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $student->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($student);
             $entityManager->flush();

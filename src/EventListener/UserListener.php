@@ -5,7 +5,7 @@ namespace App\EventListener;
 
 
 use App\Entity\User;
-use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
+use Hackzilla\PasswordGenerator\Generator\ComputerPasswordGenerator;
 use Swift_Mailer;
 use Swift_Message;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -44,12 +44,22 @@ class UserListener
 
     public function preFlush(User $user)
     {
-        if(!empty($user->getPlainPassword()))
-        {
+        // If the user has a plainPassword, hash it and save it
+        if (!empty($user->getPlainPassword())) {
             $user->setPassword($this->passwordEncoder->encodePassword($user, $user->getPlainPassword()));
-
+            $user->eraseCredentials();
+        // If the user don't have password, generate and hash one
+        } elseif (empty($user->getPassword())) {
+            $passwordGenerator = new ComputerPasswordGenerator();
+            $passwordGenerator
+                ->setUppercase()
+                ->setLowercase()
+                ->setNumbers()
+                ->setSymbols(false)
+                ->setLength(10);
+            $password = $passwordGenerator->generatePassword();
+            $user->setPassword($this->passwordEncoder->encodePassword($user, $password));
         }
-
     }
 
 }
