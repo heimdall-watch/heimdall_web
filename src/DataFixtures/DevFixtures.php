@@ -54,7 +54,7 @@ class DevFixtures extends Fixture
         $manager->persist($group);
 
         // Rollcall 1
-        $date = new \DateTime();
+        $date = new \DateTime;
         $rollcallTest = new RollCall();
         $rollcallTest->setClassGroup($group)
                     ->setTeacher($jfpp)
