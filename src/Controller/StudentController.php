@@ -75,6 +75,10 @@ class StudentController extends AbstractController
                 }
 
                 $writer->finish();
+
+                $this->addFlash('success', 'Students imported!');
+
+                return $this->redirectToRoute('student_index');
             }
         }
 
