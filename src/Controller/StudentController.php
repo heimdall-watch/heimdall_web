@@ -44,10 +44,7 @@ class StudentController extends AbstractController
                 if ($mimeType === 'text/plain' || $mimeType === 'text/csv') {
                     $reader = new CsvReader($file);
                 } else {
-                    // TODO : Wait for https://github.com/portphp/portphp/issues/99, or fork
-                    throw new \LogicException('Not implemented yet.');
                     $reader = new SpreadsheetReader($file);
-
                 }
                 $writer = new DoctrineWriter($this->getDoctrine()->getManager(), Student::class);
                 $writer->disableTruncate();
