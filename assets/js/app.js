@@ -7,3 +7,5 @@ window.$ = $;
 import 'bootstrap';
 
 import 'bootstrap-notify';
+
+import 'bootstrap-datepicker';

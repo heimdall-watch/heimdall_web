@@ -19,6 +19,7 @@
         "build": "encore production --progress"
     },
     "dependencies": {
+        "bootstrap-datepicker": "^1.9.0",
         "bootstrap-notify": "^3.1.3"
     }
 }

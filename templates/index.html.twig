@@ -19,4 +19,13 @@
             Il n'y a pas d'absence aujourd'hui.
         </li>
     {% endfor %}
+
+    <input type="text" class="datepicker">
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $('.datepicker').datepicker();
+    </script>
 {% endblock %}
