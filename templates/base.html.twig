@@ -65,6 +65,10 @@
         {% endfor %}
 
         $('[data-toggle="tooltip"]').tooltip();
+
+        $('#menu-toggle').click(() => {
+            $('#wrapper').toggleClass("toggled");
+        });
     </script>
 {% endblock %}
 </body>
