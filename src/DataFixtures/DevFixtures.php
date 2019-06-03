@@ -54,7 +54,7 @@ class DevFixtures extends Fixture
         $manager->persist($group);
 
         // Rollcall 1
-        $date = new \DateTime();
+        $date = new \DateTime;
         $rollcallTest = new RollCall();
         $rollcallTest->setClassGroup($group)
                     ->setTeacher($jfpp)
@@ -62,12 +62,44 @@ class DevFixtures extends Fixture
                     ->setDateEnd((clone $date)->modify('+ 2 hours'));
         $manager->persist($rollcallTest);
 
+        // Rollcall 2
+        $date = new \DateTime();
+        $rollcallTest2 = new RollCall();
+        $rollcallTest2->setClassGroup($group)
+            ->setTeacher($jfpp)
+            ->setDateStart($date)
+            ->setDateEnd((clone $date)->modify('+ 2 hours'));
+        $manager->persist($rollcallTest2);
+
+        // Rollcall 3
+        $date = new \DateTime();
+        $rollcallTest3 = new RollCall();
+        $rollcallTest3->setClassGroup($group)
+            ->setTeacher($jfpp)
+            ->setDateStart($date)
+            ->setDateEnd((clone $date)->modify('+ 2 hours'));
+        $manager->persist($rollcallTest3);
+
         // Student Presence 1
-        $presenceTest = new StudentPresence();
-        $presenceTest->setStudent($sosthen)
+        $presenceTest1 = new StudentPresence();
+        $presenceTest1->setStudent($sosthen)
                     ->setPresent(false)
                     ->setRollcall($rollcallTest);
-        $manager->persist($presenceTest);
+        $manager->persist($presenceTest1);
+
+        // Student Presence 2
+        $presenceTest2 = new StudentPresence();
+        $presenceTest2->setStudent($sosthen)
+            ->setPresent(false)
+            ->setRollcall($rollcallTest2);
+        $manager->persist($presenceTest2);
+
+        // Student Presence 3
+        $presenceTest3 = new StudentPresence();
+        $presenceTest3->setStudent($sosthen)
+            ->setPresent(true)
+            ->setRollcall($rollcallTest3);
+        $manager->persist($presenceTest3);
 
         $manager->flush();
     }
