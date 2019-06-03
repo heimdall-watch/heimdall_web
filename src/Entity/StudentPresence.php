@@ -33,7 +33,7 @@ class StudentPresence
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Student", inversedBy="presences")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      * @Serializer\Type("EntityId<App\Entity\Student>")
      * @Serializer\Groups({"Default", "Deserialization"})
      * @Assert\NotBlank()
