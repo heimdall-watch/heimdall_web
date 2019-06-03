@@ -20,14 +20,14 @@ class StudentPresence
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Serializer\Groups({"Default", "GetRollcall", "Deserialization"})
+     * @Serializer\Groups({"Default", "GetRollcall", "Deserialization", "GetStudentPresences"})
      */
     private $id;
 
     /**
      * @ORM\ManyToOne(targetEntity="RollCall", inversedBy="studentPresences")
      * @ORM\JoinColumn(nullable=false)
-     * @Serializer\Groups({"Default", "Deserialization"})
+     * @Serializer\Groups({"Default", "Deserialization", "GetStudentPresences"})
      */
     private $rollCall;
 
@@ -42,14 +42,14 @@ class StudentPresence
 
     /**
      * @ORM\Column(type="boolean")
-     * @Serializer\Groups({"Default", "GetRollcall", "Deserialization"})
+     * @Serializer\Groups({"Default", "GetRollcall", "Deserialization", "GetStudentPresences"})
      * @Assert\Type("boolean")
      */
     private $present;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * @Serializer\Groups({"Default", "GetRollcall", "Deserialization"})
+     * @Serializer\Groups({"Default", "GetRollcall", "Deserialization", "GetStudentPresences"})
      * @Assert\Type("integer")
      * @Assert\GreaterThan(0)
      * @Assert\LessThan(propertyPath="rollCall.getDuration()")
@@ -58,19 +58,19 @@ class StudentPresence
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Serializer\Groups({"Default", "GetRollcall", "Deserialization"})
+     * @Serializer\Groups({"Default", "GetRollcall", "Deserialization", "GetStudentPresences"})
      */
     private $excuse; // TODO : Constantes + Possibilité d'entrer un intitulé manuellement ?
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Serializer\Groups({"Default", "GetRollcall", "Deserialization"})
+     * @Serializer\Groups({"Default", "GetRollcall", "Deserialization", "GetStudentPresences"})
      */
     private $excuseProof; // TODO Lien vers le justificatif uploadé ?
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
-     * @Serializer\Groups({"Default", "GetRollcall", "Deserialization"})
+     * @Serializer\Groups({"Default", "GetRollcall", "Deserialization", "GetStudentPresences"})
      * @Assert\Type("boolean")
      */
     private $excuseValidated;

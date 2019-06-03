@@ -22,7 +22,7 @@ class RollCall
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      *
-     * @Serializer\Groups({"Default", "GetRollcall", "Deserialization"})
+     * @Serializer\Groups({"Default", "GetRollcall", "Deserialization", "GetStudentPresences"})
      */
     private $id;
 
@@ -54,7 +54,7 @@ class RollCall
     /**
      * @ORM\Column(type="datetime")
      * @var \DateTime
-     * @Serializer\Groups({"Default", "GetRollcall", "Deserialization"})
+     * @Serializer\Groups({"Default", "GetRollcall", "Deserialization", "GetStudentPresences"})
      * @Assert\DateTime()
      */
     private $dateStart;
@@ -62,14 +62,14 @@ class RollCall
     /**
      * @ORM\Column(type="datetime")
      * @var \DateTime
-     * @Serializer\Groups({"Default", "GetRollcall", "Deserialization"})
+     * @Serializer\Groups({"Default", "GetRollcall", "Deserialization", "GetStudentPresences"})
      * @Assert\DateTime()
      */
     private $dateEnd;
 
     /**
      * @ORM\Column(type="string", length=6)
-     * @Serializer\Groups({"Default", "GetRollcall", "Deserialization"})
+     * @Serializer\Groups({"Default", "GetRollcall", "Deserialization", "GetStudentPresences"})
      * @Assert\Choice({RollCall::STATUS_CANCEL, RollCall::STATUS_DRAFT, RollCall::STATUS_VALID})
      */
     private $status = self::STATUS_DRAFT;

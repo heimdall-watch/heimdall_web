@@ -3,6 +3,7 @@
 namespace App\Controller\Api;
 
 use App\Entity\Student;
+use App\Entity\StudentPresence;
 use App\Form\StudentImageType;
 use App\HttpFoundation\File\ApiUploadedFile;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -75,4 +76,20 @@ class StudentController extends AbstractController
 
         return $uploaderHelper->asset($student, 'photoFile');
     }
+
+
+
+
+    /**
+     * @Rest\Get("/presences", name="student_get_presences")
+     * @Rest\View(serializerGroups={"GetStudentPresences"}, serializerEnableMaxDepthChecks=true)
+     *
+     * @return StudentPresence[]
+     */
+    public function getPresences()
+    {
+        return $this->getDoctrine()->getManager()->getRepository(StudentPresence::class)->findBy(['student' => $this->getUser(), 'present'=>false]);
+
+    }
+
 }
