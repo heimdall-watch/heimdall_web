@@ -24,7 +24,9 @@ class StudentType extends AbstractType
             ->add('email', EmailType::class)
             ->add('photoFile', VichImageType::class, [
                 'required' => false,
-                'allow_delete' => true
+                'allow_delete' => true,
+                'download_label' => '...',
+                'imagine_pattern' => '...',
             ])
             ->add('classGroup', EntityType::class, [
                 'class' => ClassGroup::class,

@@ -58,9 +58,36 @@ class DevFixtures extends Fixture
         $rollcallTest = new RollCall();
         $rollcallTest->setClassGroup($group)
                     ->setTeacher($jfpp)
-                    ->setDateStart($date)
+                    ->setDateStart((clone $date)->modify('2 days ago'))
                     ->setDateEnd((clone $date)->modify('+ 2 hours'));
         $manager->persist($rollcallTest);
+
+        // Rollcall 4
+        $date = new \DateTime;
+        $rollcallTest4 = new RollCall();
+        $rollcallTest4->setClassGroup($group)
+            ->setTeacher($jfpp)
+            ->setDateStart((clone $date)->modify('3 days ago'))
+            ->setDateEnd((clone $date)->modify('+ 2 hours'));
+        $manager->persist($rollcallTest4);
+
+        // Rollcall 5
+        $date = new \DateTime;
+        $rollcallTest5 = new RollCall();
+        $rollcallTest5->setClassGroup($group)
+            ->setTeacher($jfpp)
+            ->setDateStart((clone $date)->modify('9 days ago'))
+            ->setDateEnd((clone $date)->modify('+ 3 hours'));
+        $manager->persist($rollcallTest5);
+
+        // Rollcall 6
+        $date = new \DateTime;
+        $rollcallTest6 = new RollCall();
+        $rollcallTest6->setClassGroup($group)
+            ->setTeacher($jfpp)
+            ->setDateStart((clone $date)->modify('5 days ago'))
+            ->setDateEnd((clone $date)->modify('+ 4 hours'));
+        $manager->persist($rollcallTest6);
 
         // Rollcall 2
         $date = new \DateTime();
@@ -68,7 +95,7 @@ class DevFixtures extends Fixture
         $rollcallTest2->setClassGroup($group)
             ->setTeacher($jfpp)
             ->setDateStart($date)
-            ->setDateEnd((clone $date)->modify('+ 2 hours'));
+            ->setDateEnd((clone $date)->modify('+ 6 hours'));
         $manager->persist($rollcallTest2);
 
         // Rollcall 3

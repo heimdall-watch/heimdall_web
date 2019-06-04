@@ -11,10 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class StudentPresence
 {
-    const EXCUSE_SICK = 'sick';
-    const EXCUSE_FAMILY = 'family';
-    const EXCUSE_TRANSPORT = 'transport';
-    const EXCUSE_WORK = 'work';
+    const EXCUSES = ['sick', 'family', 'transport', 'work'];
 
     /**
      * @ORM\Id()

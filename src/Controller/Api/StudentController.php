@@ -91,5 +91,4 @@ class StudentController extends AbstractController
         return $this->getDoctrine()->getManager()->getRepository(StudentPresence::class)->findBy(['student' => $this->getUser(), 'present'=>false]);
 
     }
-
 }
