@@ -73,5 +73,20 @@ class RollCallController extends AbstractController
     public function getRollcalls(Request $request)
     {
         return $this->getDoctrine()->getManager()->getRepository(RollCall::class)->findBy(['teacher' => $this->getUser()], ['dateStart' => 'DESC'], $request->query->get('limit', null));
+
+
     }
+
+    /**
+     * @Rest\Get("/lastweek", name="rollcall_get_last_week")
+     * @Rest\View(serializerGroups={"GetRollcall"}, serializerEnableMaxDepthChecks=true)
+     *
+     * @return RollCall[]
+     */
+    public function getRollcallsLastWeek(Request $request)
+    {
+        return $this->getDoctrine()->getManager()->getRepository(RollCall::class)->findLastWeek($this->getUser());
+    }
+
+
 }

@@ -19,6 +19,20 @@ class RollCallRepository extends ServiceEntityRepository
         parent::__construct($registry, RollCall::class);
     }
 
+    public function findLastWeek($user)
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.dateStart BETWEEN :min_date AND :max_date')
+            ->andWhere('u.teacher = :teacher')
+            ->setParameter('min_date', (new \DateTime('1 week ago')))
+            ->setParameter('max_date', (new \DateTime()))
+            ->setParameter('teacher',$user)
+            ->setMaxResults(30)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
     // /**
     //  * @return Attendance[] Returns an array of Attendance objects
     //  */
