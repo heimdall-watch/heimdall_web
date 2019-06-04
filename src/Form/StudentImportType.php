@@ -14,12 +14,12 @@ use Symfony\Component\Validator\Constraints\Range;
 
 class StudentImportType extends AbstractType
 {
-    const IMPORT_MIME_TYPES = ['text/plain', 'text/csv', '.csv', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/xml', 'text/xml', 'application/vnd.oasis.opendocument.spreadsheet'];
+    const IMPORT_MIME_TYPES = ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'text/plain', 'text/csv', 'application/vnd.ms-excel', 'application/vnd.oasis.opendocument.spreadsheet'];
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('file', FileType::class, [
-                'constraints' => new File(['mimeTypes' => self::IMPORT_MIME_TYPES, 'mimeTypesMessage' => 'File type unauthorized.']),
+                'constraints' => new File(['mimeTypes' => self::IMPORT_MIME_TYPES]),
                 'required' => true,
             ])
             ->add('classGroup', EntityType::class, [

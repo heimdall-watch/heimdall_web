@@ -6,6 +6,7 @@ use App\Entity\Student;
 use App\Form\StudentImportType;
 use App\Form\StudentType;
 use App\Repository\StudentRepository;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Port\Csv\CsvReader;
 use Port\Doctrine\DoctrineWriter;
 use Port\Spreadsheet\SpreadsheetReader;
@@ -71,11 +72,19 @@ class StudentController extends AbstractController
                     $writer->writeItem($associatedRow);
                 }
 
-                $writer->finish();
+                try {
+                    $writer->finish();
 
-                $this->addFlash('success', 'Students imported!');
+                    $this->addFlash('success', 'Students imported!');
 
-                return $this->redirectToRoute('student_index');
+                    return $this->redirectToRoute('student_index');
+                }
+                catch (UniqueConstraintViolationException $e) {
+                    $this->addFlash('danger', 'Some students already exists, please remove the duplicates before import.');
+                }
+                catch (\Exception $e) {
+                    $this->addFlash('danger', 'Import error! Some data might not be in a good format.');
+                }
             }
         }
 
