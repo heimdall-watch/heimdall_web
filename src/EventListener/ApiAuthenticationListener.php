@@ -43,7 +43,7 @@ class ApiAuthenticationListener
         }
 
         $data['user'] = [
-            'id ' => $user->getId(),
+            'id' => $user->getId(),
             'type' => $user->getType(),
             'username' => $user->getUsername(),
             'firstname' => $user->getFirstname(),

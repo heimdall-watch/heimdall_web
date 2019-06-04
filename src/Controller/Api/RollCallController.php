@@ -24,7 +24,7 @@ use Symfony\Component\Validator\ConstraintViolationList;
 class RollCallController extends AbstractController
 {
     /**
-     * @Rest\Post("/", name="rollcall_create")
+     * @Rest\Post("", name="rollcall_create")
      * @ParamConverter("rollCall", converter="fos_rest.request_body")
      *
      * @param RollCall $rollCall
@@ -65,7 +65,7 @@ class RollCallController extends AbstractController
     }
 
     /**
-     * @Rest\Get("/", name="rollcall_get_all")
+     * @Rest\Get("", name="rollcall_get_all")
      * @Rest\View(serializerGroups={"GetRollcall"}, serializerEnableMaxDepthChecks=true)
      *
      * @return RollCall[]

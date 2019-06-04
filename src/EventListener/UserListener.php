@@ -26,6 +26,18 @@ class UserListener
 
     public function prePersist(User $user)
     {
+        // If the user don't have password, generate one
+        if (empty($user->getPlainPassword()) && empty($user->getPassword())) {
+            $passwordGenerator = new ComputerPasswordGenerator();
+            $passwordGenerator
+                ->setUppercase()
+                ->setLowercase()
+                ->setNumbers()
+                ->setSymbols(false)
+                ->setLength(10);
+            $user->setPlainPassword($passwordGenerator->generatePassword());
+        }
+
         $message = (new Swift_Message('Inscription'))
             ->setFrom('send@example.com')
             ->setTo($user->getEmail())
@@ -47,18 +59,6 @@ class UserListener
         // If the user has a plainPassword, hash it and save it
         if (!empty($user->getPlainPassword())) {
             $user->setPassword($this->passwordEncoder->encodePassword($user, $user->getPlainPassword()));
-            $user->eraseCredentials();
-        // If the user don't have password, generate and hash one
-        } elseif (empty($user->getPassword())) {
-            $passwordGenerator = new ComputerPasswordGenerator();
-            $passwordGenerator
-                ->setUppercase()
-                ->setLowercase()
-                ->setNumbers()
-                ->setSymbols(false)
-                ->setLength(10);
-            $password = $passwordGenerator->generatePassword();
-            $user->setPassword($this->passwordEncoder->encodePassword($user, $password));
         }
     }
 
