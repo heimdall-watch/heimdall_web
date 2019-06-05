@@ -5,6 +5,7 @@
         "php": "^7.1.3",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "birkof/onesignal-bundle": "^1.2",
         "friendsofsymfony/rest-bundle": "^2.5",
         "gesdinet/jwt-refresh-token-bundle": "^0.6.2",
         "hackzilla/password-generator": "^1.4",
