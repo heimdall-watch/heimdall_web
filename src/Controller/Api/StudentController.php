@@ -77,9 +77,6 @@ class StudentController extends AbstractController
         return $uploaderHelper->asset($student, 'photoFile');
     }
 
-
-
-
     /**
      * @Rest\Get("/presences", name="student_get_presences")
      * @Rest\View(serializerGroups={"GetStudentPresences"}, serializerEnableMaxDepthChecks=true)

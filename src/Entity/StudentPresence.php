@@ -4,10 +4,13 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\StudentPresenceRepository")
+ * @Vich\Uploadable
  */
 class StudentPresence
 {
@@ -52,6 +55,21 @@ class StudentPresence
      * @Assert\LessThan(propertyPath="rollCall.getDuration()")
      */
     private $late;
+
+    /**
+     * @Vich\UploadableField(mapping="excuses_photos", fileNameProperty="excuseProof")
+     * @var File
+     * @Assert\File(
+     *      maxSize="5242880",
+     *      mimeTypes = {
+     *          "image/png",
+     *          "image/jpeg",
+     *          "image/jpg",
+     *      }
+     * )
+     * @Serializer\Exclude()
+     */
+    private $photoFile;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -165,6 +183,17 @@ class StudentPresence
     {
         $this->excuseValidated = $excuseValidated;
 
+        return $this;
+    }
+
+    public function getPhotoFile()
+    {
+        return $this->photoFile;
+    }
+
+    public function setPhotoFile(File $excuseProof = null)
+    {
+        $this->photoFile = $excuseProof;
         return $this;
     }
 }
