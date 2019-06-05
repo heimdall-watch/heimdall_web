@@ -26,6 +26,7 @@ class RollCallController extends AbstractController
     /**
      * @Rest\Post("", name="rollcall_create")
      * @ParamConverter("rollCall", converter="fos_rest.request_body")
+     * @Rest\View(serializerGroups={"GetRollcall"}, serializerEnableMaxDepthChecks=true)
      *
      * @param RollCall $rollCall
      * @param ConstraintViolationList $errors
@@ -49,7 +50,7 @@ class RollCallController extends AbstractController
             throw new HttpException(Response::HTTP_BAD_REQUEST, null, $e);
         }
 
-        return View::create($rollCall, Response::HTTP_CREATED, ['Location' => null]); // TODO : Location should be the path to get the entity details (REST)
+        return View::create($rollCall, Response::HTTP_CREATED, ['Location' => $this->generateUrl('api_rollcall_get', ['id' => $rollCall->getId()])]); // TODO : Location should be the path to get the entity details (REST)
     }
 
     /**

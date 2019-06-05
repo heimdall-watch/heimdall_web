@@ -56,6 +56,7 @@ class RollCall
      * @var \DateTime
      * @Serializer\Groups({"Default", "GetRollcall", "Deserialization", "GetStudentPresences"})
      * @Assert\DateTime()
+     * @Assert\LessThan(propertyPath="dateEnd")
      */
     private $dateStart;
 
@@ -64,6 +65,7 @@ class RollCall
      * @var \DateTime
      * @Serializer\Groups({"Default", "GetRollcall", "Deserialization", "GetStudentPresences"})
      * @Assert\DateTime()
+     * @Assert\GreaterThan(propertyPath="dateStart")
      */
     private $dateEnd;
 
@@ -182,7 +184,7 @@ class RollCall
 
     public function getDuration(): int
     {
-        return $this->dateStart->diff($this->dateEnd)->h;
+        return $this->dateStart->diff($this->dateEnd)->m;
     }
 
     public function getStatus(): ?string

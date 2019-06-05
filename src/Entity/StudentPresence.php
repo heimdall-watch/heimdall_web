@@ -49,7 +49,6 @@ class StudentPresence
      * @Serializer\Groups({"Default", "GetRollcall", "Deserialization", "GetStudentPresences"})
      * @Assert\Type("integer")
      * @Assert\GreaterThan(0)
-     * @Assert\LessThan(propertyPath="rollCall.getDuration()")
      */
     private $late;
 

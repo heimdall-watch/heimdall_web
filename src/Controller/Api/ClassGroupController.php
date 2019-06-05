@@ -5,6 +5,7 @@ namespace App\Controller\Api;
 use App\Entity\ClassGroup;
 use App\Entity\Student;
 use App\Entity\Teacher;
+use Doctrine\Common\Collections\Collection;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -39,7 +40,7 @@ class ClassGroupController extends AbstractController
      * @IsGranted("ROLE_TEACHER")
      *
      * @param ClassGroup $classGroup
-     * @return Student[]
+     * @return Student[]|Collection
      */
     public function getClassStudents(ClassGroup $classGroup, UploaderHelper $uploaderHelper)
     {

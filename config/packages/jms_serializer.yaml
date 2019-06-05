@@ -1,1 +1,4 @@
 jms_serializer:
+  handlers:
+    datetime:
+      default_format: 'Y-m-d\TH:i:s.u'
