@@ -10,3 +10,14 @@ vich_uploader:
             inject_on_load: false
             delete_on_update: true
             delete_on_remove: true
+
+
+        excuses_photos:
+            uri_prefix: /presences/proofs
+            upload_destination: '%kernel.project_dir%/public/presences/proofs'
+            namer: Vich\UploaderBundle\Naming\UniqidNamer
+
+            inject_on_load: false
+            delete_on_update: true
+            delete_on_remove: true
+
