@@ -14,7 +14,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  */
 class StudentPresence
 {
-    const EXCUSES = ['sick', 'family', 'transport', 'work'];
+    const EXCUSES = ['sick', 'family', 'transport', 'work', 'other'];
 
     /**
      * @ORM\Id()
