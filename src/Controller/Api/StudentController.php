@@ -85,7 +85,9 @@ class StudentController extends AbstractController
      */
     public function getPresences()
     {
-        return $this->getDoctrine()->getManager()->getRepository(StudentPresence::class)->findBy(['student' => $this->getUser(), 'present'=>false]);
+        //return $this->getDoctrine()->getManager()->getRepository(StudentPresence::class)->
+        //findBy(['student' => $this->getUser(), 'present'=>false],['student' => $this->getUser(), 'late'>0]);
+        return $this->getDoctrine()->getManager()->getRepository(StudentPresence::class)->findAbsencesRetards($this->getUser());
 
     }
 }

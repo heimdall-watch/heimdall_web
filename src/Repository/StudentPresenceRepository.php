@@ -23,6 +23,17 @@ class StudentPresenceRepository extends ServiceEntityRepository
     //  * @return UserAttendance[] Returns an array of UserAttendance objects
     //  */
 
+    public function findAbsencesRetards($user)
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.student = :student')
+            ->andWhere('u.present = false OR u.late != 0')
+            ->setParameter('student',$user)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
     public function findByDate(\DateTime $date)
     {
         return $this->createQueryBuilder('u')
