@@ -34,9 +34,12 @@
     <h1>Presence of the student</h1>
 
         {% for presence in student.presences %}
+            {% if presence.present!=true or presence.late!=null%}
             <li class="list-group-item d-flex justify-content-between align-items-center">
+
                 {{ presence.rollcall.dateStart|date("Y-m-d H:i:s")}} -
                 {{ presence.present ? 'Présent' : 'Absence'}} -
+
                 {{ presence.excuse ? presence.excuse : 'Non justifiée' }} -
                 {% if presence.excuseProof %}
                 <img src="{{ asset('/presences/proofs/') ~ presence.excuseProof }}" />
@@ -46,12 +49,14 @@
 
                 <span class="badge badge-primary badge-pill">{{ presence.rollcall.duration}}h</span>
             </li>
+            {% endif %}
         {% else %}
             <ul class="list-group">
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                 Il n'y a pas de données.
                 </li>
             </ul>
+
         {% endfor %}
 
     <a href="{{ path('student_index') }}" class="btn btn-secondary">back to list</a>
