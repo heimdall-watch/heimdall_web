@@ -37,7 +37,13 @@
             <li class="list-group-item d-flex justify-content-between align-items-center">
                 {{ presence.rollcall.dateStart|date("Y-m-d H:i:s")}} -
                 {{ presence.present ? 'Présent' : 'Absence'}} -
-                {{ presence.excuse ? presence.excuse : 'Non justifiée' }}
+                {{ presence.excuse ? presence.excuse : 'Non justifiée' }} -
+                {% if presence.excuseProof %}
+                <img src="{{ asset('/presences/proofs/') ~ presence.excuseProof }}" />
+                {% else %}
+                    Pas d'image
+                    {% endif %}
+
                 <span class="badge badge-primary badge-pill">{{ presence.rollcall.duration}}h</span>
             </li>
         {% else %}
