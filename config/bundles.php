@@ -19,4 +19,5 @@ return [
     Vich\UploaderBundle\VichUploaderBundle::class => ['all' => true],
     Symfony\WebpackEncoreBundle\WebpackEncoreBundle::class => ['all' => true],
     Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle::class => ['all' => true],
+    Adelplace\OneSignalBundle\OneSignalBundle::class => ['all' => true],
 ];

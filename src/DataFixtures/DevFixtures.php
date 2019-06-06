@@ -21,7 +21,7 @@ class DevFixtures extends Fixture
         $brahim = new Admin();
         $brahim->setUsername("Brahim")
                ->setFirstname("Brahim")
-               ->setLastname("Lastname")
+               ->setLastname("Boughezala")
                ->setEmail("sosthen.gaillard@gmail.com")
                ->setPlainPassword("brahim");
         $manager->persist($brahim);
@@ -30,28 +30,33 @@ class DevFixtures extends Fixture
         $sosthen = new Student();
         $sosthen->setUsername("Sosthen")
                 ->setFirstname("Sosthen")
-                ->setLastname("Lastname")
+                ->setLastname("Gaillard")
                 ->setEmail("sosthen.gaillard@gmail.com")
                 ->setPlainPassword("sosthen");
         $manager->persist($sosthen);
 
+        // Group MIAGE
         $miage = new ClassGroup();
-        $miage->setName('MIAGE')->addStudent($sosthen);
+        $miage->setName('M2 Classique')
+               ->addStudent($sosthen);
         $manager->persist($miage);
+
+
+        // Group M2 APP
+        $group = new ClassGroup();
+        $group->setName("M2 Apprentissage")
+              ->addStudent($sosthen);
+        $manager->persist($group);
 
         // Teacher 1
         $jfpp = new Teacher();
         $jfpp->setUsername("Jfpp")
-             ->setFirstname("Jfpp")
-             ->setLastname("Lastname")
-             ->setEmail("sosthen.gaillard@gmail.com")
-             ->setPlainPassword("jfpp");
+            ->setFirstname("Jfpp")
+            ->setLastname("Lastname")
+            ->setEmail("sosthen.gaillard@gmail.com")
+            ->setPlainPassword("jfpp")
+            ->addClassGroup($group);
         $manager->persist($jfpp);
-
-        // Group M2 APP
-        $group = new ClassGroup();
-        $group->setName("M2 APP");
-        $manager->persist($group);
 
         // Rollcall 1
         $date = new \DateTime;
