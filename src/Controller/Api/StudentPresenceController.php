@@ -6,6 +6,7 @@ use App\Entity\StudentPresence;
 use App\Form\StudentPresenceImageType;
 use App\HttpFoundation\File\ApiUploadedFile;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use FOS\RestBundle\View\View;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,6 +23,17 @@ use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
  */
 class StudentPresenceController extends AbstractController
 {
+    /**
+     * @Rest\Get("/presence/{id}", name="get_presence")
+     * @Rest\View(serializerGroups={"GetStudentPresences"}, serializerEnableMaxDepthChecks=true)
+     *
+     * @return StudentPresence
+     */
+    public function getExcuse(StudentPresence $presence)
+    {
+        return $presence;
+    }
+
     /**
      * @Rest\Get("/excuses", name="get_excuses")
      * @Rest\View(serializerGroups={"GetExcuse"}, serializerEnableMaxDepthChecks=true)
@@ -61,7 +73,10 @@ class StudentPresenceController extends AbstractController
             throw new NotFoundHttpException("La photo n'existe pas");
         }
 
-        return $uploaderHelper->asset($studentPresence, 'photoFile');
+        // TODO : very ugly
+        $studentPresence->setExcuseProof($uploaderHelper->asset($studentPresence, 'photoFile'));
+
+        return View::create($studentPresence, Response::HTTP_CREATED, ['Location' => $this->generateUrl('api_get_presence', ['id' => $studentPresence->getId()])]);
     }
 
 }
