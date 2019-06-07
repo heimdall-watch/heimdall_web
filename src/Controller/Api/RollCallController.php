@@ -73,7 +73,10 @@ class RollCallController extends AbstractController
      */
     public function getRollcalls(Request $request)
     {
-        return $this->getDoctrine()->getManager()->getRepository(RollCall::class)->findBy(['teacher' => $this->getUser()], ['dateStart' => 'DESC'], $request->query->get('limit', null));
+        return $this->getDoctrine()->getManager()->getRepository(RollCall::class)->findBy(
+            ['teacher' => $this->getUser()],
+            ['dateStart' => 'DESC'],
+            $request->query->get('limit', null));
 
 
     }

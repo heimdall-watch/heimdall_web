@@ -31,37 +31,78 @@ class DevFixtures extends Fixture
         $sosthen->setUsername("Sosthen")
                 ->setFirstname("Sosthen")
                 ->setLastname("Gaillard")
-                ->setEmail("sosthen.gaillard@gmail.com")
+                ->setEmail("sosthen@heimdall.watch")
                 ->setPlainPassword("sosthen");
         $manager->persist($sosthen);
+        $julie = new Student();
+        $julie->setUsername("Julie")
+            ->setFirstname("Julie")
+            ->setLastname("Ausseil")
+            ->setEmail("julie@heimdall.watch")
+            ->setPlainPassword("julie");
+        $manager->persist($julie);
+        $flo = new Student();
+        $flo->setUsername("Florence")
+            ->setFirstname("Florence")
+            ->setLastname("Allard")
+            ->setEmail("florence@heimdall.watch")
+            ->setPlainPassword("florence");
+        $manager->persist($flo);
+        $loic = new Student();
+        $loic->setUsername("Loic")
+            ->setFirstname("Loïc")
+            ->setLastname("Bonnet")
+            ->setEmail("loic@heimdall.watch")
+            ->setPlainPassword("loic");
+        $manager->persist($loic);
+        $samyh = new Student();
+        $samyh->setUsername("Samyh")
+            ->setFirstname("Samyh")
+            ->setLastname("Bouleoud")
+            ->setEmail("samyh@heimdall.watch")
+            ->setPlainPassword("samyh");
+        $manager->persist($samyh);
 
         // Group MIAGE
         $miage = new ClassGroup();
-        $miage->setName('M2 Classique')
-               ->addStudent($sosthen);
+        $miage->setName('M2 Classique');
         $manager->persist($miage);
 
-
         // Group M2 APP
-        $group = new ClassGroup();
-        $group->setName("M2 Apprentissage")
-              ->addStudent($sosthen);
-        $manager->persist($group);
+        $m2App = new ClassGroup();
+        $m2App->setName("M2 Apprentissage")
+            ->addStudent($sosthen)
+            ->addStudent($julie)
+            ->addStudent($flo)
+            ->addStudent($loic)
+            ->addStudent($samyh);
+        $manager->persist($m2App);
+
+        for ($i = 0; $i < 10; $i++) {
+            $student = new Student();
+            $student->setUsername("Student " . $i)
+                ->setFirstname("Student " . $i)
+                ->setLastname("Default " . $i)
+                ->setEmail("student@student.student");
+            $manager->persist($student);
+            $m2App->addStudent($student);
+        }
 
         // Teacher 1
         $jfpp = new Teacher();
-        $jfpp->setUsername("Jfpp")
+        $jfpp->addClassGroup($m2App)
+            ->addClassGroup($miage)
+            ->setUsername("Jfpp")
             ->setFirstname("Jfpp")
             ->setLastname("Lastname")
             ->setEmail("sosthen.gaillard@gmail.com")
-            ->setPlainPassword("jfpp")
-            ->addClassGroup($group);
+            ->setPlainPassword("jfpp");
         $manager->persist($jfpp);
 
         // Rollcall 1
         $date = new \DateTime;
         $rollcallTest = new RollCall();
-        $rollcallTest->setClassGroup($group)
+        $rollcallTest->setClassGroup($m2App)
                     ->setTeacher($jfpp)
                     ->setDateStart((clone $date)->modify('2 days ago'))
                     ->setDateEnd((clone $date)->modify('+ 2 hours'));
@@ -70,7 +111,7 @@ class DevFixtures extends Fixture
         // Rollcall 4
         $date = new \DateTime;
         $rollcallTest4 = new RollCall();
-        $rollcallTest4->setClassGroup($group)
+        $rollcallTest4->setClassGroup($m2App)
             ->setTeacher($jfpp)
             ->setDateStart((clone $date)->modify('3 days ago'))
             ->setDateEnd((clone $date)->modify('+ 2 hours'));
@@ -79,7 +120,7 @@ class DevFixtures extends Fixture
         // Rollcall 5
         $date = new \DateTime;
         $rollcallTest5 = new RollCall();
-        $rollcallTest5->setClassGroup($group)
+        $rollcallTest5->setClassGroup($m2App)
             ->setTeacher($jfpp)
             ->setDateStart((clone $date)->modify('9 days ago'))
             ->setDateEnd((clone $date)->modify('+ 3 hours'));
@@ -88,7 +129,7 @@ class DevFixtures extends Fixture
         // Rollcall 6
         $date = new \DateTime;
         $rollcallTest6 = new RollCall();
-        $rollcallTest6->setClassGroup($group)
+        $rollcallTest6->setClassGroup($m2App)
             ->setTeacher($jfpp)
             ->setDateStart((clone $date)->modify('5 days ago'))
             ->setDateEnd((clone $date)->modify('+ 4 hours'));
@@ -97,7 +138,7 @@ class DevFixtures extends Fixture
         // Rollcall 2
         $date = new \DateTime();
         $rollcallTest2 = new RollCall();
-        $rollcallTest2->setClassGroup($group)
+        $rollcallTest2->setClassGroup($m2App)
             ->setTeacher($jfpp)
             ->setDateStart($date)
             ->setDateEnd((clone $date)->modify('+ 6 hours'));
@@ -106,7 +147,7 @@ class DevFixtures extends Fixture
         // Rollcall 3
         $date = new \DateTime();
         $rollcallTest3 = new RollCall();
-        $rollcallTest3->setClassGroup($group)
+        $rollcallTest3->setClassGroup($m2App)
             ->setTeacher($jfpp)
             ->setDateStart($date)
             ->setDateEnd((clone $date)->modify('+ 2 hours'));

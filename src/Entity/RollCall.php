@@ -13,10 +13,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class RollCall
 {
-    const STATUS_DRAFT = 'draft';
-    const STATUS_VALID = 'valid';
-    const STATUS_CANCEL = 'cancel';
-
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -68,13 +64,6 @@ class RollCall
      * @Assert\GreaterThan(propertyPath="dateStart")
      */
     private $dateEnd;
-
-    /**
-     * @ORM\Column(type="string", length=6)
-     * @Serializer\Groups({"Default", "GetRollcall", "Deserialization", "GetStudentPresences"})
-     * @Assert\Choice({RollCall::STATUS_CANCEL, RollCall::STATUS_DRAFT, RollCall::STATUS_VALID})
-     */
-    private $status = self::STATUS_DRAFT;
 
     public function __construct()
     {
@@ -185,17 +174,5 @@ class RollCall
     public function getDuration(): int
     {
         return $this->dateStart->diff($this->dateEnd)->m;
-    }
-
-    public function getStatus(): ?string
-    {
-        return $this->status;
-    }
-
-    public function setStatus(string $status): self
-    {
-        $this->status = $status;
-
-        return $this;
     }
 }
