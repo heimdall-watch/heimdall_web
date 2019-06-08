@@ -2,9 +2,8 @@
 /.env.local
 /.env.local.php
 /.env.*.local
-/public/bundles/
-/public/build/
-/public/students/
+/public/*
+!/public/index.php
 /var/
 /vendor/
 /config/jwt/

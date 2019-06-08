@@ -1,4 +1,4 @@
 adelplace_one_signal:
-    application_id: '1cce1366-61f0-493d-856c-88b4b3384c87'
-    application_auth_key: 'YzY5ZGI2ZDgtZjhlNy00NWE4LWFmYWUtZGM4ZWY0OWJmNjJk'
-    user_auth_key: 'OTBkYmY5MGEtMzMxMC00NTk5LTlmMDAtYzhjOTliODk5NDA2'
+    application_id: '%env(ONESIGNAL_APP_ID)%'
+    application_auth_key: '%env(ONESIGNAL_APP_AUTH_KEY)%'
+    user_auth_key: '%env(ONESIGNAL_USER_AUTH_KEY)%'
