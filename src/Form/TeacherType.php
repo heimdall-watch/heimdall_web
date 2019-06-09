@@ -23,6 +23,7 @@ class TeacherType extends AbstractType
                 'class' => ClassGroup::class,
                 'multiple' => true,
                 'choice_label' => 'name',
+                'attr' => ['class' => 'select2']
             ])
         ;
     }

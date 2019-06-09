@@ -9,3 +9,5 @@ import 'bootstrap';
 import 'bootstrap-notify';
 
 import 'bootstrap-datepicker';
+
+import 'select2';

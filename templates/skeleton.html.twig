@@ -26,6 +26,12 @@
     $('#menu-toggle').click(() => {
         $('#wrapper').toggleClass("toggled");
     });
+
+
+    $('.select2').select2({
+        language: '{{ app.request.locale }}',
+        theme: 'bootstrap4',
+    });
 </script>
 
 {% block javascripts %}{% endblock %}
