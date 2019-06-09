@@ -14,9 +14,16 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class UserRepository extends ServiceEntityRepository
 {
-    public function __construct(RegistryInterface $registry)
+    public function __construct(RegistryInterface $registry, ?string $classname = null)
     {
-        parent::__construct($registry, User::class);
+        parent::__construct($registry, $classname ?? User::class);
+    }
+
+    public function getFindAllQuery()
+    {
+        $qb = $this->createQueryBuilder('user');
+
+        return $qb->getQuery();
     }
 
     // /**

@@ -5,11 +5,11 @@ namespace App\Controller;
 use App\Entity\Teacher;
 use App\Form\TeacherType;
 use App\Repository\TeacherRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
  * @Route("/teacher")
@@ -19,10 +19,18 @@ class TeacherController extends AbstractController
     /**
      * @Route("/", name="teacher_index", methods={"GET"})
      */
-    public function index(TeacherRepository $teacherRepository): Response
+    public function index(Request $request, PaginatorInterface $paginator, TeacherRepository $repository): Response
     {
+        $query = $repository->getFindAllQuery();
+
+        $pagination = $paginator->paginate(
+            $query,
+            $request->query->getInt('page', 1),
+            10
+        );
+
         return $this->render('teacher/index.html.twig', [
-            'teachers' => $teacherRepository->findAll(),
+            'pagination' => $pagination
         ]);
     }
 
@@ -46,9 +54,10 @@ class TeacherController extends AbstractController
             return $this->redirectToRoute('teacher_index');
         }
 
-        return $this->render('teacher/new.html.twig', [
+        return $this->render('teacher/form.html.twig', [
             'teacher' => $teacher,
             'form' => $form->createView(),
+            'update' => false,
         ]);
     }
 
@@ -78,9 +87,10 @@ class TeacherController extends AbstractController
             ]);
         }
 
-        return $this->render('teacher/edit.html.twig', [
+        return $this->render('teacher/form.html.twig', [
             'teacher' => $teacher,
             'form' => $form->createView(),
+            'update' => true,
         ]);
     }
 

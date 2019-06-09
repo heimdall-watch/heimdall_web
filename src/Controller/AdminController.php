@@ -6,11 +6,11 @@ use App\Entity\Admin;
 use App\Form\AdminType;
 use App\Repository\AdminRepository;
 use Hackzilla\PasswordGenerator\Generator\ComputerPasswordGenerator;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
  * @Route("/admin")
@@ -20,10 +20,18 @@ class AdminController extends AbstractController
     /**
      * @Route("/", name="admin_index", methods={"GET"})
      */
-    public function index(AdminRepository $adminRepository): Response
+    public function index(Request $request, PaginatorInterface $paginator, AdminRepository $repository): Response
     {
+        $query = $repository->getFindAllQuery();
+
+        $pagination = $paginator->paginate(
+            $query,
+            $request->query->getInt('page', 1),
+            10
+        );
+
         return $this->render('admin/index.html.twig', [
-            'admins' => $adminRepository->findAllAdmins(),
+            'pagination' => $pagination
         ]);
     }
 
@@ -58,9 +66,10 @@ class AdminController extends AbstractController
             return $this->redirectToRoute('admin_index');
         }
 
-        return $this->render('admin/new.html.twig', [
+        return $this->render('admin/form.html.twig', [
             'admin' => $admin,
             'form' => $form->createView(),
+            'update' => false,
         ]);
     }
 
@@ -96,9 +105,10 @@ class AdminController extends AbstractController
             ]);
         }
 
-        return $this->render('admin/edit.html.twig', [
+        return $this->render('admin/form.html.twig', [
             'admin' => $admin,
             'form' => $form->createView(),
+            'update' => true,
         ]);
     }
 

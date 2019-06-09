@@ -19,6 +19,13 @@ class ClassGroupRepository extends ServiceEntityRepository
         parent::__construct($registry, ClassGroup::class);
     }
 
+    public function getFindAllQuery()
+    {
+        $qb = $this->createQueryBuilder('class');
+
+        return $qb->getQuery();
+    }
+
     /*
     public function findOneBySomeField($value): ?Group
     {

@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% set title = update ? 'Modification de ' ~ admin.username : "Ajout d'administrateur" %}
+{% block title %}{{ parent() }} - {{ title }}{% endblock %}
+
+{% block container %}
+    <h1>{{ title }}</h1>
+
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <button class="btn btn-success" type="submit">Enregistrer</button>
+    <a href="{{ path('admin_index') }}" class="btn btn-secondary">Retour à la liste</a>
+    {% if update and admin.id != app.user.id %}
+        {% include 'ui/_delete_form.html.twig' with { id: admin.id, path: 'admin_delete' } %}
+    {% endif %}
+    {{ form_end(form) }}
+{% endblock %}

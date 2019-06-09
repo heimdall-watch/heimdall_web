@@ -194,6 +194,12 @@
             "config/packages/prod/jms_serializer.yaml"
         ]
     },
+    "knplabs/knp-components": {
+        "version": "v1.3.10"
+    },
+    "knplabs/knp-paginator-bundle": {
+        "version": "v3.0.0"
+    },
     "lcobucci/jwt": {
         "version": "3.2.5"
     },

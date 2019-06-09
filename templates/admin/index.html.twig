@@ -1,36 +1,58 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Admin index{% endblock %}
+{% block title %}{{ parent() }} - Liste des administrateurs{% endblock %}
 
 {% block container %}
-    <h1>Admin index</h1>
+    <h1>Liste des administrateurs ({{ pagination.totalItemCount }})</h1>
+
+    <div class="pull-left">
+        {{ knp_pagination_filter(pagination, {
+            'user.username': 'Nom d\'utilisateur',
+            'user.lastname': 'Nom',
+            'user.firstname': 'Prénom',
+        }, {'button': 'Rechercher'}) }}
+    </div>
+
+    <div class="pull-right">
+        <a href="{{ path('admin_new') }}" class="btn btn-success"><i class="fa fa-plus"></i> Nouveau</a>
+    </div>
 
     <table class="table">
         <thead>
-            <tr>
-                <th>Username</th>
-                <th>Email</th>
-                <th>actions</th>
-            </tr>
+        <tr>
+            <th>{{ knp_pagination_sortable(pagination, 'Nom d\'utilisateur', 'user.username') }}</th>
+            <th>{{ knp_pagination_sortable(pagination, 'Nom', 'user.lastname') }}</th>
+            <th>{{ knp_pagination_sortable(pagination, 'Prénom', 'user.firstname') }}</th>
+            <th>Actions</th>
+
+        </tr>
         </thead>
         <tbody>
-        {% for admin in admins %}
+        {% for user in pagination %}
             <tr>
-                <td>{{ admin.username }}</td>
-                <td>{{ admin.email }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.lastname }}</td>
+                <td>{{ user.firstname }}</td>
                 <td>
-                    <a class="btn btn-link btn-xs text-info" title="{{ 'see_details'|trans }}" data-toggle="tooltip" href="{{ path('admin_show', {'id': admin.id}) }}"><i class="fa fa-eye" aria-hidden="true"></i></a>
-                    <a class="btn btn-link btn-xs text-warning" title="{{ 'edit'|trans }}" data-toggle="tooltip" href="{{ path('admin_edit', {'id': admin.id}) }}"><i class="fa fa-edit" aria-hidden="true"></i></a>
-                    {% include 'ui/_delete_form.html.twig' with { id: admin.id, path: 'admin_delete', min: true } %}
+                    <a class="btn btn-link btn-xs text-info" title="Voir le détail" data-toggle="tooltip"
+                       href="{{ path('admin_show', {'id': user.id}) }}"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                    <a class="btn btn-link btn-xs text-warning" title="Modifier ce compte" data-toggle="tooltip"
+                       href="{{ path('admin_edit', {'id': user.id}) }}"><i class="fa fa-edit"
+                                                                           aria-hidden="true"></i></a>
+                    {% if user.id != app.user.id %}
+                        {% include 'ui/_delete_form.html.twig' with { id: user.id, path: 'admin_delete', min: true } %}
+                    {% endif %}
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="6">no records found</td>
+                <td colspan="7">Aucun administrateur pour le moment.</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <a href="{{ path('admin_new') }}" class="btn btn-success">Create new</a>
+    <div class="navigation">
+        {{ knp_pagination_render(pagination, null, {}, {'align': 'center'}) }}
+    </div>
 {% endblock %}

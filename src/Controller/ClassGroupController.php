@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\ClassGroup;
 use App\Form\ClassGroupType;
 use App\Repository\ClassGroupRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,10 +19,18 @@ class ClassGroupController extends AbstractController
     /**
      * @Route("/", name="class_group_index", methods={"GET"})
      */
-    public function index(ClassGroupRepository $groupRepository): Response
+    public function index(Request $request, PaginatorInterface $paginator, ClassGroupRepository $repository): Response
     {
+        $query = $repository->getFindAllQuery();
+
+        $pagination = $paginator->paginate(
+            $query,
+            $request->query->getInt('page', 1),
+            10
+        );
+
         return $this->render('class_group/index.html.twig', [
-            'class_groups' => $groupRepository->findAll(),
+            'pagination' => $pagination
         ]);
     }
 
@@ -42,9 +51,10 @@ class ClassGroupController extends AbstractController
             return $this->redirectToRoute('class_group_index');
         }
 
-        return $this->render('class_group/new.html.twig', [
+        return $this->render('class_group/form.html.twig', [
             'class_group' => $classGroup,
             'form' => $form->createView(),
+            'update' => false,
         ]);
     }
 
@@ -74,9 +84,10 @@ class ClassGroupController extends AbstractController
             ]);
         }
 
-        return $this->render('class_group/edit.html.twig', [
+        return $this->render('class_group/form.html.twig', [
             'class_group' => $classGroup,
             'form' => $form->createView(),
+            'update' => true,
         ]);
     }
 

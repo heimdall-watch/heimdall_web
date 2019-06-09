@@ -7,6 +7,7 @@ use App\Form\StudentImportType;
 use App\Form\StudentType;
 use App\Repository\StudentRepository;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use Knp\Component\Pager\PaginatorInterface;
 use Port\Csv\CsvReader;
 use Port\Doctrine\DoctrineWriter;
 use Port\Spreadsheet\SpreadsheetReader;
@@ -97,10 +98,18 @@ class StudentController extends AbstractController
     /**
      * @Route("/", name="student_index", methods={"GET"})
      */
-    public function index(StudentRepository $studentRepository): Response
+    public function index(Request $request, PaginatorInterface $paginator, StudentRepository $repository): Response
     {
+        $query = $repository->getFindAllQuery();
+
+        $pagination = $paginator->paginate(
+            $query,
+            $request->query->getInt('page', 1),
+            10
+        );
+
         return $this->render('student/index.html.twig', [
-            'students' => $studentRepository->findAll(),
+            'pagination' => $pagination
         ]);
     }
 
@@ -122,9 +131,10 @@ class StudentController extends AbstractController
             return $this->redirectToRoute('student_index');
         }
 
-        return $this->render('student/new.html.twig', [
+        return $this->render('student/form.html.twig', [
             'student' => $student,
             'form' => $form->createView(),
+            'update' => false,
         ]);
     }
 
@@ -154,9 +164,10 @@ class StudentController extends AbstractController
             ]);
         }
 
-        return $this->render('student/edit.html.twig', [
+        return $this->render('student/form.html.twig', [
             'student' => $student,
             'form' => $form->createView(),
+            'update' => true,
         ]);
     }
 
