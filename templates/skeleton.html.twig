@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>{% block title %}Heimdall{% endblock %}</title>
+
+    {{ encore_entry_link_tags('app') }}
+    {% block stylesheets %}{% endblock %}
+</head>
+<body>
+
+{% block body %}{% endblock %}
+
+{{ encore_entry_script_tags('app') }}
+<script type="text/javascript">
+    {# Flash messages #}
+    {% for label,messages in app.flashes %}
+    {% for message in messages %}
+    $.notify('{{ message|e('js') }}', {type: '{{ label }}'});
+    {% endfor %}
+    {% endfor %}
+
+    $('[data-toggle="tooltip"]').tooltip();
+
+    $('#menu-toggle').click(() => {
+        $('#wrapper').toggleClass("toggled");
+    });
+</script>
+
+{% block javascripts %}{% endblock %}
+</body>
+</html>

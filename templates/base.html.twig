@@ -1,16 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>{% block title %}Heimdall{% endblock %}</title>
+{% extends 'skeleton.html.twig' %}
 
-    {% block stylesheets %}
-        {{ encore_entry_link_tags('app') }}
-    {% endblock %}
-</head>
-<body>
-
+{% block body %}
 <div class="d-flex" id="wrapper">
 
     {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
@@ -49,27 +39,8 @@
         {% endif %}
 
         <div class="container-fluid">
-            {% block body %}{% endblock %}
+            {% block container %}{% endblock %}
         </div>
     </div>
 </div>
-
-{% block javascripts %}
-    {{ encore_entry_script_tags('app') }}
-    <script type="text/javascript">
-        {# Flash messages #}
-        {% for label,messages in app.flashes %}
-        {% for message in messages %}
-        $.notify('{{ message|e('js') }}', {type: '{{ label }}'});
-        {% endfor %}
-        {% endfor %}
-
-        $('[data-toggle="tooltip"]').tooltip();
-
-        $('#menu-toggle').click(() => {
-            $('#wrapper').toggleClass("toggled");
-        });
-    </script>
 {% endblock %}
-</body>
-</html>
