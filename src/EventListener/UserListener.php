@@ -38,14 +38,18 @@ class UserListener
             $user->setPlainPassword($passwordGenerator->generatePassword());
         }
 
+        $serverName = getenv('HEIMDALL_SERVER_NAME');
         $message = (new Swift_Message('Inscription'))
-            ->setFrom('send@example.com')
+            ->setFrom('no-reply@' . $serverName, $serverName)
             ->setTo($user->getEmail())
             ->setBody(
                 $this->twig->render(
                     'email/email_creation.html.twig',
-                    ['name' => $user->getUsername(),
-                    'password' => $user->getPlainPassword()]
+                    [
+                        'name' => $user->getUsername(),
+                        'password' => $user->getPlainPassword(),
+                        'type' => $user->getType(),
+                    ]
                 ),
                 'text/html'
             )

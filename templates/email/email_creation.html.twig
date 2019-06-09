@@ -1,11 +1,18 @@
-{# templates/email/email_creation.html.twig #}
 <h3>Compte Heimdall</h3>
 
-Bonjour {{ name }}!
-Votre identifiant est : {{ name }}
-votre password est : {{ password }}
+<p>Bonjour {{ name }}!</p>
 
-{# example, assuming you have a route named "login" #}
-Pour se connecter et changer de mot de passe, aller sur : <a href="{{ url('app_login') }}">Connexion</a>.
+<p>Votre compte heimdall a été créé, voici vos identifiants :</p>
 
-Merci!
+<ul>
+    <li>Nom d'utilisateur : {{ name }}</li>
+    <li>Mot de passe : {{ password }}</li>
+</ul>
+
+<p>
+{% if type == 'Student' %}
+    Téléchargez l'application Heimdall sur votre téléphone pour visualiser vos absences et retards et les justifier facilement !
+{% elseif type == 'Teacher' %}
+    Téléchargez l'application Heimdall pour faire l'appel de vos classes, noter les absences et les retards.
+{% endif %}
+</p>
