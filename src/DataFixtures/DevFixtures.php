@@ -21,7 +21,7 @@ class DevFixtures extends Fixture
         $brahim = new Admin();
         $brahim->setUsername("Brahim")
                ->setFirstname("Brahim")
-               ->setLastname("Boughezala")
+               ->setLastname("LASTNAME")
                ->setEmail("sosthen.gaillard@gmail.com")
                ->setPlainPassword("brahim");
         $manager->persist($brahim);
