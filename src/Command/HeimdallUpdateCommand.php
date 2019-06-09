@@ -30,7 +30,7 @@ class HeimdallUpdateCommand extends Command
     {
         $this
             ->setDescription('Update the Heimdall server')
-            ->addOption('hard', 'h', InputOption::VALUE_OPTIONAL, 'Reset hard instead of git pull (any uncommitted change will be lost)')
+            ->addOption('hard', null, InputOption::VALUE_OPTIONAL, 'Reset hard instead of git pull (any uncommitted change will be lost)')
         ;
     }
 
