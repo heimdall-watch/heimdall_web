@@ -23,12 +23,16 @@
     </table>
 
     <h1>Groupes</h1>
-    <ul>
+
+    <table class="table">
+        <tbody>
         {% for classGroups in teacher.classGroups%}
-            <li>{{ classGroups.name }}</li>
-            <br>
+            <tr>
+                <td>{{ classGroups.name }}</td>
+            </tr>
         {% endfor %}
-    </ul>
+        </tbody>
+    </table>
 
     <a href="{{ path('teacher_index') }}" class="btn btn-secondary">Retour à la liste</a>
 

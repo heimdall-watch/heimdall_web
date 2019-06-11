@@ -173,6 +173,6 @@ class RollCall
 
     public function getDuration(): int
     {
-        return $this->dateStart->diff($this->dateEnd)->m;
+        return $this->dateStart->diff($this->dateEnd)->h;
     }
 }

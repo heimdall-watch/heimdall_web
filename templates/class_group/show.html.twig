@@ -9,31 +9,56 @@
         <tbody>
             <tr>
                 <th>Id</th>
-                <td>{{ class_group.id }}</td>
+                <th>Name</th>
+
             </tr>
             <tr>
-                <th>Name</th>
                 <td>{{ class_group.name }}</td>
+                <td>{{ class_group.id }}</td>
             </tr>
         </tbody>
     </table>
 
     <h1>Students</h1>
     <ul>
+        <table class="table">
+            <tbody>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+            </tr>
         {% for student in class_group.students %}
-            <li>{{ student.id }}</li>
-            <li>{{ student.username }}</li>
-            <br>
+                <tr>
+                    <td>{{ student.id }}</td>
+                    <td>{{ student.username }}</td>
+                </tr>
         {% endfor %}
+                </tbody>
+            </table>
+            <br>
+
     </ul>
 
     <h1>Teachers</h1>
     <ul>
-        {% for teacher in class_group.teachers %}
-            <li>{{ teacher.id }}</li>
-            <li>{{ teacher.username }}</li>
+
+
+        <table class="table">
+            <tbody>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+            </tr>
+            {% for teacher in class_group.teachers %}
+                <tr>
+                    <td>{{ teacher.id }}</td>
+                    <td>{{ teacher.username }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
             <br>
-        {% endfor %}
     </ul>
 
     <a href="{{ path('class_group_index') }}" class="btn btn-secondary">Retour à la liste</a>
