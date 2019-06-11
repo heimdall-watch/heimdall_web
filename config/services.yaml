@@ -53,3 +53,10 @@ services:
         tags:
             - { name: jms_serializer.subscribing_handler }
         arguments: ['@doctrine.orm.entity_manager']
+
+
+    # TODO : Not working
+    serializer.subscriber.heimdall:
+        class: App\EventSubscriber\SerializeSubscriber
+        tags:
+            - { name: jms_serializer.event_subscriber }

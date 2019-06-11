@@ -13,7 +13,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
-use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 
 /**
  * Class StudentPresenceController
@@ -49,11 +48,10 @@ class StudentPresenceController extends AbstractController
      * @Rest\Post("/{id}", name="set_excuse")
      *
      * @param Request $request
-     * @param UploaderHelper $uploaderHelper
      *
      * @return mixed
     **/
-    public function setExcuse(StudentPresence $studentPresence, Request $request, UploaderHelper $uploaderHelper)
+    public function setExcuse(StudentPresence $studentPresence, Request $request)
     {
         $form = $this->createForm(StudentPresenceImageType::class, $studentPresence);
 
@@ -72,9 +70,6 @@ class StudentPresenceController extends AbstractController
         if ($studentPresence->getPhotoFile() === null) {
             throw new NotFoundHttpException("La photo n'existe pas");
         }
-
-        // TODO : very ugly
-        $studentPresence->setExcuseProof($uploaderHelper->asset($studentPresence, 'photoFile'));
 
         return View::create($studentPresence, Response::HTTP_CREATED, ['Location' => $this->generateUrl('api_get_presence', ['id' => $studentPresence->getId()])]);
     }

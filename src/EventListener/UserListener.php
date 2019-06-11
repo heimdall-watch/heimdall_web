@@ -24,6 +24,8 @@ class UserListener
         $this->passwordEncoder = $passwordEncode;
     }
 
+    
+
     public function prePersist(User $user)
     {
         // If the user don't have password, generate one

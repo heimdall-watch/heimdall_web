@@ -10,7 +10,6 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
-use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 
 /**
  * Class ClassGroupController
@@ -42,14 +41,10 @@ class ClassGroupController extends AbstractController
      * @param ClassGroup $classGroup
      * @return Student[]|Collection
      */
-    public function getClassStudents(ClassGroup $classGroup, UploaderHelper $uploaderHelper)
+    public function getClassStudents(ClassGroup $classGroup)
     {
         $students = $classGroup->getStudents();
-        // TODO : Refacto, this is shitty
-        /** @var Student $student */
-        foreach ($students as $student) {
-            $student->setPhoto($uploaderHelper->asset($student, 'photoFile'));
-        }
+
         return $students;
     }
 }

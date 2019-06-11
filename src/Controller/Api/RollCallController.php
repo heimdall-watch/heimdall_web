@@ -54,6 +54,42 @@ class RollCallController extends AbstractController
     }
 
     /**
+     * @Rest\Post("/{id}", name="rollcall_update")
+     * @ParamConverter("rollCall", converter="fos_rest.request_body")
+     * @Rest\View(serializerGroups={"GetRollcall"}, serializerEnableMaxDepthChecks=true)
+     *
+     * @param int $id
+     * @param RollCall $rollCall
+     * @param ConstraintViolationList $errors
+     * @return RollCall|View
+     */
+    public function update(int $id, RollCall $rollCall, ConstraintViolationList $errors)
+    {
+        if ($errors->count() > 0) {
+            return View::create($errors, Response::HTTP_BAD_REQUEST);
+        }
+
+        $existingRollcall = $this->getDoctrine()->getRepository(RollCall::class)->find($id);
+        if ($existingRollcall === null) {
+            throw $this->createNotFoundException('The rollcall ' . $id . ' does not exists.');
+        }
+
+        foreach ($rollCall->getStudentPresences() as $studentPresence) {
+            $studentPresence->setRollcall($rollCall);
+        }
+        $em = $this->getDoctrine()->getManager();
+
+        try {
+            $em->merge($rollCall);
+            $em->flush();
+        } catch (\Exception $e) {
+            throw new HttpException(Response::HTTP_BAD_REQUEST, null, $e);
+        }
+
+        return View::create($rollCall, Response::HTTP_CREATED, ['Location' => $this->generateUrl('api_rollcall_get', ['id' => $rollCall->getId()])]); // TODO : Location should be the path to get the entity details (REST)
+    }
+
+    /**
      * @Rest\Get("/{id}", name="rollcall_get")
      * @Rest\View(serializerGroups={"GetRollcall"}, serializerEnableMaxDepthChecks=true)
      *
