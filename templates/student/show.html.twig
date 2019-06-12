@@ -3,69 +3,28 @@
 {% block title %}Student{% endblock %}
 
 {% block container %}
-    <h1>Student</h1>
+    <h1>{{ student.firstname }} {{ student.lastname }}</h1>
 
     <table class="table">
         <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ student.id }}</td>
-            </tr>
-            <tr>
-                <th>Username</th>
-                <td>{{ student.username }}</td>
-            </tr>
-            <tr>
-                <th>Email</th>
-                <td>{{ student.email }}</td>
-            </tr>
-            <tr>
-                <th>Photo</th>
-                <td>{{ student.photo }}</td>
-            </tr>
-            <tr>
-                <th>Groupe</th>
-                <td>{{ student.ClassGroup.name }}</td>
-            </tr>
+        <tr>
+            <th>Numéro étudiant</th>
+            <td>{{ student.username }}</td>
+        </tr>
+        <tr>
+            <th>Email</th>
+            <td>{{ student.email }}</td>
+        </tr>
+        <tr>
+            <th>Photo</th>
+            <td><img src="{{ path('student_get_photo', {'id': student.id}) }}" height="100"></td>
+        </tr>
+        <tr>
+            <th>Groupe</th>
+            <td>{{ student.ClassGroup.name }}</td>
+        </tr>
         </tbody>
     </table>
-
-
-    <h1>Presence of the student</h1>
-
-        {% for presence in student.presences %}
-            {% if presence.present!=true or presence.late!=null%}
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-
-                {{ presence.rollcall.dateStart|date("Y-m-d H:i:s")}} -
-                {{ presence.present ? 'Retard' : 'Absence'}} -
-
-                {{ presence.excuse ? presence.excuse : 'Non justifiée' }} -
-                {% if presence.excuseProof %}
-                    <button class="btn btn-secondary" data-toggle="modal" data-target="#modalJustif"
-                            data-id="{{ presence.id }}"
-                            data-justif="{{ asset('/presences/proofs/') ~ presence.excuseProof }}"
-                            {% if presence.excuseValidated is not null %}data-validate="{{ presence.excuseValidated == true ? '1' : '0'}}"{% endif %}
-                            data-excuse="{{ presence.excuse }}"
-                            data-csrf="{{ csrf_token('validate' ~ presence.id) }}" >Accéder au justificatif</button>
-
-
-                    {% endif %}
-
-
-                <span class="badge badge-primary badge-pill">{{ presence.rollcall.duration}}h</span>
-
-
-            </li>
-            {% endif %}
-        {% else %}
-            <ul class="list-group">
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                Il n'y a pas de données.
-                </li>
-            </ul>
-
-        {% endfor %}
 
     <a href="{{ path('student_index') }}" class="btn btn-secondary">Retour à la liste</a>
 
@@ -73,7 +32,43 @@
 
     {{ include('ui/_delete_form.html.twig', { path: 'student_delete', id: student.id }) }}
 
-    <div class="modal fade" id="modalJustif" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <h1 class="mt-3">Absences et retards de l'étudiant</h1>
+
+    {% for presence in student.presences %}
+        {% if presence.present!=true or presence.late!=null %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+
+                {{ presence.rollcall.dateStart|date("Y-m-d H:i:s") }} -
+                {{ presence.present ? 'Retard' : 'Absence' }} -
+
+                {{ presence.excuse ? presence.excuse : 'Non justifiée' }} -
+                {% if presence.excuseProof %}
+                    <button class="btn btn-secondary" data-toggle="modal" data-target="#modalJustif"
+                            data-id="{{ presence.id }}"
+                            data-justif="{{ path('get_excuse_proof_photo', {'id': presence.id}) }}"
+                            {% if presence.excuseValidated is not null %}data-validate="{{ presence.excuseValidated == true ? '1' : '0' }}"{% endif %}
+                            data-excuse="{{ presence.excuse }}"
+                            data-csrf="{{ csrf_token('validate' ~ presence.id) }}">Accéder au justificatif
+                    </button>
+                {% endif %}
+                <span class="badge badge-primary badge-pill">{{ presence.rollcall.duration }}h</span>
+            </li>
+        {% endif %}
+    {% else %}
+        <ul class="list-group">
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                Il n'y a pas de données.
+            </li>
+        </ul>
+    {% endfor %}
+    <a href="{{ path('student_index') }}" class="btn btn-secondary">Retour à la liste</a>
+
+    <a href="{{ path('student_edit', {'id': student.id}) }}" class="btn btn-warning">Modifier</a>
+
+    {{ include('ui/_delete_form.html.twig', { path: 'student_delete', id: student.id }) }}
+
+    <div class="modal fade" id="modalJustif" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -83,18 +78,19 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <span  id="justifExcuse"></span>
+                    <span id="justifExcuse"></span>
                     <img src="" id="justifImage">
 
                 </div>
                 <div class="modal-footer">
 
 
-                    <form method="post" action="{{ path('student_presence_validate', {'id': "ID"}) }}" >
+                    <form method="post" action="{{ path('student_presence_validate', {'id': "ID"}) }}">
                         <input type="hidden" name="_method" value="POST">
                         <input type="hidden" name="_token" value="">
-                            <input type="submit" value="validate" id="stateValidate" name="state" class="btn btn-success ml-4">
-                            <input type="submit" value="refuse" id="stateRefuse" name="state" class="btn btn-danger ml-4">
+                        <input type="submit" value="validate" id="stateValidate" name="state"
+                               class="btn btn-success ml-4">
+                        <input type="submit" value="refuse" id="stateRefuse" name="state" class="btn btn-danger ml-4">
                     </form>
 
                 </div>
@@ -102,12 +98,10 @@
         </div>
     </div>
 
-
-
 {% endblock %}
 
 {% block javascripts %}
-{{ parent() }}
+    {{ parent() }}
     <script type="text/javascript">
         $('#modalJustif').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget) // Button that triggered the modal
@@ -120,9 +114,8 @@
             // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
             // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
             var modal = $(this)
-            modal.find('#justifImage').attr('src',justif)
+            modal.find('#justifImage').attr('src', justif)
             modal.find('#justifExcuse').text(excuse);
-
 
 
             var $form = modal.find('.modal-footer form');
@@ -130,22 +123,21 @@
             $form.find('input[name="_token"]').val(csrf)
             console.log(excuseValidated)
             //si excuse acceptée : possibilité de refuser
-            if(excuseValidated===1) {
+            if (excuseValidated === 1) {
                 $form.find('#stateValidate').hide();
                 $form.find('#stateRefuse').show();
             }
             //si excuse refusée : possibilité d'accepter
-            else if(excuseValidated===0) {
+            else if (excuseValidated === 0) {
                 $form.find('#stateValidate').show();
                 $form.find('#stateRefuse').hide();
-            }
-            else {
+            } else {
                 $form.find('#stateValidate').show();
                 $form.find('#stateRefuse').show();
             }
         })
 
 
-        </script>
+    </script>
 
 {% endblock %}

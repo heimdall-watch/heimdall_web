@@ -55,7 +55,6 @@ services:
         arguments: ['@doctrine.orm.entity_manager']
 
 
-    # TODO : Not working
     serializer.subscriber.heimdall:
         class: App\EventSubscriber\SerializeSubscriber
         tags:

@@ -6,12 +6,12 @@
 {% block container %}
     <h1>{{ title }}</h1>
 
-    {{ form_start(form) }}
+    {{ form_start(form, {'attr': {'class': 'd-inline'}}) }}
     {{ form_widget(form) }}
     <button class="btn btn-success" type="submit">Enregistrer</button>
     <a href="{{ path('class_group_index') }}" class="btn btn-secondary">Retour à la liste</a>
+    {{ form_end(form) }}
     {% if update %}
         {% include 'ui/_delete_form.html.twig' with { id: class_group.id, path: 'class_group_delete' } %}
     {% endif %}
-    {{ form_end(form) }}
 {% endblock %}

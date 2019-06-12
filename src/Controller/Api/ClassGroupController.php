@@ -43,6 +43,10 @@ class ClassGroupController extends AbstractController
      */
     public function getClassStudents(ClassGroup $classGroup)
     {
+        if (!$classGroup->getTeachers()->contains($this->getUser())) {
+            throw $this->createAccessDeniedException('You do not have access to this class.');
+        }
+
         $students = $classGroup->getStudents();
 
         return $students;

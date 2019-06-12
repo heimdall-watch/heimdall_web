@@ -6,6 +6,7 @@ use App\Entity\StudentPresence;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Vich\UploaderBundle\Handler\DownloadHandler;
 
 /**
  * @Route("/student/presence")
@@ -26,10 +27,21 @@ class StudentPresenceController extends AbstractController
         }
 
         return $this->redirectToRoute('student_show',['id'=>$studentPresence->getStudent()->getId()]);
-
-
     }
 
-
-
+    /**
+     * @Route("/{id}/photo", name="get_excuse_proof_photo")
+     */
+    public function getPhoto(StudentPresence $studentPresence, DownloadHandler $downloadHandler)
+    {
+        // Only the student owning the file, the admins and the teachers who have the student in their class can access the photo
+        if ($this->getUser() == $studentPresence->getStudent() || $this->isGranted('ROLE_ADMIN')) {
+            if ($studentPresence->getExcuseProof() === null) {
+                throw $this->createNotFoundException('This presence does not have an excuse proof photo.');
+            }
+            return $downloadHandler->downloadObject($studentPresence, 'photoFile');
+        } else {
+            throw $this->createAccessDeniedException('You do not have access to this photo.');
+        }
+    }
 }

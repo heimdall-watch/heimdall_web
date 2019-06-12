@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Vich\UploaderBundle\Handler\DownloadHandler;
 
 
 /**
@@ -183,5 +184,21 @@ class StudentController extends AbstractController
         }
 
         return $this->redirectToRoute('student_index');
+    }
+
+    /**
+     * @Route("/{id}/photo", name="student_get_photo")
+     */
+    public function getPhoto(Student $student, DownloadHandler $downloadHandler)
+    {
+        // Only the student owning the file, the admins and the teachers who have the student in their class can access the photo
+        if ($this->getUser() == $student || $this->isGranted('ROLE_ADMIN') || ($this->isGranted('ROLE_TEACHER') && $this->getUser()->teachToStudent($student))) {
+            if ($student->getPhoto() === null) {
+                throw $this->createNotFoundException('This student does not have a photo');
+            }
+            return $downloadHandler->downloadObject($student, 'photoFile');
+        } else {
+            throw $this->createAccessDeniedException('You do not have access to this photo.');
+        }
     }
 }

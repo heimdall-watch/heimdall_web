@@ -7,19 +7,19 @@ use App\Entity\User;
 use Gesdinet\JWTRefreshTokenBundle\Event\RefreshEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
 use Psr\Log\LoggerInterface;
-use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
+use Symfony\Component\Routing\RouterInterface;
 
 class ApiAuthenticationListener
 {
     private $logger;
-    private $uploaderHelper;
+    private $router;
     private $tokenExpires;
     private $refreshTokenExpires;
 
-    public function __construct($tokenExpires, $refreshTokenExpires, LoggerInterface $logger, UploaderHelper $uploaderHelper)
+    public function __construct($tokenExpires, $refreshTokenExpires, LoggerInterface $logger, RouterInterface $router)
     {
         $this->logger = $logger;
-        $this->uploaderHelper = $uploaderHelper;
+        $this->router = $router;
         $this->tokenExpires = $tokenExpires * 1000;
         $this->refreshTokenExpires = $refreshTokenExpires * 1000;
     }
@@ -51,7 +51,7 @@ class ApiAuthenticationListener
             'last_login' => $user->getLastLogin()->format('c'),
         ];
         if ($user instanceof Student) {
-            $data['user']['photo'] = $this->uploaderHelper->asset($user, 'photoFile');
+            $data['user']['photo'] = $this->router->generate('api_student_get_photo', ['id' => $user->getId()], RouterInterface::ABSOLUTE_URL);
         }
 
         $event->setData($data);

@@ -4,11 +4,8 @@ namespace App\Command;
 
 use Swift_Mailer;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use Twig\Environment;
 
 class HeimdallSendRecapCommand extends Command
@@ -35,7 +32,7 @@ class HeimdallSendRecapCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
 
-        $studentPresence[] = StudentPresence.getAllPresences();
+//        $studentPresence[] =
         $serverName = getenv('HEIMDALL_SERVER_NAME');
         $message = (new Swift_Message('Récapitulatif Absences'))
             ->setFrom('no-reply@' . $serverName, $serverName)

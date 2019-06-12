@@ -7,6 +7,7 @@ use App\Entity\StudentPresence;
 use App\Form\StudentImageType;
 use App\HttpFoundation\File\ApiUploadedFile;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,10 +15,11 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
+use Vich\UploaderBundle\Handler\DownloadHandler;
 
 /**
  * @Route("/student")
+ * @IsGranted("ROLE_STUDENT")
  */
 class StudentController extends AbstractController
 {
@@ -47,11 +49,10 @@ class StudentController extends AbstractController
      * @Rest\Post("/photo", name="student_photo_set")
      *
      * @param Request $request
-     * @param UploaderHelper $uploaderHelper
      *
      * @return mixed
      */
-    public function setPhoto(Request $request, UploaderHelper $uploaderHelper)
+    public function setPhoto(Request $request)
     {
         /** @var Student $student */
         $student = $this->getUser();
@@ -74,7 +75,7 @@ class StudentController extends AbstractController
             throw new NotFoundHttpException("La photo n'existe pas");
         }
 
-        return $uploaderHelper->asset($student, 'photoFile');
+        return $this->generateUrl('api_student_get_photo', ['id' => $student->getId()], RouterInterface::ABSOLUTE_URL);
     }
 
     /**
@@ -91,16 +92,19 @@ class StudentController extends AbstractController
 
     }
 
-
-
     /**
-     * @Rest\Get("/allpresences", name="student_get_all_presences")
-     * @Rest\View(serializerGroups={"GetStudentPresences"}, serializerEnableMaxDepthChecks=true)
-     *
-     * @return StudentPresence[]
+     * @Route("/{id}/photo", name="student_get_photo")
      */
-    public function getAllPresences()
+    public function getPhoto(Student $student, DownloadHandler $downloadHandler) // TODO : Refacto with classic StudentController
     {
-        return $this->getDoctrine()->getManager()->getRepository(StudentPresence::class)->findAll();
+        // Only the student owning the file, the admins and the teachers who have the student in their class can access the photo
+        if ($this->getUser() == $student || $this->isGranted('ROLE_ADMIN') || ($this->isGranted('ROLE_TEACHER') && $this->getUser()->teachToStudent($student))) {
+            if ($student->getPhoto() === null) {
+                throw $this->createNotFoundException('This student does not have a photo');
+            }
+            return $downloadHandler->downloadObject($student, 'photoFile');
+        } else {
+            throw $this->createAccessDeniedException('You do not have access to this photo.');
+        }
     }
 }

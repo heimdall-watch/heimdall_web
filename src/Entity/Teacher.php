@@ -30,6 +30,17 @@ class Teacher extends User
         $this->rollCalls = new ArrayCollection();
     }
 
+    public function teachToStudent(Student $student): bool
+    {
+        /** @var ClassGroup $classGroup */
+        foreach ($this->classGroups as $classGroup) {
+            if ($classGroup->getStudents()->contains($student)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * @return Collection|ClassGroup[]
      */
