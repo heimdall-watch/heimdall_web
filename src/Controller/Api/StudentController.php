@@ -3,6 +3,7 @@
 namespace App\Controller\Api;
 
 use App\Entity\Student;
+use App\Entity\User;
 use App\Form\StudentImageType;
 use App\HttpFoundation\File\ApiUploadedFile;
 use FOS\RestBundle\Controller\Annotations as Rest;

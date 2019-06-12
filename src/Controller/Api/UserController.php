@@ -2,6 +2,7 @@
 
 namespace App\Controller\Api;
 
+use App\Entity\User;
 use Hackzilla\PasswordGenerator\Generator\ComputerPasswordGenerator;
 use Swift_Message;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -50,8 +51,7 @@ abstract class UserController extends AbstractController
                     ]
                 ),
                 'text/html'
-            )
-        ;
+            );
 
         $this->mailer->send($message);
 

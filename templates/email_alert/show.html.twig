@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} - Alerte pour {{ alert.email }}{% endblock %}
+
+{% block container %}
+    <h1>Alerte pour {{ alert.email }}</h1>
+
+    <table class="table">
+        <tbody>
+        <tr>
+            <th>Email</th>
+            <td>{{ alert.email }}</td>
+        </tr>
+        <tr>
+            <th>Periodicité</th>
+            <td>{{ alert.periodicityLabel }}</td>
+        </tr>
+        <tr>
+            <th>Dernier envoi</th>
+            <td>{{ alert.lastSent|date('d/m/Y à H:i') }}</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <h1>Classes</h1>
+
+    <table class="table">
+        <tbody>
+        {% for classGroup in alert.watchedClasses %}
+            <tr>
+                <td>{{ classGroup.name }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('email_alert_index') }}" class="btn btn-secondary">Retour à la liste</a>
+
+    <a href="{{ path('email_alert_edit', {'id': alert.id}) }}" class="btn btn-warning">Modifier</a>
+
+    {% include 'ui/_delete_form.html.twig' with { id: alert.id, path: 'email_alert_delete' } %}
+{% endblock %}

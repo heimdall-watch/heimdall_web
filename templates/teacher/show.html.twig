@@ -1,19 +1,23 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Teacher{% endblock %}
+{% block title %}{{ parent() }} - {{ teacher.firstname }} {{ teacher.lastname }}{% endblock %}
 
 {% block container %}
-    <h1>Teacher</h1>
+    <h1>{{ teacher.firstname }} {{ teacher.lastname }}</h1>
 
     <table class="table">
         <tbody>
             <tr>
-                <th>Id</th>
-                <td>{{ teacher.id }}</td>
+                <th>Nom d'utilisateur</th>
+                <td>{{ teacher.username }}</td>
             </tr>
             <tr>
-                <th>Username</th>
-                <td>{{ teacher.username }}</td>
+                <th>Nom</th>
+                <td>{{ teacher.lastname }}</td>
+            </tr>
+            <tr>
+                <th>Prénom</th>
+                <td>{{ teacher.firstname }}</td>
             </tr>
             <tr>
                 <th>Email</th>
@@ -22,13 +26,13 @@
         </tbody>
     </table>
 
-    <h1>Groupes</h1>
+    <h1>Classes</h1>
 
     <table class="table">
         <tbody>
-        {% for classGroups in teacher.classGroups%}
+        {% for classGroup in teacher.classGroups %}
             <tr>
-                <td>{{ classGroups.name }}</td>
+                <td>{{ classGroup.name }}</td>
             </tr>
         {% endfor %}
         </tbody>

@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Student{% endblock %}
+{% block title %}{{ parent() }} - {{ student.firstname }} {{ student.lastname }}{% endblock %}
 
 {% block container %}
     <h1>{{ student.firstname }} {{ student.lastname }}</h1>
@@ -12,6 +12,14 @@
             <td>{{ student.username }}</td>
         </tr>
         <tr>
+            <th>Nom</th>
+            <td>{{ student.lastname }}</td>
+        </tr>
+        <tr>
+            <th>Prénom</th>
+            <td>{{ student.firstname }}</td>
+        </tr>
+        <tr>
             <th>Email</th>
             <td>{{ student.email }}</td>
         </tr>
@@ -20,7 +28,7 @@
             <td><img src="{{ path('student_get_photo', {'id': student.id}) }}" height="100"></td>
         </tr>
         <tr>
-            <th>Groupe</th>
+            <th>Classe</th>
             <td>{{ student.ClassGroup.name }}</td>
         </tr>
         </tbody>
@@ -61,7 +69,7 @@
             </li>
         </ul>
     {% endfor %}
-    
+
     <div class="modal fade" id="modalJustif" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">

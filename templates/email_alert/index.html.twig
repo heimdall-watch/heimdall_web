@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} - Liste des alertes programmées{% endblock %}
+
+{% block container %}
+    <h1>Liste des alertes programmées ({{ pagination.totalItemCount }})</h1>
+
+    <div class="pull-left">
+        {{ knp_pagination_filter(pagination, {
+            'alert.email': 'Email',
+            'alert.periodicity': 'Périodicité',
+        }, {'button': 'Rechercher'}) }}
+    </div>
+
+    <div class="pull-right">
+        <a href="{{ path('email_alert_new') }}" class="btn btn-success"><i class="fa fa-plus"></i> Nouvelle</a>
+    </div>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>{{ knp_pagination_sortable(pagination, 'Email', 'alert.email') }}</th>
+            <th>{{ knp_pagination_sortable(pagination, 'Periodicité', 'alert.periodicity') }}</th>
+            <th>Actions</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        {% for alert in pagination %}
+            <tr>
+                <td>{{ alert.email }}</td>
+                <td>{{ alert.periodicityLabel }}</td>
+                <td>
+                    <a class="btn btn-link btn-xs text-info" title="Voir le détail" data-toggle="tooltip"
+                       href="{{ path('email_alert_show', {'id': alert.id}) }}"><i class="fa fa-eye"
+                                                                                  aria-hidden="true"></i></a>
+                    <a class="btn btn-link btn-xs text-warning" title="Modifier cette alerte" data-toggle="tooltip"
+                       href="{{ path('email_alert_edit', {'id': alert.id}) }}"><i class="fa fa-edit"
+                                                                                  aria-hidden="true"></i></a>
+                    {% include 'ui/_delete_form.html.twig' with { id: alert.id, path: 'email_alert_delete', min: true } %}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">Aucune alerte pour le moment.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="navigation">
+        {{ knp_pagination_render(pagination, null, {}, {'align': 'center'}) }}
+    </div>
+{% endblock %}

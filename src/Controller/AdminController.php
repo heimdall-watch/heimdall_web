@@ -57,9 +57,6 @@ class AdminController extends AbstractController
             $password = $passwordGenerator->generatePassword();
             $admin->setPlainPassword($password);
 
-            // TEMP
-            $this->addFlash('info', $password);
-
             $entityManager->persist($admin);
             $entityManager->flush();
 

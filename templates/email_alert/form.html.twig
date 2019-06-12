@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% set title = update ? 'Modification de ' ~ alert.email : "Ajout d'alerte email" %}
+{% block title %}{{ parent() }} - {{ title }}{% endblock %}
+
+{% block container %}
+    <h1>{{ title }}</h1>
+
+    {{ form_start(form, {'attr': {'class': 'd-inline'}}) }}
+    {{ form_widget(form) }}
+    <button class="btn btn-success" type="submit">Enregistrer</button>
+    <a href="{{ path('email_alert_index') }}" class="btn btn-secondary">Retour à la liste</a>
+    {{ form_end(form) }}
+    {% if update %}
+        {% include 'ui/_delete_form.html.twig' with { id: alert.id, path: 'email_alert_delete' } %}
+    {% endif %}
+{% endblock %}
