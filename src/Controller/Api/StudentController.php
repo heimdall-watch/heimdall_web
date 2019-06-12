@@ -90,4 +90,17 @@ class StudentController extends AbstractController
         return $this->getDoctrine()->getManager()->getRepository(StudentPresence::class)->findAbsencesRetards($this->getUser());
 
     }
+
+
+
+    /**
+     * @Rest\Get("/allpresences", name="student_get_all_presences")
+     * @Rest\View(serializerGroups={"GetStudentPresences"}, serializerEnableMaxDepthChecks=true)
+     *
+     * @return StudentPresence[]
+     */
+    public function getAllPresences()
+    {
+        return $this->getDoctrine()->getManager()->getRepository(StudentPresence::class)->findAll();
+    }
 }
