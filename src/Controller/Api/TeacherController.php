@@ -27,4 +27,15 @@ class TeacherController extends UserController
         return parent::updatePassword($request, $passwordEncoder);
     }
 
+    /**
+     * @Rest\Post("/reset_password", name="teacher_reset_password")
+     *
+     * @param User $user
+     *
+     */
+    public function resetPassword(User $user)
+    {
+        return parent::resetPassword($user);
+    }
+
 }

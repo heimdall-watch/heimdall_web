@@ -35,6 +35,17 @@ class StudentController extends UserController
     }
 
     /**
+     * @Rest\Post("/reset_password", name="student_reset_password")
+     *
+     * @param User $user
+     *
+     */
+    public function resetPassword(User $user)
+    {
+        return parent::resetPassword($user);
+    }
+
+    /**
      * @Rest\Post("/photo", name="student_photo_set")
      *
      * @param Request $request
