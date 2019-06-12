@@ -7,7 +7,6 @@ use App\Form\StudentImageType;
 use App\HttpFoundation\File\ApiUploadedFile;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -20,9 +19,8 @@ use Vich\UploaderBundle\Handler\DownloadHandler;
  * @Route("/student")
  * @IsGranted("ROLE_STUDENT")
  */
-class StudentController extends AbstractController
+class StudentController extends UserController
 {
-    // TODO : AccountController ?
     /**
      * @Rest\Post("/update_password", name="student_update_password")
      *
@@ -33,15 +31,7 @@ class StudentController extends AbstractController
      */
     public function updatePassword(Request $request, UserPasswordEncoderInterface $passwordEncoder)
     {
-        /** @var Student $student */
-        $student = $this->getUser();
-        if (!$passwordEncoder->isPasswordValid($student, $request->request->get('oldPassword'))) {
-            throw new HttpException(403, "Mot de passe actuel incorrect");
-        }
-        $student->setPlainPassword($request->request->get('newPassword'));
-        $this->getDoctrine()->getManager()->flush();
-
-        return true;
+        return parent::updatePassword($request, $passwordEncoder);
     }
 
     /**
