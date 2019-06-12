@@ -61,12 +61,7 @@
             </li>
         </ul>
     {% endfor %}
-    <a href="{{ path('student_index') }}" class="btn btn-secondary">Retour à la liste</a>
-
-    <a href="{{ path('student_edit', {'id': student.id}) }}" class="btn btn-warning">Modifier</a>
-
-    {{ include('ui/_delete_form.html.twig', { path: 'student_delete', id: student.id }) }}
-
+    
     <div class="modal fade" id="modalJustif" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">

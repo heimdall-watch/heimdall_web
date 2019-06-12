@@ -100,38 +100,38 @@ class DevFixtures extends Fixture
         $manager->persist($jfpp);
 
         // Rollcall 1
-        $date = new \DateTime;
+        $date = new \DateTime();
         $rollcallTest = new RollCall();
         $rollcallTest->setClassGroup($m2App)
                     ->setTeacher($jfpp)
-                    ->setDateStart((clone $date)->modify('2 days ago'))
+                    ->setDateStart(clone $date)
                     ->setDateEnd((clone $date)->modify('+ 2 hours'));
         $manager->persist($rollcallTest);
 
         // Rollcall 4
-        $date = new \DateTime;
+        $date = new \DateTime('3 days ago');
         $rollcallTest4 = new RollCall();
         $rollcallTest4->setClassGroup($m2App)
             ->setTeacher($jfpp)
-            ->setDateStart((clone $date)->modify('3 days ago'))
+            ->setDateStart(clone $date)
             ->setDateEnd((clone $date)->modify('+ 2 hours'));
         $manager->persist($rollcallTest4);
 
         // Rollcall 5
-        $date = new \DateTime;
+        $date = new \DateTime('9 days ago');
         $rollcallTest5 = new RollCall();
         $rollcallTest5->setClassGroup($m2App)
             ->setTeacher($jfpp)
-            ->setDateStart((clone $date)->modify('9 days ago'))
+            ->setDateStart(clone $date)
             ->setDateEnd((clone $date)->modify('+ 3 hours'));
         $manager->persist($rollcallTest5);
 
         // Rollcall 6
-        $date = new \DateTime;
+        $date = new \DateTime('5 days ago');
         $rollcallTest6 = new RollCall();
         $rollcallTest6->setClassGroup($m2App)
             ->setTeacher($jfpp)
-            ->setDateStart((clone $date)->modify('5 days ago'))
+            ->setDateStart(clone $date)
             ->setDateEnd((clone $date)->modify('+ 4 hours'));
         $manager->persist($rollcallTest6);
 
@@ -173,6 +173,14 @@ class DevFixtures extends Fixture
             ->setPresent(true)
             ->setRollcall($rollcallTest3);
         $manager->persist($presenceTest3);
+
+        // Student Presence 3
+        $presenceTest4 = new StudentPresence();
+        $presenceTest4->setStudent($sosthen)
+            ->setPresent(true)
+            ->setLate(20)
+            ->setRollcall($rollcallTest4);
+        $manager->persist($presenceTest4);
 
         $manager->flush();
     }

@@ -26,6 +26,18 @@ use Vich\UploaderBundle\Handler\DownloadHandler;
 class StudentPresenceController extends AbstractController
 {
     /**
+     * @Rest\Get("", name="student_get_presences")
+     * @Rest\View(serializerGroups={"GetStudentPresences"}, serializerEnableMaxDepthChecks=true)
+     *
+     * @return StudentPresence[]
+     */
+    public function getPresences()
+    {
+        return $this->getDoctrine()->getManager()->getRepository(StudentPresence::class)->findAbsencesRetards($this->getUser());
+
+    }
+
+    /**
      * @Rest\Get("/presence/{id}", name="get_presence")
      * @Rest\View(serializerGroups={"GetStudentPresences"}, serializerEnableMaxDepthChecks=true)
      *
@@ -48,7 +60,8 @@ class StudentPresenceController extends AbstractController
     }
 
     /**
-     * @Rest\Post("/{id}", name="set_excuse")
+     * @Rest\Post("/{id}/excuse", name="set_excuse")
+     * @Rest\View(serializerGroups={"GetStudentPresences"}, serializerEnableMaxDepthChecks=true)
      *
      * @param Request $request
      *
