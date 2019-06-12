@@ -20,10 +20,11 @@ class DevFixtures extends Fixture
         // Brahim
         $brahim = new Admin();
         $brahim->setUsername("Brahim")
-               ->setFirstname("Brahim")
-               ->setLastname("LASTNAME")
-               ->setEmail("sosthen.gaillard@gmail.com")
-               ->setPlainPassword("brahim");
+            ->setFirstname("Brahim")
+            ->setLastname("LASTNAME")
+            ->setEmail("sosthen.gaillard@gmail.com")
+            ->setRoles(['ROLE_SUPER_ADMIN'])
+            ->setPlainPassword("brahim");
         $manager->persist($brahim);
 
         // Student 1

@@ -20,8 +20,9 @@ class Student extends User
 
     /**
      * @ORM\ManyToOne(targetEntity="ClassGroup", inversedBy="students")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      * @Serializer\Groups({"Default"})
+     * @Assert\NotBlank()
      */
     private $classGroup;
 

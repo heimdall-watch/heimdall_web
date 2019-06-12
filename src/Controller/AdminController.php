@@ -78,7 +78,7 @@ class AdminController extends AbstractController
      */
     public function show(Admin $admin): Response
     {
-        if ($admin->hasRole('ROLE_SUPER_ADMIN')) {
+        if (!$admin->hasRole('ROLE_SUPER_ADMIN')) {
             throw $this->createAccessDeniedException();
         }
         return $this->render('admin/show.html.twig', [
@@ -91,7 +91,7 @@ class AdminController extends AbstractController
      */
     public function edit(Request $request, Admin $admin): Response
     {
-        if ($admin->hasRole('ROLE_SUPER_ADMIN')) {
+        if (!$admin->hasRole('ROLE_SUPER_ADMIN')) {
             throw $this->createAccessDeniedException();
         }
         $form = $this->createForm(AdminType::class, $admin);
@@ -117,7 +117,7 @@ class AdminController extends AbstractController
      */
     public function delete(Request $request, Admin $admin): Response
     {
-        if ($admin->hasRole('ROLE_SUPER_ADMIN')) {
+        if (!$admin->hasRole('ROLE_SUPER_ADMIN')) {
             throw $this->createAccessDeniedException();
         }
         if ($this->isCsrfTokenValid('delete'.$admin->getId(), $request->request->get('_token'))) {

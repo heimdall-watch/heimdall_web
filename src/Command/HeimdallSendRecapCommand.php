@@ -19,7 +19,7 @@ class HeimdallSendRecapCommand extends Command
     {
         $this->mailer = $mailer;
         $this->twig = $twig;
-        parent::___construct();
+        parent::__construct();
     }
 
     protected function configure()

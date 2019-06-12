@@ -24,7 +24,7 @@ class RollCall
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\ClassGroup", inversedBy="rollCalls")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      * @Serializer\Type("EntityId<App\Entity\ClassGroup>")
      * @Serializer\Groups({"Default", "Deserialization"})
      * @Assert\NotBlank()
@@ -33,7 +33,7 @@ class RollCall
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Teacher", inversedBy="rollCalls")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      * @Serializer\Type("EntityId<App\Entity\Teacher>")
      * @Serializer\Groups({"Default", "Deserialization"})
      * @Assert\NotBlank()
