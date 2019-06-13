@@ -236,7 +236,7 @@ abstract class User implements UserInterface
     public function addDevice(string $deviceId): self
     {
         $key = array_search($deviceId, $this->devices);
-        if ($key === null) {
+        if ($key === false) {
             $this->devices[] = $deviceId;
         }
 

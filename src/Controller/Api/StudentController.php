@@ -19,12 +19,12 @@ use Vich\UploaderBundle\Handler\DownloadHandler;
 
 /**
  * @Route("/student")
- * @IsGranted("ROLE_STUDENT")
  */
 class StudentController extends UserController
 {
     /**
      * @Rest\Post("/update_password", name="student_update_password")
+     * @IsGranted("ROLE_STUDENT")
      *
      * @param Request                      $request
      * @param UserPasswordEncoderInterface $passwordEncoder
@@ -38,6 +38,7 @@ class StudentController extends UserController
 
     /**
      * @Rest\Post("/reset_password", name="student_reset_password")
+     * @IsGranted("ROLE_STUDENT")
      *
      * @param User $user
      *
@@ -49,6 +50,7 @@ class StudentController extends UserController
 
     /**
      * @Rest\Post("/photo", name="student_photo_set")
+     * @IsGranted("ROLE_STUDENT")
      *
      * @param Request $request
      *
