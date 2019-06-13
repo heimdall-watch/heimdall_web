@@ -120,7 +120,7 @@ class StudentController extends AbstractController
     public function new(Request $request): Response
     {
         $student = new Student();
-        $form = $this->createForm(StudentType::class, $student);
+        $form = $this->createForm(StudentType::class, $student, ['userId' => $student->getId()]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -154,7 +154,7 @@ class StudentController extends AbstractController
      */
     public function edit(Request $request, Student $student): Response
     {
-        $form = $this->createForm(StudentType::class, $student);
+        $form = $this->createForm(StudentType::class, $student, ['userId' => $student->getId()]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

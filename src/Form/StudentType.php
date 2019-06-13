@@ -10,12 +10,21 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Routing\RouterInterface;
 use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class StudentType extends AbstractType
 {
+    private $router;
+
+    public function __construct(RouterInterface $router)
+    {
+        $this->router = $router;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $url = $this->router->generate('student_get_photo', ['id' => $options['userId']]);
         $builder
             ->add('username', TextType::class, [
                 'label' => 'Numéro étudiant'
@@ -31,6 +40,8 @@ class StudentType extends AbstractType
                 'label' => 'Photo',
                 'required' => false,
                 'allow_delete' => true,
+                'image_uri' => $url,
+                'download_uri' => $url,
             ])
             ->add('classGroup', EntityType::class, [
                 'label' => 'Classe',
@@ -45,6 +56,7 @@ class StudentType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Student::class,
+            'userId' => null,
         ]);
     }
 }
