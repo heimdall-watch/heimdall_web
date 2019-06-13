@@ -34,8 +34,10 @@ class Teacher extends User
     {
         /** @var ClassGroup $classGroup */
         foreach ($this->classGroups as $classGroup) {
-            if ($classGroup->getStudents()->contains($student)) {
-                return true;
+            foreach ($classGroup->getStudents() as $classStudent) {
+                if ($classStudent->getId() === $student->getId()) {
+                    return true;
+                }
             }
         }
         return false;
