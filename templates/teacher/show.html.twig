@@ -40,11 +40,21 @@
 
     <h1>Périphériques</h1>
 
+
     <table class="table">
         <tbody>
         {% for device in teacher.devices %}
             <tr>
                 <td>{{ device }}</td>
+                <td>
+                    <form method="post" action="{{ path('delete_device', {'id': teacher.id, 'deviceId': device}) }}"
+                          onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ?');"
+                          class="d-inline">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ device) }}">
+                        <button class="btn btn-danger ml-4"><i class="fa fa-trash"></i> Supprimer</button>
+                    </form>
+                </td>
             </tr>
         {% endfor %}
         </tbody>
