@@ -3,10 +3,8 @@
 namespace App\Controller\Api;
 
 use App\Entity\RollCall;
-use App\Entity\User;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\View\View;
-use OneSignal\OneSignal;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -34,7 +32,7 @@ class RollCallController extends AbstractController
      * @param ConstraintViolationList $errors
      * @return RollCall|View
      */
-    public function create(RollCall $rollCall, ConstraintViolationList $errors, OneSignal $oneSignal)
+    public function create(RollCall $rollCall, ConstraintViolationList $errors)
     {
         if ($errors->count() > 0) {
             return View::create($errors, Response::HTTP_BAD_REQUEST);
@@ -43,17 +41,6 @@ class RollCallController extends AbstractController
         $em = $this->getDoctrine()->getManager();
 
         foreach ($rollCall->getStudentPresences() as $studentPresence) {
-            if ($studentPresence->getPresent() === false || $studentPresence->getLate() !== null) {
-                $student = $em->getRepository(User::class)->find($studentPresence->getStudent()->getId());
-                $oneSignal->notifications->add([
-                    'contents' => [
-                        'en' => 'You are ' . $studentPresence->getPresent() === false ? 'absent' : 'late' . ' to the class of ' . $this->getUser()->getFirstname() . ' ' . $this->getUser()->getLastName(),
-                        'fr' => 'Vous êtes ' . $studentPresence->getPresent() === false ? 'absent' : 'en retard' . ' au cours de ' . $this->getUser()->getFirstname() . ' ' . $this->getUser()->getLastName(),
-                    ],
-                    'include_player_ids' => $student->getDevices()
-
-                ]);
-            }
             $studentPresence->setRollcall($rollCall);
         }
 

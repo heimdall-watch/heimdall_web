@@ -4,37 +4,35 @@
 namespace App\EventListener;
 
 
+use App\Entity\RollCall;
 use OneSignal\OneSignal;
+use Psr\Log\LoggerInterface;
 
 class RollCallListener
 {
-   private $api;
+    private $api;
+    private $logger;
 
-    public function __construct(OneSignal $api)
+    public function __construct(OneSignal $api, LoggerInterface $logger)
     {
-        $this->api =$api;
+        $this->api = $api;
+        $this->logger = $logger;
     }
 
-    public function postUpdate($args)
+    public function postPersist(RollCall $rollCall)
     {
-        // TODO ?
-//        die('coucou');
-//        $rollCall=$args->getObject();
-//        foreach ($rollCall->getStudentPresences() as $presence){
-//
-//            if($presence==FALSE)
-//            {
-//                $this->api->notifications->add(([
-//                    'contents' => [
-//                        'fr' => 'Notification message'
-//                    ],
-//                    'included_segments' => ['All'],
-//                    'data' => ['foo' => 'bar'],
-//                    'large_icon' =>"ic_launcher_round.png",
-//                    // ..other options
-//                ]));
-//
-//            }
-//        }
+        foreach ($rollCall->getStudentPresences() as $studentPresence) {
+            if ($studentPresence->getPresent() === false || $studentPresence->getLate() !== null) {
+                $notif = [
+                    'contents' => [
+                        'en' => 'You are ' . ($studentPresence->getPresent() === false ? 'absent' : 'late') . ' to the class of ' . $rollCall->getTeacher()->getFirstname() . ' ' . $rollCall->getTeacher()->getLastName(),
+                        'fr' => 'Vous êtes ' . ($studentPresence->getPresent() === false ? 'absent' : 'en retard') . ' au cours de ' . $rollCall->getTeacher()->getFirstname() . ' ' . $rollCall->getTeacher()->getLastName(),
+                    ],
+                    'include_player_ids' => $studentPresence->getStudent()->getDevices()
+                ];
+                $this->api->notifications->add($notif);
+                $this->logger->debug("Sending onesignal notif to " . $studentPresence->getStudent()->getUsername() . ' : ' . json_encode($notif));
+            }
+        }
     }
 }

@@ -47,7 +47,6 @@ class ApiAuthenticationListener
             'id' => $user->getId(),
             'type' => $user->getType(),
             'username' => $user->getUsername(),
-            'email' => $user->getEmail(),
             'firstname' => $user->getFirstname(),
             'lastname' => $user->getLastname(),
             'last_login' => $user->getLastLogin()->format('c'),
