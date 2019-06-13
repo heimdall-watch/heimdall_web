@@ -41,11 +41,13 @@ class ApiAuthenticationListener
         if (\array_key_exists('refresh_token', $data)) {
             $data['refresh_token_expires'] = $now_milli + $this->refreshTokenExpires;
         }
+        $data['onesignal_app_id'] = getenv('ONESIGNAL_APP_ID');
 
         $data['user'] = [
             'id' => $user->getId(),
             'type' => $user->getType(),
             'username' => $user->getUsername(),
+            'email' => $user->getEmail(),
             'firstname' => $user->getFirstname(),
             'lastname' => $user->getLastname(),
             'last_login' => $user->getLastLogin()->format('c'),

@@ -72,6 +72,11 @@ abstract class User implements UserInterface
      */
     private $lastname;
 
+    /**
+     * @ORM\Column(type="array", nullable=true)
+     */
+    private $devices = [];
+
     public function getType() {
         return (new \ReflectionClass($this))->getShortName();
     }
@@ -212,6 +217,25 @@ abstract class User implements UserInterface
     public function setLastname(string $lastname): self
     {
         $this->lastname = $lastname;
+
+        return $this;
+    }
+
+    public function getDevices(): ?array
+    {
+        return $this->devices;
+    }
+
+    public function setDevices(?array $devices): self
+    {
+        $this->devices = $devices;
+
+        return $this;
+    }
+
+    public function addDevice(string $deviceId): self
+    {
+        $this->devices[] = $deviceId;
 
         return $this;
     }
