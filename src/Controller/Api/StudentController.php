@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Vich\UploaderBundle\Handler\DownloadHandler;
 
@@ -68,9 +69,7 @@ class StudentController extends UserController
             throw new HttpException(Response::HTTP_BAD_REQUEST, "Envoi de la photo impossible");
         }
 
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($student);
-        $em->flush();
+        $this->getDoctrine()->getManager()->flush();
 
         if ($student->getPhotoFile() === null) {
             throw new NotFoundHttpException("La photo n'existe pas");
@@ -89,7 +88,7 @@ class StudentController extends UserController
             if ($student->getPhoto() === null) {
                 throw $this->createNotFoundException('This student does not have a photo');
             }
-            return $downloadHandler->downloadObject($student, 'photoFile');
+            return $downloadHandler->downloadObject($student, 'photoFile', null, null, false);
         } else {
             throw $this->createAccessDeniedException('You do not have access to this photo.');
         }

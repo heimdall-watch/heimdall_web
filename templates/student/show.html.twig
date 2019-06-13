@@ -44,6 +44,18 @@
 
     {% include 'student/absence.html.twig' with { 'presences': student.presences } %}
 
+    <h1>Périphériques</h1>
+
+    <table class="table">
+        <tbody>
+        {% for device in student.devices %}
+            <tr>
+                <td>{{ device }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
 {% endblock %}
 
 {% block javascripts %}

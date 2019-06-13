@@ -196,7 +196,7 @@ class StudentController extends AbstractController
             if ($student->getPhoto() === null) {
                 throw $this->createNotFoundException('This student does not have a photo');
             }
-            return $downloadHandler->downloadObject($student, 'photoFile');
+            return $downloadHandler->downloadObject($student, 'photoFile', null, null, false);
         } else {
             throw $this->createAccessDeniedException('You do not have access to this photo.');
         }

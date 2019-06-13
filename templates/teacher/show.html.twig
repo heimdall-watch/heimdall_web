@@ -38,6 +38,18 @@
         </tbody>
     </table>
 
+    <h1>Périphériques</h1>
+
+    <table class="table">
+        <tbody>
+        {% for device in teacher.devices %}
+            <tr>
+                <td>{{ device }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
     <a href="{{ path('teacher_index') }}" class="btn btn-secondary">Retour à la liste</a>
 
     <a href="{{ path('teacher_edit', {'id': teacher.id}) }}" class="btn btn-warning">Modifier</a>

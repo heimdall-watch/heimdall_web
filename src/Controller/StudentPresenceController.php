@@ -39,7 +39,8 @@ class StudentPresenceController extends AbstractController
             if ($studentPresence->getExcuseProof() === null) {
                 throw $this->createNotFoundException('This presence does not have an excuse proof photo.');
             }
-            return $downloadHandler->downloadObject($studentPresence, 'photoFile');
+            return $downloadHandler->downloadObject($studentPresence, 'photoFile', null, null, false
+            );
         } else {
             throw $this->createAccessDeniedException('You do not have access to this photo.');
         }

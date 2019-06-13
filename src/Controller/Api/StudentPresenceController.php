@@ -79,9 +79,9 @@ class StudentPresenceController extends AbstractController
             throw new HttpException(Response::HTTP_BAD_REQUEST, "Envoi de la photo impossible");
         }
 
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($studentPresence);
-        $em->flush();
+        $studentPresence->setExcuseValidated(false);
+
+        $this->getDoctrine()->getManager()->flush();
 
         if ($studentPresence->getPhotoFile() === null) {
             throw new NotFoundHttpException("La photo n'existe pas");
@@ -100,7 +100,7 @@ class StudentPresenceController extends AbstractController
             if ($studentPresence->getExcuseProof() === null) {
                 throw $this->createNotFoundException('This presence does not have an excuse proof photo.');
             }
-            return $downloadHandler->downloadObject($studentPresence, 'photoFile');
+            return $downloadHandler->downloadObject($studentPresence, 'photoFile', null, null, false);
         } else {
             throw $this->createAccessDeniedException('You do not have access to this photo.');
         }
