@@ -34,8 +34,6 @@
                                 data-excuse="{{ presence.excuseLabel }}"
                                 data-csrf="{{ csrf_token('validate' ~ presence.id) }}">Accéder au justificatif
                         </button>
-                    {% else %}
-                        <span class="badge badge-dark">Non justifié</span>
                     {% endif %}
                 </td>
             </tr>

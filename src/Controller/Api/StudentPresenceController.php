@@ -79,7 +79,7 @@ class StudentPresenceController extends AbstractController
             throw new HttpException(Response::HTTP_BAD_REQUEST, "Envoi de la photo impossible");
         }
 
-        $studentPresence->setExcuseValidated(false);
+        $studentPresence->setExcuseValidated(null);
 
         $this->getDoctrine()->getManager()->flush();
 
