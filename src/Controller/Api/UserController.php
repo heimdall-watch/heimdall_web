@@ -14,11 +14,11 @@ abstract class UserController extends AbstractController
 {
     public function updatePassword(Request $request, UserPasswordEncoderInterface $passwordEncoder)
     {
-        $teacher = $this->getUser();
-        if (!$passwordEncoder->isPasswordValid($teacher, $request->request->get('oldPassword'))) {
+        $user = $this->getUser();
+        if (!$passwordEncoder->isPasswordValid($user, $request->request->get('oldPassword'))) {
             throw new HttpException(403, "Mot de passe actuel incorrect");
         }
-        $teacher->setPlainPassword($request->request->get('newPassword'));
+        $user->setPlainPassword($request->request->get('newPassword'));
         $this->getDoctrine()->getManager()->flush();
 
         return true;

@@ -235,7 +235,20 @@ abstract class User implements UserInterface
 
     public function addDevice(string $deviceId): self
     {
-        $this->devices[] = $deviceId;
+        $key = array_search($deviceId, $this->devices);
+        if ($key === null) {
+            $this->devices[] = $deviceId;
+        }
+
+        return $this;
+    }
+
+    public function deleteDevice(string $deviceId): self
+    {
+        $key = array_search($deviceId, $this->devices);
+        if ($key !== null) {
+            unset($this->devices[$key]);
+        }
 
         return $this;
     }
