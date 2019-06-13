@@ -36,14 +36,10 @@ class StudentPresenceRepository extends ServiceEntityRepository
             ;
     }
 
-    public function findByDate(\DateTime $date)
+    public function findPending()
     {
         return $this->createQueryBuilder('u')
-            ->join('u.rollCall','r')
-            ->andWhere('r.dateStart BETWEEN :min_date AND :max_date')
-            ->andWhere('u.present = false')
-            ->setParameter('min_date', $date)
-            ->setParameter('max_date', (clone $date)->modify('+ 23 hours 59 minutes 59 seconde'))
+            ->where('(u.present = false OR u.late IS NOT NULL) AND u.excuseProof IS NOT NULL AND u.excuseValidated IS NULL')
             ->setMaxResults(30)
             ->getQuery()
             ->getResult()

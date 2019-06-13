@@ -4,69 +4,13 @@
 
 {% block container %}
 
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
-<div class="container">
-    <br/>
-    <div class="row justify-content-center">
-        <div class="col-12 col-md-10 col-lg-8">
-            <form class="card card-sm">
-                <div class="card-body row no-gutters align-items-center">
-                    <div class="col-auto">
-                        <i class="fas fa-search h4 text-body"></i>
-                    </div>
-                    <!--end of col-->
-                    <div class="col">
-                        <input class="form-control form-control-lg form-control-borderless" type="search" placeholder="Search">
-                    </div>
-                    <!--end of col-->
-                    <div class="col-auto">
-                        <button class="btn btn-lg btn-success" type="submit">Search</button>
-                    </div>
-                    <!--end of col-->
-                </div>
-            </form>
-        </div>
-        <!--end of col-->
-    </div>
-</div>
+    <h1>Justificatifs d'absences et retards à valider</h1>
 
-    <h1>Liste des absences</h1>
-
-
-    {% for studentpresence in absences %}
-        <ul class="list-group">
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-                {{ studentpresence.student.username}} -
-                {{ studentpresence.rollcall.classgroup.name}}
-                <span class="badge badge-primary badge-pill">{{ studentpresence.rollcall.duration }}h</span>
-            </li>
-        </ul>
-    {% else %}
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-            Il n'y a pas d'absence à ce jour.
-        </li>
-    {% endfor %}
-
-
-    <div type="text" class="datepicker" >
-
-        <!--<span id="dateSelected"></span>-->
-        <h1>Liste des derniers motifs de retard</h1>
-    </div>
+    {% include 'student/absence.html.twig' with { 'presences': absences } %}
 
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
-    <script type="text/javascript">
-        $('.datepicker').datepicker({
-            format: "dd/mm/yyyy",
-            todayBtn: "linked",
-            language: "fr",
-            todayHighlight: true
-        }).on('changeDate',function(e){
-            window.location = '{{ url('dashboard') }}?date=' + e.format("yyyy-mm-dd");
-            $('#dateSelected').text(e.format("dd/mm/yyyy"));
-        });
-    </script>
+    {{ encore_entry_script_tags('proofModal') }}
 {% endblock %}

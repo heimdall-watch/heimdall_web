@@ -16,7 +16,7 @@ class StudentPresenceController extends AbstractController
     /**
      * @Route("/{id}/validate", name="student_presence_validate")
      */
-    public function validate(StudentPresence $studentPresence,Request $request)
+    public function validate(StudentPresence $studentPresence, Request $request)
     {
 
         if ($this->isCsrfTokenValid('validate' . $studentPresence->getId(), $request->request->get('_token'))) {
@@ -26,7 +26,7 @@ class StudentPresenceController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('student_show',['id'=>$studentPresence->getStudent()->getId()]);
+        return $this->redirect($request->headers->get('referer'));
     }
 
     /**

@@ -149,6 +149,23 @@ class StudentPresence
         return $this;
     }
 
+    public function getExcuseLabel(): string
+    {
+        switch ($this->excuse) {
+            case 'sick':
+                return 'Malade';
+            case 'family':
+                return 'Raison familiale';
+            case 'transport':
+                return 'Problème de transport';
+            case 'work':
+                return 'Raison professionnelle';
+            case 'other':
+            default:
+                return 'Autre raison';
+        }
+    }
+
     public function getExcuse(): ?string
     {
         return $this->excuse;

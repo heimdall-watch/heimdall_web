@@ -1,9 +1,6 @@
 import '../css/app.scss';
 
 import $ from 'jquery';
-
-window.$ = $;
-
 import 'bootstrap';
 
 import 'bootstrap-notify';
@@ -11,3 +8,6 @@ import 'bootstrap-notify';
 import 'bootstrap-datepicker';
 
 import 'select2';
+
+window.$ = $;
+

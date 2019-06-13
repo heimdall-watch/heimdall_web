@@ -1,0 +1,87 @@
+<table class="table">
+    <thead>
+    <tr>
+        <th>Date</th>
+        <th>Nom de l'étudiant</th>
+        <th>Absence/Retard</th>
+        <th>Raison</th>
+        <th>Justificatif</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for presence in presences %}
+        {% if presence.present != true or presence.late != null %}
+            {% set status = presence.excuseValidated is null
+                ? '<span class=\"badge badge-primary\">En attente de validation</span>'
+                : presence.excuseValidated == true
+                ? '<span class=\"badge badge-success\">Validé</span>'
+                : '<span class=\"badge badge-danger\">Refusé</span>' %}
+            <tr>
+                <td>{{ presence.rollcall.dateStart|date("Y-m-d H:i:s") }}</td>
+                <td>
+                    <a href="{{ path('student_show', { 'id': presence.student.id }) }}">{{ presence.student.firstname ~ ' ' ~ presence.student.lastname }}</a>
+                </td>
+                <td>{{ presence.present ? 'Retard de ' ~ presence.late ~ 'm' : 'Absence de ' ~ presence.rollcall.duration ~ 'h' }}</td>
+                <td>{{ presence.excuse ? presence.excuseLabel : '<span class="badge badge-danger">Non justifié</span>' }}</td>
+                <td>
+                    {% if presence.excuseProof is not null %}
+                        {{ status|raw }}<br>
+                        <button class="btn btn-secondary mt-2" data-toggle="modal" data-target="#modalJustif"
+                                data-id="{{ presence.id }}"
+                                data-status="{{ status|escape }}"
+                                data-justif="{{ path('get_excuse_proof_photo', {'id': presence.id}) }}"
+                                {% if presence.excuseValidated is not null %}data-validate="{{ presence.excuseValidated == true ? '1' : '0' }}"{% endif %}
+                                data-excuse="{{ presence.excuseLabel }}"
+                                data-csrf="{{ csrf_token('validate' ~ presence.id) }}">Accéder au justificatif
+                        </button>
+                    {% else %}
+                        <span class="badge badge-dark">Non justifié</span>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endif %}
+    {% else %}
+        <tr>
+            <td colspan="5">Aucune absence / aucun retard</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<div class="modal fade" id="modalJustif" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Justificatif</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-center">
+                <div>
+                    <strong>Raison :</strong>
+                    <span id="justifExcuse" class="mt-3"></span>
+                </div>
+                <div class="mt-2">
+                    <strong>Etat actuel :</strong>
+                    <span id="justifStatus" class="mt-3"></span>
+                </div>
+                <img src="" id="justifImage" class="mt-2">
+            </div>
+            <div class="modal-footer">
+                <form method="post" action="{{ path('student_presence_validate', {'id': "ID"}) }}">
+                    <input type="hidden" name="_method" value="POST">
+                    <input type="hidden" name="_token" value="">
+                    <button type="submit" value="validate" id="stateValidate" name="state" class="btn btn-success ml-4">
+                        Valider
+                    </button>
+                    <button type="submit" value="refuse" id="stateRefuse" name="state" class="btn btn-danger ml-4">
+                        Refuser
+                    </button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
