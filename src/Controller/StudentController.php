@@ -29,6 +29,7 @@ class StudentController extends AbstractController
      */
     public function import(Request $request)
     {
+        $em = $this->getDoctrine()->getManager();
         $data = [];
         $importForm = $this->createForm(StudentImportType::class, $data);
         $importForm->handleRequest($request);
@@ -49,7 +50,7 @@ class StudentController extends AbstractController
                 } else {
                     $reader = new SpreadsheetReader($file);
                 }
-                $writer = new DoctrineWriter($this->getDoctrine()->getManager(), Student::class);
+                $writer = new DoctrineWriter($em, Student::class);
                 $writer->disableTruncate();
 
                 $writer->prepare();
@@ -63,6 +64,7 @@ class StudentController extends AbstractController
                             continue;
                         }
                     }
+
                     $associatedRow = [
                         'username' => $row[$data['username']-1],
                         'firstname' => $row[$data['firstname']-1],
@@ -71,7 +73,15 @@ class StudentController extends AbstractController
                         'classGroup' => $classGroup,
                     ];
 
-                    $writer->writeItem($associatedRow);
+                    $student = new Student();
+                    $student->setClassGroup($classGroup)
+                        ->setEmail($associatedRow['email'])
+                        ->setFirstname($associatedRow['firstname'])
+                        ->setLastname($associatedRow['lastname'])
+                        ->setUsername($associatedRow['username']);
+
+                    $em->persist($student);
+                    $em->flush();
                 }
 
                 try {
