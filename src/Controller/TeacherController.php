@@ -2,11 +2,20 @@
 
 namespace App\Controller;
 
+use App\Entity\Student;
 use App\Entity\Teacher;
+use App\Form\StudentImportType;
+use App\Form\TeacherImportType;
 use App\Form\TeacherType;
 use App\Repository\TeacherRepository;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Knp\Component\Pager\PaginatorInterface;
+use Port\Csv\CsvReader;
+use Port\Doctrine\DoctrineWriter;
+use Port\Spreadsheet\SpreadsheetReader;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -16,6 +25,34 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class TeacherController extends AbstractController
 {
+    /**
+     * @Route("/import", name="teacher_import", methods={"GET", "POST"})
+     */
+    public function import(Request $request)
+    {
+        $data = [];
+        $importForm = $this->createForm(TeacherImportType::class, $data);
+        $importForm->handleRequest($request);
+
+        if ($importForm->isSubmitted()) {
+            if ($importForm->isValid()) {
+                try {
+                    $this->parseCsv($importForm);
+                    $this->addFlash('success', 'Teachers imported!');
+
+                    return $this->redirectToRoute('teacher_index');
+                }
+                catch (\Exception $e) {
+                    $this->addFlash('danger', 'Erreur de l\'import. Vérifiez le CSV.');
+                }
+            }
+        }
+        return $this->render('teacher/import.html.twig', [
+            'import_form' => $importForm->createView(),
+            'mime_types' => implode(',', TeacherImportType::IMPORT_MIME_TYPES),
+        ]);
+    }
+
     /**
      * @Route("/", name="teacher_index", methods={"GET"})
      */
@@ -46,7 +83,6 @@ class TeacherController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
             $teacher->setPlainPassword($teacher->getPassword());
-
 
             $entityManager->persist($teacher);
             $entityManager->flush();
@@ -106,5 +142,58 @@ class TeacherController extends AbstractController
         }
 
         return $this->redirectToRoute('teacher_index');
+    }
+
+    /**
+     * @param FormInterface $importForm
+     * @return bool
+     */
+    private function parseCsv(FormInterface $importForm)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $data = $importForm->getData();
+        $classGroup = $data['classGroup'];
+
+        /** @var UploadedFile $uploadedFile */
+        $uploadedFile = $importForm['file']->getData();
+        $mimeType = $uploadedFile->getMimeType();
+
+        $file = new \SplFileObject($uploadedFile->getRealPath());
+
+        if ($mimeType === 'text/plain' || $mimeType === 'text/csv') {
+            $reader = new CsvReader($file);
+        } else {
+            $reader = new SpreadsheetReader($file);
+        }
+
+        // Skip firstline if headers
+        $isfirstline = true;
+        foreach ($reader as $row) {
+            if ($isfirstline) {
+                $isfirstline = false;
+                if ($data['firstLineIsHeaders']) {
+                    continue;
+                }
+            }
+
+            $teacherArray = [
+                'username' => $row[$data['username'] - 1],
+                'firstname' => $row[$data['firstname'] - 1],
+                'lastname' => $row[$data['lastname'] - 1],
+                'email' => $row[$data['email'] - 1],
+                'classGroup' => $classGroup,
+            ];
+
+            $teacher = new Teacher();
+            $teacher->addClassGroup($classGroup)
+                ->setEmail($teacherArray['email'])
+                ->setFirstname($teacherArray['firstname'])
+                ->setLastname($teacherArray['lastname'])
+                ->setUsername($teacherArray['username']);
+
+            $em->persist($teacher);
+            $em->flush();
+        }
     }
 }
