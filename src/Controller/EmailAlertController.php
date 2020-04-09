@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\EmailAlert;
 use App\Form\EmailAlertType;
 use App\Repository\EmailAlertRepository;
+use App\Security\CheckAccessRights;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,9 +19,12 @@ class EmailAlertController extends AbstractController
 {
     /**
      * @Route("/", name="email_alert_index", methods={"GET"})
+     * @throws \App\Exception\UserException
      */
     public function index(Request $request, PaginatorInterface $paginator, EmailAlertRepository $repository): Response
     {
+        CheckAccessRights::hasAdminOrSuperAdminRole($this->getUser());
+
         $query = $repository->getFindAllQuery();
 
         $pagination = $paginator->paginate(

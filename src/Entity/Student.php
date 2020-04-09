@@ -81,6 +81,8 @@ class Student extends User
 
     /**
      * @return Collection|StudentPresence[]
+     *
+     * Carefull here : a presence can be an absence (????)
      */
     public function getPresences(): Collection
     {
@@ -122,6 +124,8 @@ class Student extends User
 
         return $this;
     }
+
+    //TODO: MAKE THIS WORK
     public function getPhotoFile()
     {
         return $this->photoFile;

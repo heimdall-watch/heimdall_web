@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
@@ -15,8 +16,6 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  */
 class StudentPresence
 {
-    const EXCUSES = ['sick', 'family', 'transport', 'work', 'other'];
-
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -139,43 +138,26 @@ class StudentPresence
         return $this;
     }
 
-    public function getLate(): \DateTime
+    public function getLate(): ?DateTime
     {
         return $this->late;
     }
 
-    public function setLate(?\DateTime $late): self
+    public function setLate(?DateTime $late): self
     {
         $this->late = $late;
 
         return $this;
     }
 
-    public function getExcuseLabel(): string
+    public function getExcuseDescription(): ?string
     {
-        switch ($this->excuse) {
-            case 'sick':
-                return 'Malade';
-            case 'family':
-                return 'Raison familiale';
-            case 'transport':
-                return 'Problème de transport';
-            case 'work':
-                return 'Raison professionnelle';
-            case 'other':
-            default:
-                return 'Autre raison';
-        }
+        return $this->excuseDescription;
     }
 
-    public function getExcuse(): ?string
+    public function setExcuseDescription(?string $excuseDescription): self
     {
-        return $this->excuse;
-    }
-
-    public function setExcuse(?string $excuse): self
-    {
-        $this->excuse = $excuse;
+        $this->excuseDescription = $excuseDescription;
 
         return $this;
     }

@@ -39,7 +39,7 @@ class StudentPresenceRepository extends ServiceEntityRepository
     public function findPending()
     {
         return $this->createQueryBuilder('u')
-            ->where('(u.present = false OR u.late IS NOT NULL) AND u.excuseProof IS NOT NULL AND u.excuseValidated IS NULL')
+            ->where('(u.present = false OR u.late IS NOT NULL) AND (u.excuseValidated = false OR u.excuseValidated IS NULL)')
             ->setMaxResults(30)
             ->getQuery()
             ->getResult()
