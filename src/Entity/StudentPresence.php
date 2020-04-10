@@ -138,12 +138,20 @@ class StudentPresence
         return $this;
     }
 
+<<<<<<< HEAD
     public function getLate(): ?DateTime
+=======
+    public function getLate(): \DateTime
+>>>>>>> Migration/admin classgroup student presence (#4)
     {
         return $this->late;
     }
 
+<<<<<<< HEAD
     public function setLate(?DateTime $late): self
+=======
+    public function setLate(?\DateTime $late): self
+>>>>>>> Migration/admin classgroup student presence (#4)
     {
         $this->late = $late;
 
