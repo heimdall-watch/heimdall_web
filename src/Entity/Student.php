@@ -35,7 +35,7 @@ class Student extends User
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Serializer\Groups({"Default", "GetRollcall", "Deserialization", "GetClassStudents"})
+     * @Serializer\Groups({"Default", "Getlesson", "Deserialization", "GetClassStudents"})
      */
     private $photo;
 
