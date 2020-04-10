@@ -16,13 +16,13 @@ class ClassGroup
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Serializer\Groups({"Default", "GetRollcall", "Deserialization", "GetClass"})
+     * @Serializer\Groups({"Default", "Getlesson", "Deserialization", "GetClass"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=50)
-     * @Serializer\Groups({"Default", "GetRollcall", "Deserialization", "GetClass"})
+     * @Serializer\Groups({"Default", "Getlesson", "Deserialization", "GetClass"})
      */
     private $name;
 
@@ -40,16 +40,16 @@ class ClassGroup
     private $teachers;
 
     /**
-     * @ORM\OneToMany(targetEntity="RollCall", mappedBy="classGroup")
+     * @ORM\OneToMany(targetEntity="Lesson", mappedBy="classGroup")
      * @Serializer\Groups({"Default", "Deserialization"})
      */
-    private $rollCalls;
+    private $lessons;
 
     public function __construct()
     {
         $this->students = new ArrayCollection();
         $this->teachers = new ArrayCollection();
-        $this->rollCalls = new ArrayCollection();
+        $this->lessons = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -101,27 +101,27 @@ class ClassGroup
     }
 
     /**
-     * @return Collection|RollCall[]
+     * @return Collection|Lesson[]
      */
-    public function getRollCalls(): Collection
+    public function getLessons(): Collection
     {
-        return $this->rollCalls;
+        return $this->lessons;
     }
 
-    public function addAttendance(RollCall $attendance): self
+    public function addAttendance(Lesson $attendance): self
     {
-        if (!$this->rollCalls->contains($attendance)) {
-            $this->rollCalls[] = $attendance;
+        if (!$this->lessons->contains($attendance)) {
+            $this->lessons[] = $attendance;
             $attendance->setClassGroup($this);
         }
 
         return $this;
     }
 
-    public function removeAttendance(RollCall $attendance): self
+    public function removeAttendance(Lesson $attendance): self
     {
-        if ($this->rollCalls->contains($attendance)) {
-            $this->rollCalls->removeElement($attendance);
+        if ($this->lessons->contains($attendance)) {
+            $this->lessons->removeElement($attendance);
             // set the owning side to null (unless already changed)
             if ($attendance->getClassGroup() === $this) {
                 $attendance->setClassGroup(null);

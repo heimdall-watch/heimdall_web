@@ -29,7 +29,7 @@ class StudentPresenceRepository extends ServiceEntityRepository
             ->andWhere('u.student = :student')
             ->andWhere('u.present = false OR u.late != 0')
             ->setParameter('student',$user)
-            ->leftJoin('u.rollCall', 'r')
+            ->leftJoin('u.lesson', 'r')
             ->orderBy('r.dateStart', 'DESC')
             ->getQuery()
             ->getResult()
