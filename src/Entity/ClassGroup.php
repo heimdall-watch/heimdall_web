@@ -27,6 +27,24 @@ class ClassGroup
     private $name;
 
     /**
+     * @ORM\Column(type="string", length=50)
+     * @Serializer\Groups({"Default", "Getlesson", "Deserialization", "GetClass"})
+     */
+    private $university;
+
+    /**
+     * @ORM\Column(type="string", length=50)
+     * @Serializer\Groups({"Default", "Getlesson", "Deserialization", "GetClass"})
+     */
+    private $UFR;
+
+    /**
+     * @ORM\Column(type="string", length=50)
+     * @Serializer\Groups({"Default", "Getlesson", "Deserialization", "GetClass"})
+     */
+    private $formation;
+
+    /**
      * @ORM\OneToMany(targetEntity="App\Entity\Student", mappedBy="classGroup")
      * @ORM\OrderBy({"lastname" = "ASC", "firstname" = "ASC"})
      * @Serializer\Groups({"Default", "Deserialization"})
@@ -44,6 +62,12 @@ class ClassGroup
      * @Serializer\Groups({"Default", "Deserialization"})
      */
     private $lessons;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Admin", inversedBy="classGroups", cascade={"persist"})
+     * @Serializer\Groups({"Default", "Deserialization"})
+     */
+    private $admins;
 
     public function __construct()
     {
@@ -106,6 +130,54 @@ class ClassGroup
     public function getLessons(): Collection
     {
         return $this->lessons;
+    }
+
+    public function getAdmins()
+    {
+        return $this->admins;
+    }
+
+    public function setAdmins($admins): ClassGroup
+    {
+        $this->admins = $admins;
+
+        return $this;
+    }
+
+    public function getUniversity()
+    {
+        return $this->university;
+    }
+
+    public function setUniversity($university): ClassGroup
+    {
+        $this->university = $university;
+
+        return $this;
+    }
+
+    public function getUFR()
+    {
+        return $this->UFR;
+    }
+
+    public function setUFR($UFR): ClassGroup
+    {
+        $this->UFR = $UFR;
+
+        return $this;
+    }
+
+    public function getFormation()
+    {
+        return $this->formation;
+    }
+
+    public function setFormation($formation): ClassGroup
+    {
+        $this->formation = $formation;
+
+        return $this;
     }
 
     public function addAttendance(Lesson $attendance): self

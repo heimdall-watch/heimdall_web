@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
@@ -48,9 +49,10 @@ class StudentPresence
     private $present;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="datetime", nullable=true)
+     * @var \DateTime
      * @Serializer\Groups({"Default", "Getlesson", "Deserialization", "GetStudentPresences"})
-     * @Assert\Type("integer")
+     * @Assert\DateTime()
      * @Assert\GreaterThan(0)
      */
     private $late;
@@ -74,7 +76,7 @@ class StudentPresence
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Serializer\Groups({"Default", "Getlesson", "Deserialization", "GetStudentPresences"})
      */
-    private $excuse; // TODO : Constantes + Possibilité d'entrer un intitulé manuellement ?
+    private $excuseDescription; // TODO : Constantes + Possibilité d'entrer un intitulé manuellement ?
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -137,12 +139,12 @@ class StudentPresence
         return $this;
     }
 
-    public function getLate(): ?int
+    public function getLate(): \DateTime
     {
         return $this->late;
     }
 
-    public function setLate(?int $late): self
+    public function setLate(?\DateTime $late): self
     {
         $this->late = $late;
 
