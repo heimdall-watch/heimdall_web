@@ -9,21 +9,21 @@ use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\RollCallRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\LessonRepository")
  */
-class RollCall
+class Lesson
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      *
-     * @Serializer\Groups({"Default", "GetRollcall", "Deserialization", "GetStudentPresences"})
+     * @Serializer\Groups({"Default", "Getlesson", "Deserialization", "GetStudentPresences"})
      */
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\ClassGroup", inversedBy="rollCalls")
+     * @ORM\ManyToOne(targetEntity="App\Entity\ClassGroup", inversedBy="lessons")
      * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      * @Serializer\Type("EntityId<App\Entity\ClassGroup>")
      * @Serializer\Groups({"Default", "Deserialization"})
@@ -32,7 +32,7 @@ class RollCall
     private $classGroup;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Teacher", inversedBy="rollCalls")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Teacher", inversedBy="lessons")
      * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      * @Serializer\Type("EntityId<App\Entity\Teacher>")
      * @Serializer\Groups({"Default", "Deserialization"})
@@ -41,7 +41,7 @@ class RollCall
     private $teacher;
 
     /**
-     * @ORM\OneToMany(targetEntity="StudentPresence", mappedBy="rollCall", orphanRemoval=true, cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="StudentPresence", mappedBy="lesson", orphanRemoval=true, cascade={"persist"})
      * @Serializer\Groups({"Default", "Deserialization"})
      * @Assert\Valid()
      */
@@ -50,7 +50,7 @@ class RollCall
     /**
      * @ORM\Column(type="datetime")
      * @var \DateTime
-     * @Serializer\Groups({"Default", "GetRollcall", "Deserialization", "GetStudentPresences"})
+     * @Serializer\Groups({"Default", "Getlesson", "Deserialization", "GetStudentPresences"})
      * @Assert\DateTime()
      * @Assert\LessThan(propertyPath="dateEnd")
      */
@@ -59,7 +59,7 @@ class RollCall
     /**
      * @ORM\Column(type="datetime")
      * @var \DateTime
-     * @Serializer\Groups({"Default", "GetRollcall", "Deserialization", "GetStudentPresences"})
+     * @Serializer\Groups({"Default", "Getlesson", "Deserialization", "GetStudentPresences"})
      * @Assert\DateTime()
      * @Assert\GreaterThan(propertyPath="dateStart")
      */
@@ -77,7 +77,7 @@ class RollCall
 
     /**
      * @Serializer\VirtualProperty("getClassGroup")
-     * @Serializer\Groups({"GetRollcall"})
+     * @Serializer\Groups({"Getlesson"})
      * @Serializer\Type("App\Entity\ClassGroup")
      * @Serializer\MaxDepth(1)
      * @return ClassGroup|null
@@ -96,7 +96,7 @@ class RollCall
 
     /**
      * @Serializer\VirtualProperty("getTeacher")
-     * @Serializer\Groups({"GetRollcall"})
+     * @Serializer\Groups({"Getlesson"})
      * @Serializer\Type("App\Entity\Teacher")
      * @Serializer\MaxDepth(1)
      * @return Teacher|null
@@ -115,7 +115,7 @@ class RollCall
 
     /**
      * @Serializer\VirtualProperty("getStudentPresences")
-     * @Serializer\Groups({"GetRollcall"})
+     * @Serializer\Groups({"Getlesson"})
      * @Serializer\MaxDepth(2)
      * @return Collection|StudentPresence[]
      */
@@ -128,7 +128,7 @@ class RollCall
     {
         if (!$this->studentPresences->contains($studentPresence)) {
             $this->studentPresences[] = $studentPresence;
-            $studentPresence->setRollcall($this);
+            $studentPresence->setlesson($this);
         }
 
         return $this;
@@ -139,8 +139,8 @@ class RollCall
         if ($this->studentPresences->contains($studentPresence)) {
             $this->studentPresences->removeElement($studentPresence);
             // set the owning side to null (unless already changed)
-            if ($studentPresence->getRollcall() === $this) {
-                $studentPresence->setRollcall(null);
+            if ($studentPresence->getlesson() === $this) {
+                $studentPresence->setlesson(null);
             }
         }
 
