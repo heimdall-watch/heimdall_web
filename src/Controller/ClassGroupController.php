@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\ClassGroup;
 use App\Form\ClassGroupType;
 use App\Repository\ClassGroupRepository;
+use App\Security\CheckAccessRights;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,10 +19,14 @@ class ClassGroupController extends AbstractController
 {
     /**
      * @Route("/", name="class_group_index", methods={"GET"})
+     * @throws \App\Exception\UserException
      */
-    public function index(Request $request, PaginatorInterface $paginator, ClassGroupRepository $repository): Response
+    public function index(Request $request, PaginatorInterface $paginator): Response
     {
-        $query = $repository->getFindAllQuery();
+        CheckAccessRights::hasAdminOrSuperAdminRole($this->getUser());
+
+        $em = $this->getDoctrine()->getManager();
+        $query = $em->getRepository(ClassGroup::class)->getFindAllQuery();
 
         $pagination = $paginator->paginate(
             $query,
@@ -36,9 +41,12 @@ class ClassGroupController extends AbstractController
 
     /**
      * @Route("/new", name="class_group_new", methods={"GET","POST"})
+     * @throws \App\Exception\UserException
      */
     public function new(Request $request): Response
     {
+        CheckAccessRights::hasAdminOrSuperAdminRole($this->getUser());
+
         $classGroup = new ClassGroup();
         $form = $this->createForm(ClassGroupType::class, $classGroup);
         $form->handleRequest($request);
@@ -70,9 +78,12 @@ class ClassGroupController extends AbstractController
 
     /**
      * @Route("/{id}/edit", name="class_group_edit", methods={"GET","POST"})
+     * @throws \App\Exception\UserException
      */
     public function edit(Request $request, ClassGroup $classGroup): Response
     {
+        CheckAccessRights::hasAdminOrSuperAdminRole($this->getUser());
+
         $form = $this->createForm(ClassGroupType::class, $classGroup);
         $form->handleRequest($request);
 
@@ -93,9 +104,12 @@ class ClassGroupController extends AbstractController
 
     /**
      * @Route("/{id}", name="class_group_delete", methods={"DELETE"})
+     * @throws \App\Exception\UserException
      */
     public function delete(Request $request, ClassGroup $classGroup): Response
     {
+        CheckAccessRights::hasAdminOrSuperAdminRole($this->getUser());
+
         if ($this->isCsrfTokenValid('delete'.$classGroup->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($classGroup);

@@ -8,6 +8,7 @@ use App\Form\StudentImportType;
 use App\Form\TeacherImportType;
 use App\Form\TeacherType;
 use App\Repository\TeacherRepository;
+use App\Security\CheckAccessRights;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Knp\Component\Pager\PaginatorInterface;
 use Port\Csv\CsvReader;
@@ -27,9 +28,12 @@ class TeacherController extends AbstractController
 {
     /**
      * @Route("/import", name="teacher_import", methods={"GET", "POST"})
+     * @throws \App\Exception\UserException
      */
     public function import(Request $request)
     {
+        CheckAccessRights::hasAdminOrSuperAdminRole($this->getUser());
+
         $data = [];
         $importForm = $this->createForm(TeacherImportType::class, $data);
         $importForm->handleRequest($request);
@@ -55,11 +59,13 @@ class TeacherController extends AbstractController
 
     /**
      * @Route("/", name="teacher_index", methods={"GET"})
+     * @throws \App\Exception\UserException
      */
     public function index(Request $request, PaginatorInterface $paginator, TeacherRepository $repository): Response
     {
-        $query = $repository->getFindAllQuery();
+        CheckAccessRights::hasAdminOrSuperAdminRole($this->getUser());
 
+        $query = $repository->getFindAllQuery();
         $pagination = $paginator->paginate(
             $query,
             $request->query->getInt('page', 1),
@@ -73,9 +79,12 @@ class TeacherController extends AbstractController
 
     /**
      * @Route("/new", name="teacher_new", methods={"GET","POST"})
+     * @throws \App\Exception\UserException
      */
     public function new(Request $request): Response
     {
+        CheckAccessRights::hasAdminOrSuperAdminRole($this->getUser());
+
         $teacher = new Teacher();
         $form = $this->createForm(TeacherType::class, $teacher);
         $form->handleRequest($request);
@@ -99,9 +108,12 @@ class TeacherController extends AbstractController
 
     /**
      * @Route("/{id}", name="teacher_show", methods={"GET"})
+     * @throws \App\Exception\UserException
      */
     public function show(Teacher $teacher): Response
     {
+        CheckAccessRights::hasAdminOrSuperAdminRole($this->getUser());
+
         return $this->render('teacher/show.html.twig', [
             'teacher' => $teacher,
         ]);
@@ -109,9 +121,12 @@ class TeacherController extends AbstractController
 
     /**
      * @Route("/{id}/edit", name="teacher_edit", methods={"GET","POST"})
+     * @throws \App\Exception\UserException
      */
     public function edit(Request $request, Teacher $teacher): Response
     {
+        CheckAccessRights::hasAdminOrSuperAdminRole($this->getUser());
+
         $form = $this->createForm(TeacherType::class, $teacher);
         $form->handleRequest($request);
 
@@ -132,9 +147,12 @@ class TeacherController extends AbstractController
 
     /**
      * @Route("/{id}", name="teacher_delete", methods={"DELETE"})
+     * @throws \App\Exception\UserException
      */
     public function delete(Request $request, Teacher $teacher): Response
     {
+        CheckAccessRights::hasAdminOrSuperAdminRole($this->getUser());
+
         if ($this->isCsrfTokenValid('delete'.$teacher->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($teacher);

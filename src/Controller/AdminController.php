@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Admin;
 use App\Form\AdminType;
 use App\Repository\AdminRepository;
+use App\Security\CheckAccessRights;
 use Hackzilla\PasswordGenerator\Generator\ComputerPasswordGenerator;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,9 +20,12 @@ class AdminController extends AbstractController
 {
     /**
      * @Route("/", name="admin_index", methods={"GET"})
+     * @throws \App\Exception\UserException
      */
     public function index(Request $request, PaginatorInterface $paginator, AdminRepository $repository): Response
     {
+        CheckAccessRights::hasAdminOrSuperAdminRole($this->getUser());
+
         $query = $repository->getFindAllQuery();
 
         $pagination = $paginator->paginate(
@@ -75,9 +79,6 @@ class AdminController extends AbstractController
      */
     public function show(Admin $admin): Response
     {
-        if (!$admin->hasRole('ROLE_SUPER_ADMIN')) {
-            throw $this->createAccessDeniedException();
-        }
         return $this->render('admin/show.html.twig', [
             'admin' => $admin,
         ]);
@@ -85,12 +86,12 @@ class AdminController extends AbstractController
 
     /**
      * @Route("/{id}/edit", name="admin_edit", methods={"GET","POST"})
+     * @throws \App\Exception\UserException
      */
     public function edit(Request $request, Admin $admin): Response
     {
-        if (!$admin->hasRole('ROLE_SUPER_ADMIN')) {
-            throw $this->createAccessDeniedException();
-        }
+        CheckAccessRights::hasAdminOrSuperAdminRole($this->getUser());
+
         $form = $this->createForm(AdminType::class, $admin);
         $form->handleRequest($request);
 

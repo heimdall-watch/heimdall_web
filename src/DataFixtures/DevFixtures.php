@@ -24,7 +24,7 @@ class DevFixtures extends Fixture
             ->setFirstname("Brahim")
             ->setLastname("LASTNAME")
             ->setEmail("sosthen.gaillard@gmail.com")
-            ->setRoles(['ROLE_SUPER_ADMIN'])
+            ->setRoles(['ROLE_ADMIN'])
             ->setPlainPassword("brahim");
         $manager->persist($brahim);
 
@@ -34,7 +34,7 @@ class DevFixtures extends Fixture
             ->setFirstname("admin")
             ->setLastname("admin")
             ->setEmail("admin.admin@gmail.com")
-            ->setRoles(['ROLE_SUPER_ADMIN'])
+            ->setRoles(['ROLE_ADMIN'])
             ->setPlainPassword("admin");
         $manager->persist($brahim);
 

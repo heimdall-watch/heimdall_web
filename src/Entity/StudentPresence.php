@@ -95,12 +95,12 @@ class StudentPresence
         return $this->id;
     }
 
-    public function getLesson(): ?Lesson
+    public function getlesson(): ?Lesson
     {
         return $this->lesson;
     }
 
-    public function setLesson(?Lesson $lesson): self
+    public function setlesson(?Lesson $lesson): self
     {
         $this->lesson = $lesson;
 

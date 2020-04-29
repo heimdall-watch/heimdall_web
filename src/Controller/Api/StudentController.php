@@ -76,7 +76,7 @@ class StudentController extends UserController
 
         $this->getDoctrine()->getManager()->flush();
 
-        if ($student->getPhotoFile() === null) {
+        if ($student->getPhoto() === null) {
             throw new NotFoundHttpException("La photo n'existe pas");
         }
 

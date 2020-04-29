@@ -142,7 +142,6 @@ class LessonController extends AbstractController
      * @return Lesson[]
      */
     public function getlessonsLastWeek(Request $request)
-    {
-        return $this->getDoctrine()->getManager()->getRepository(Lesson::class)->findLastWeek($this->getUser());
+    {return $this->getDoctrine()->getManager()->getRepository(Lesson::class)->findLastWeek($this->getUser());
     }
 }

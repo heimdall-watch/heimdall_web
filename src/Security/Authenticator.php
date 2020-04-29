@@ -71,10 +71,6 @@ class Authenticator extends AbstractFormLoginAuthenticator
             throw new CustomUserMessageAuthenticationException('Username could not be found.');
         }
 
-        if (!in_array('ROLE_ADMIN', $user->getRoles()) && !in_array('ROLE_SUPER_ADMIN', $user->getRoles())) {
-            throw new CustomUserMessageAuthenticationException('Only admins can log in on the web interface at this time, please use the mobile app instead.');
-        }
-
         return $user;
     }
 
