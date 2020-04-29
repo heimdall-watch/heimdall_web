@@ -31,6 +31,7 @@ class StudentController extends AbstractController
      */
     public function import(Request $request)
     {
+        $em = $this->getDoctrine()->getManager();
         CheckAccessRights::hasAdminOrSuperAdminRole($this->getUser());
 
         $em = $this->getDoctrine()->getManager();
