@@ -8,6 +8,7 @@ use FOS\RestBundle\View\View;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -101,33 +102,4 @@ class LessonController extends AbstractController
     {
         return $lesson;
     }
-
-    /**
-     * @Rest\Get("", name="lesson_get_all")
-     * @Rest\View(serializerGroups={"Getlesson"}, serializerEnableMaxDepthChecks=true)
-     *
-     * @return Lesson[]
-     */
-    public function getlessons(Request $request)
-    {
-        return $this->getDoctrine()->getManager()->getRepository(Lesson::class)->findBy(
-            ['teacher' => $this->getUser()],
-            ['dateStart' => 'DESC'],
-            $request->query->get('limit', null));
-
-
-    }
-
-    /**
-     * @Rest\Get("/lastweek", name="lesson_get_last_week")
-     * @Rest\View(serializerGroups={"Getlesson"}, serializerEnableMaxDepthChecks=true)
-     *
-     * @return Lesson[]
-     */
-    public function getlessonsLastWeek(Request $request)
-    {
-        return $this->getDoctrine()->getManager()->getRepository(Lesson::class)->findLastWeek($this->getUser());
-    }
-
-
 }

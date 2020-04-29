@@ -10,6 +10,7 @@ use App\Entity\Student;
 use App\Entity\StudentPresence;
 use App\Entity\Teacher;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Persistence\ObjectManager;
 
 class DevFixtures extends Fixture
@@ -26,6 +27,20 @@ class DevFixtures extends Fixture
             ->setRoles(['ROLE_SUPER_ADMIN'])
             ->setPlainPassword("brahim");
         $manager->persist($brahim);
+
+        // Brahim
+        $admin = new Admin();
+        $admin->setUsername("admin")
+            ->setFirstname("admin")
+            ->setLastname("admin")
+            ->setEmail("admin.admin@gmail.com")
+            ->setRoles(['ROLE_SUPER_ADMIN'])
+            ->setPlainPassword("admin");
+        $manager->persist($brahim);
+
+        $admins = new ArrayCollection();
+        $admins->add($admin);
+        $admins->add($brahim);
 
         // Student 1
         $sosthen = new Student();
@@ -66,7 +81,11 @@ class DevFixtures extends Fixture
 
         // Group MIAGE
         $miage = new ClassGroup();
-        $miage->setName('M2 Classique');
+        $miage->setName('M2 Classique')
+            ->setFormation('Miage')
+            ->setUFR('SEGMI')
+            ->setUniversity("Paris Nanterre")
+            ->setAdmins($admins);
         $manager->persist($miage);
 
         // Group M2 APP
@@ -76,7 +95,11 @@ class DevFixtures extends Fixture
             ->addStudent($julie)
             ->addStudent($flo)
             ->addStudent($loic)
-            ->addStudent($samyh);
+            ->addStudent($samyh)
+            ->setFormation('Miage')
+            ->setUFR('SEGMI')
+            ->setUniversity("Paris Nanterre")
+            ->setAdmins($admins);
         $manager->persist($m2App);
 
         for ($i = 0; $i < 10; $i++) {
@@ -105,6 +128,7 @@ class DevFixtures extends Fixture
         $lessonTest = new Lesson();
         $lessonTest->setClassGroup($m2App)
                     ->setTeacher($jfpp)
+                    ->setName('IDD')
                     ->setDateStart(clone $date)
                     ->setDateEnd((clone $date)->modify('+ 2 hours'));
         $manager->persist($lessonTest);
@@ -114,6 +138,7 @@ class DevFixtures extends Fixture
         $lessonTest4 = new Lesson();
         $lessonTest4->setClassGroup($m2App)
             ->setTeacher($jfpp)
+            ->setName('GDA')
             ->setDateStart(clone $date)
             ->setDateEnd((clone $date)->modify('+ 2 hours'));
         $manager->persist($lessonTest4);
@@ -123,6 +148,7 @@ class DevFixtures extends Fixture
         $lessonTest5 = new Lesson();
         $lessonTest5->setClassGroup($m2App)
             ->setTeacher($jfpp)
+            ->setName('MSI')
             ->setDateStart(clone $date)
             ->setDateEnd((clone $date)->modify('+ 3 hours'));
         $manager->persist($lessonTest5);
@@ -132,6 +158,7 @@ class DevFixtures extends Fixture
         $lessonTest6 = new Lesson();
         $lessonTest6->setClassGroup($m2App)
             ->setTeacher($jfpp)
+            ->setName('PROCS')
             ->setDateStart(clone $date)
             ->setDateEnd((clone $date)->modify('+ 4 hours'));
         $manager->persist($lessonTest6);
@@ -141,6 +168,7 @@ class DevFixtures extends Fixture
         $lessonTest2 = new Lesson();
         $lessonTest2->setClassGroup($m2App)
             ->setTeacher($jfpp)
+            ->setName('EBS')
             ->setDateStart($date)
             ->setDateEnd((clone $date)->modify('+ 6 hours'));
         $manager->persist($lessonTest2);
@@ -150,6 +178,7 @@ class DevFixtures extends Fixture
         $lessonTest3 = new Lesson();
         $lessonTest3->setClassGroup($m2App)
             ->setTeacher($jfpp)
+            ->setName('Projet')
             ->setDateStart($date)
             ->setDateEnd((clone $date)->modify('+ 2 hours'));
         $manager->persist($lessonTest3);
@@ -179,7 +208,7 @@ class DevFixtures extends Fixture
         $presenceTest4 = new StudentPresence();
         $presenceTest4->setStudent($sosthen)
             ->setPresent(true)
-            ->setLate(20)
+            ->setLate(new \DateTime())
             ->setlesson($lessonTest4);
         $manager->persist($presenceTest4);
 

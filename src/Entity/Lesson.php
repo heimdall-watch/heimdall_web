@@ -65,6 +65,12 @@ class Lesson
      */
     private $dateEnd;
 
+    /**
+     * @ORM\Column(type="string", length=50)
+     * @Serializer\Groups({"Default", "Getlesson", "Deserialization", "GetClass"})
+     */
+    private $name;
+
     public function __construct()
     {
         $this->studentPresences = new ArrayCollection();
@@ -174,5 +180,17 @@ class Lesson
     public function getDuration(): int
     {
         return $this->dateStart->diff($this->dateEnd)->h;
+    }
+
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    public function setName($name): Lesson
+    {
+        $this->name = $name;
+
+        return $this;
     }
 }
