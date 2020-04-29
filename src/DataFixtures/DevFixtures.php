@@ -204,13 +204,35 @@ class DevFixtures extends Fixture
             ->setlesson($lessonTest3);
         $manager->persist($presenceTest3);
 
-        // Student Presence 3
+        // Student Presence 4
         $presenceTest4 = new StudentPresence();
         $presenceTest4->setStudent($sosthen)
             ->setPresent(true)
             ->setLate(new \DateTime())
             ->setlesson($lessonTest4);
         $manager->persist($presenceTest4);
+
+        // Student Presence 5
+        $presenceTest5 = new StudentPresence();
+        $presenceTest5->setStudent($julie)
+            ->setPresent(true)
+            ->setLate(new \DateTime())
+            ->setlesson($lessonTest4)
+            ->setExcuseDescription("transport")
+            ->setExcuseProof("un papier de la sncf")
+            ->setExcuseValidated(FALSE);
+        $manager->persist($presenceTest5);
+
+        // Student Presence 6
+        $presenceTest6 = new StudentPresence();
+        $presenceTest6->setStudent($julie)
+            ->setPresent(true)
+            ->setLate(new \DateTime())
+            ->setlesson($lessonTest5)
+            ->setExcuseDescription("transport")
+            ->setExcuseProof("un papier de la sncf")
+            ->setExcuseValidated(TRUE);
+        $manager->persist($presenceTest6);
 
         $manager->flush();
     }

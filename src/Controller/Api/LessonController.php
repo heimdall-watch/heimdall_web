@@ -2,6 +2,7 @@
 
 namespace App\Controller\Api;
 
+use App\Entity\ClassGroup;
 use App\Entity\Lesson;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\View\View;
@@ -101,5 +102,47 @@ class LessonController extends AbstractController
     public function getlesson(Lesson $lesson)
     {
         return $lesson;
+    }
+
+    /**
+     * @Rest\Get("", name="lesson_get_all")
+     * @Rest\View(serializerGroups={"Getlesson"}, serializerEnableMaxDepthChecks=true)
+     *
+     * @return Lesson[]
+     */
+    public function getlessons(Request $request)
+    {
+        return $this->getDoctrine()->getManager()->getRepository(Lesson::class)->findBy(
+            ['teacher' => $this->getUser()],
+            ['dateStart' => 'DESC'],
+            $request->query->get('limit', null));
+
+
+    }
+
+    /**
+     * @Rest\Post("", name="lesson_get_all")
+     * @Rest\View(serializerGroups={"Getlesson"}, serializerEnableMaxDepthChecks=true)
+     *
+     * @return Lesson[]
+     */
+    public function getLessonsByClassGroup(Request $request, ClassGroup $classGroup)
+    {
+        return $this->getDoctrine()->getManager()->getRepository(Lesson::class)->findBy(
+            ['classGroup' => $classGroup],
+            ['dateStart' => 'DESC'],
+            $request->query->get('limit', null));
+
+    }
+
+    /**
+     * @Rest\Get("/lastweek", name="lesson_get_last_week")
+     * @Rest\View(serializerGroups={"Getlesson"}, serializerEnableMaxDepthChecks=true)
+     *
+     * @return Lesson[]
+     */
+    public function getlessonsLastWeek(Request $request)
+    {
+        return $this->getDoctrine()->getManager()->getRepository(Lesson::class)->findLastWeek($this->getUser());
     }
 }
