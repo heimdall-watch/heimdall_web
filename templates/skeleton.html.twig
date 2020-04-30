@@ -6,7 +6,9 @@
     <title>{% block title %}Heimdall{% endblock %}</title>
 
     {{ encore_entry_link_tags('app') }}
-    {% block stylesheets %}{% endblock %}
+    {% block stylesheets %}
+        <link rel="stylesheet" type="text/css" href="{{ asset('templates/css/heimdall_css.css') }}" />
+    {% endblock %}
 </head>
 <body>
 

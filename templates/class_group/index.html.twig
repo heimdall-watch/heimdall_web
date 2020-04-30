@@ -3,7 +3,7 @@
 {% block title %}{{ parent() }} - Liste des classes{% endblock %}
 
 {% block container %}
-    <h1>Liste des classes ({{ pagination.totalItemCount }})</h1>
+    <h3>Liste des classes ({{ pagination.totalItemCount }})</h3>
 
     <div class="pull-left">
         {{ knp_pagination_filter(pagination, {
@@ -35,6 +35,21 @@
                        href="{{ path('class_group_edit', {'id': class.id}) }}"><i class="fa fa-edit"
                                                                                   aria-hidden="true"></i></a>
                     {% include 'ui/_delete_form.html.twig' with { id: class.id, path: 'class_group_delete', min: true } %}
+                </td>
+                <td>
+                    <ul class="navbar-nav ">
+                        <li class="nav-item dropdown_month">
+                            <a class="nav-link dropdown-toggle" href="#" id="month-dropdown" role="button"
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Choisir un mois
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-left" aria-labelledby="month-dropdown">
+                                <a class="dropdown-item" href="{{ path('app_logout') }}">mois</a>
+                            </div>
+                        </li>
+                    </ul>
+                    <a class="btn btn-primary btn-xs" title="télécharger le csv" data-toggle="tooltip"
+                        href="{{ path('class_group_export_csv', {'id': class.id}) }}">Télécharger le CSV</a>
                 </td>
             </tr>
         {% else %}
