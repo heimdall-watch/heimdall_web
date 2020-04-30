@@ -81,7 +81,7 @@ class DevFixtures extends Fixture
 
         // Group MIAGE
         $miage = new ClassGroup();
-        $miage->setName('M2 Classique')
+        $miage->setName('M1 MIAGE APP')
             ->setFormation('Miage')
             ->setUFR('SEGMI')
             ->setUniversity("Paris Nanterre")
@@ -122,6 +122,16 @@ class DevFixtures extends Fixture
             ->setEmail("sosthen.gaillard@gmail.com")
             ->setPlainPassword("jfpp");
         $manager->persist($jfpp);
+
+        $test = new Teacher();
+        $test->addClassGroup($miage)
+            ->addClassGroup($miage)
+            ->setUsername("brunocojean")
+            ->setFirstname("BRUNO")
+            ->setLastname("COJEAN")
+            ->setEmail("TEST.TES@gmail.com")
+            ->setPlainPassword("bruno");
+        $manager->persist($test);
 
         // lesson 1
         $date = new \DateTime();
