@@ -169,7 +169,7 @@ class Student extends User
     /** Return the concatenation between firstname and lastname */
     public function getIdentity() : String
     {
-
+        return $this->getFirstname() . ' ' . $this->getLastname();
     }
 
 }
