@@ -9,6 +9,7 @@ use App\Form\ClassGroupType;
 use App\Repository\ClassGroupRepository;
 use App\Security\CheckAccessRights;
 use Knp\Component\Pager\PaginatorInterface;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 use Port\Csv\CsvWriter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -40,8 +41,20 @@ class ClassGroupController extends AbstractController
             10
         );
 
+        $todayDate = new \DateTime();
+        $todayMonth = $this->getInversedFormatedMonth($todayDate->format('n'));
+
+        $months = [
+            'Septembre', 'Octobre', 'Novembre', 'Décembre', 'Janvier',
+            'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août'
+        ];
+
+        $position = array_search($todayMonth, $months);
+        $passedMonths = array_slice($months, 0, $position, true);
+
         return $this->render('class_group/index.html.twig', [
-            'pagination' => $pagination
+            'pagination' => $pagination,
+            'months' => $passedMonths
         ]);
     }
 
@@ -147,7 +160,7 @@ class ClassGroupController extends AbstractController
 
             $studentPresencesForMonth = array_filter($studentPresences, function ($presence) use ($formatedMonth) {
                 /** @var StudentPresence $presence */
-                return $presence->getlesson()->getDateStart()->format('m') === $formatedMonth;
+                return $presence->getlesson()->getDateStart()->format('n') === $formatedMonth;
             });
 
             /** @var StudentPresence $presence */
@@ -218,7 +231,7 @@ class ClassGroupController extends AbstractController
     {
         switch ($month) {
             case 'Janvier': {
-                return 1;
+                return 01;
             }
             case 'Février': {
                 return 2;
@@ -252,6 +265,53 @@ class ClassGroupController extends AbstractController
             }
             case 'Décembre' : {
                 return 12;
+            }
+        }
+
+        return 0;
+    }
+
+    /** Ugly as hell, but works just fine.
+     *  If someone take back this project, it could be a good idea to rework this
+     */
+    private function getInversedFormatedMonth(int $month) : String
+    {
+        switch ($month) {
+            case 1: {
+                return 'Janvier';
+            }
+            case 2: {
+                return 'Février';
+            }
+            case 3: {
+                return 'Mars';
+            }
+            case 4: {
+                return 'Avril';
+            }
+            case 5: {
+                return 'Mai';
+            }
+            case 6: {
+                return 'Juin';
+            }
+            case 7: {
+                return 'Juillet';
+            }
+            case 8: {
+                return 'Août';
+            }
+            case 9 :{
+                return 'Septembre';
+            }
+            case 10: {
+                return 'Octobre';
+            }
+            case 11: {
+                return 'Novembre';
+            }
+            case 12: {
+                return 'Décembre';
             }
         }
 
