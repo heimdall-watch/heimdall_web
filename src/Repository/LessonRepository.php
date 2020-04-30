@@ -33,6 +33,25 @@ class LessonRepository extends ServiceEntityRepository
             ;
     }
 
+    public function findNextLesson($user){
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.dateStart > :date')
+            ->andWhere('u.teacher = :teacher')
+            ->setParameter('date', (new \DateTime()))
+            ->setParameter('teacher',$user)
+            ->setMaxResults(30)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+    
+    public function getFindAllQuery()
+    {
+        $qb = $this->createQueryBuilder('lesson');
+
+        return $qb->getQuery()->getResult();
+    }
+
     // /**
     //  * @return Attendance[] Returns an array of Attendance objects
     //  */

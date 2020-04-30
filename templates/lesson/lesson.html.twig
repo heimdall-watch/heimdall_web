@@ -1,0 +1,39 @@
+{% extends 'responsive.html.twig' %}
+
+{% block title %}{{ parent() }} - Feuille d'appel{% endblock %}
+
+{% block body %}
+    <div style="text-align:center">
+        <h3>Feuille d'appel</h3>
+            <div>
+                <p>{{ lesson.name }} - {{lesson.classGroup.name}}</p>
+                <p>{{ lesson.dateStart|date('d-m-Y h:m') }} à {{ lesson.dateEnd|date('d-m-Y h:m') }}</p>
+            </div>
+            <div style="text-align:center">
+                <table>
+                    <thead>
+                        <th>Etudiant</th>
+                        <th>Présent</th>
+                        <th>Absent</th>
+                        <th>Retard</th>
+                    </thead>
+                    {% for student in lesson.classGroup.students %}
+                        <tr>
+                            <td>
+                                {{student.firstname ~ ' ' ~ student.lastname}} 
+                            </td>
+                            <td>
+                                <input type="checkbox" />
+                            </td>
+                            <td>
+                                <input type="checkbox" />
+                            </td>
+                            <td>
+                                <input type="number" />
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+    </div>
+{% endblock %}
