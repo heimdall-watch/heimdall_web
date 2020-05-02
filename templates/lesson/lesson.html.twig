@@ -3,37 +3,77 @@
 {% block title %}{{ parent() }} - Feuille d'appel{% endblock %}
 
 {% block body %}
+
+<script>
+    $('#submit').onClick(function s(){
+        console.log("sendFormPresence");
+        var forms = document.getElementsByClassName('formPresence');
+        for(var i=0;i<forms.length;i++){
+            console.log("form", forms[i]);
+        }
+    })
+</script>
     <div style="text-align:center">
         <h3>Feuille d'appel</h3>
             <div>
                 <p>{{ lesson.name }} - {{lesson.classGroup.name}}</p>
                 <p>{{ lesson.dateStart|date('d-m-Y h:m') }} à {{ lesson.dateEnd|date('d-m-Y h:m') }}</p>
             </div>
-            <div style="text-align:center">
-                <table>
+            <div>
+                <table style="border:1px solid black;margin: auto auto;text-align:center">
                     <thead>
-                        <th>Etudiant</th>
-                        <th>Présent</th>
-                        <th>Absent</th>
-                        <th>Retard</th>
-                    </thead>
-                    {% for student in lesson.classGroup.students %}
-                        <tr>
-                            <td>
-                                {{student.firstname ~ ' ' ~ student.lastname}} 
-                            </td>
-                            <td>
-                                <input type="checkbox" />
-                            </td>
-                            <td>
-                                <input type="checkbox" />
-                            </td>
-                            <td>
-                                <input type="number" />
-                            </td>
+                        <tr style="border:1px solid black;">
+                            <th style="border:1px solid black;">Etudiant</th>
+                            <th style="border:1px solid black;">Présent</th>
+                            <th style="border:1px solid black;">Absent</th>
+                            <th style="border:1px solid black;">Retard</th>
                         </tr>
-                    {% endfor %}
+                    </thead>
+                    <tbody>
+                        {% for student in lesson.classGroup.students %}
+                            {% set presence = null %}
+                            {% if lesson.studentPresences != null %}
+                                {% for pres in lesson.studentPresences %}
+                                    {% if pres.student.id == student.id %}
+                                        {% set presence = pres %}
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                            <tr style="border:1px solid black;">
+                                <form class="formPresence" method="POST" action="/lesson">
+                                    <td style="border:1px solid black;">
+                                        {{student.firstname ~ ' ' ~ student.lastname}} 
+                                        <input type="hidden" name="id_student" value={{student.id}} />
+                                        <input type="hidden" name="id_lesson" value={{lesson.id}} />
+                                    </td>
+                                    {% if presence != null and presence.present == true %}
+                                        <td style="border:1px solid black;">
+                                            <input type="radio" name="present" value="true" checked/>
+                                        </td>
+                                        <td style="border:1px solid black;">
+                                            <input type="radio" name="present" value="false" />
+                                        </td>
+                                        <td style="border:1px solid black;">
+                                            <input type="number" size=2 value=0 />
+                                        </td>
+                                    {% else %}
+                                        <td style="border:1px solid black;">
+                                            <input type="radio" name="present" value="true" />
+                                        </td>
+                                        <td style="border:1px solid black;">
+                                            <input type="radio" name="present"  value="false" checked/>
+                                        </td>
+                                        <td style="border:1px solid black;">
+                                            <input type="number" size=2 value=0 />
+                                        </td>
+                                    {% endif %}
+                                </form>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
                 </table>
+                <button id="submit">Valider</button>
             </div>
     </div>
+    
 {% endblock %}
