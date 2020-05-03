@@ -27,7 +27,7 @@ class StudentPresenceRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('u')
             ->andWhere('u.student = :student')
-            ->andWhere('u.present = false OR u.late != 0')
+            ->andWhere('u.present = false OR u.late is not NULL')
             ->setParameter('student',$user)
             ->leftJoin('u.lesson', 'r')
             ->orderBy('r.dateStart', 'DESC')
