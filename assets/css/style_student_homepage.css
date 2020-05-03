@@ -1,6 +1,14 @@
+body {
+  background-color: #56baed !important;
+}
+
 tr, td{
   font-size: small !important;
-  padding: 0% !important;
+  
+}
+
+h1 {
+  color: #60a0ff;
 }
 
 .table-wrapper {

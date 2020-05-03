@@ -4,21 +4,25 @@
 
 {% block body %}
 
-
-    <div style="text-align:center">
-        <h3>Feuille d'appel</h3>
-            <div>
-                <p>{{ lesson.name }} - {{lesson.classGroup.name}}</p>
-                <p>{{ lesson.dateStart|date('d-m-Y h:m') }} à {{ lesson.dateEnd|date('d-m-Y h:m') }}</p>
+    <div class="container">
+        <div class="table-wrapper">
+            <div style="text-align:center">
+                <div class="table-title" >
+                    <h1>Feuille d'appel</h1>
+                </div>
+                <div>
+                    <p>{{ lesson.name }} - {{lesson.classGroup.name}}</p>
+                    <p>{{ lesson.dateStart|date('d-m-Y h:m') }} à {{ lesson.dateEnd|date('d-m-Y h:m') }}</p>
+                </div>
             </div>
             <div>
-                <table style="border:1px solid black;margin: auto auto;text-align:center">
+                <table class="table table-bordered" style="margin: auto auto;">
                     <thead>
-                        <tr style="border:1px solid black;">
-                            <th style="border:1px solid black;">Etudiant</th>
-                            <th style="border:1px solid black;">Présent</th>
-                            <th style="border:1px solid black;">Absent</th>
-                            <th style="border:1px solid black;">Retard</th>
+                        <tr >
+                            <th >Etudiant</th>
+                            <th >Présent</th>
+                            <th >Absent</th>
+                            <th >Retard</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -31,31 +35,31 @@
                                     {% endif %}
                                 {% endfor %}
                             {% endif %}
-                            <tr style="border:1px solid black;">
+                            <tr >
                                 <form class="formPresence" method="POST" action="lesson/new">
-                                    <td style="border:1px solid black;">
+                                    <td >
                                         {{student.firstname ~ ' ' ~ student.lastname}} 
                                         <input type="hidden" name="id_student" value={{student.id}} />
                                         <input type="hidden" name="id_lesson" value={{lesson.id}} />
                                     </td>
                                     {% if presence != null and presence.present == true %}
-                                        <td style="border:1px solid black;">
+                                        <td >
                                             <input type="radio" name="present" value="true" checked/>
                                         </td>
-                                        <td style="border:1px solid black;">
+                                        <td >
                                             <input type="radio" name="present" value="false" />
                                         </td>
-                                        <td style="border:1px solid black;">
+                                        <td >
                                             <input type="number" size=2 value=0 />
                                         </td>
                                     {% else %}
-                                        <td style="border:1px solid black;">
+                                        <td >
                                             <input type="radio" name="present" value="true" />
                                         </td>
-                                        <td style="border:1px solid black;">
+                                        <td >
                                             <input type="radio" name="present"  value="false" checked/>
                                         </td>
-                                        <td style="border:1px solid black;">
+                                        <td >
                                             <input type="number" name="late" size=2 value=0 />
                                         </td>
                                     {% endif %}
@@ -66,6 +70,7 @@
                 </table>
                 <button id="submit">Valider</button>
             </div>
+        </div>
     </div>
     <script>
         $('#submit').click(function (){

@@ -3,8 +3,15 @@
 {% block title %}{{ parent() }} - Liste des créneaux{% endblock %}
 
 {% block body %}
-    <div style="text-align:center">
-        <h3>Liste des créneaux</h3>
+    <div class="container">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-8">
+                        <h1>Liste des créneaux</b></h1>
+                    </div>
+                </div>
+            </div>
             {% for lesson in pagination %}
                 <div>
                     <p>{{ lesson.name }} - {{lesson.classGroup.name}}</p>
@@ -19,5 +26,6 @@
                     <td colspan="7">Aucun cours pour le moment.</td>
                 </tr>
             {% endfor %}
+        </div>
     </div>
 {% endblock %}
