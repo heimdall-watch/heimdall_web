@@ -121,8 +121,6 @@ class LessonController extends AbstractController
         $sp->setPresent($present);
         $entityManager->persist($sp);
         $entityManager->flush();
-        //return $this->redirectToRoute('lesson_index');
-        //return $this->redirectToRoute('lesson_show',['id'=>1]);
         return new Response();
     }
 
