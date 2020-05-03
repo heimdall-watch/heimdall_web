@@ -24,6 +24,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Doctrine\ODM\PHPCR\Query\Query;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
@@ -78,54 +79,51 @@ class LessonController extends AbstractController
     }
     
     /**
-     * @Route("/new", name="admin_new", methods={"GET","POST"})
+     * @Route("/new", name="admin_new", methods={"POST"})
      */
     public function new(Request $request, StudentRepository $sr, StudentPresenceRepository $spr,LessonRepository $lr): Response
     {
-        $presence = new Presence();
-        $form = $this->createForm(PresenceType::class, $presence);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $sp = new StudentPresence();
-            $listSP = $spr->getFindAllQuery()->getResult();
-            foreach($listSP as $stdPre){
-                if($stdPre->getStudent()->getId() == $presence->getIdStudent() 
-                    && $stdPre->getlesson()->getId() == $presence->getIdLesson()){
-                    $sp = $stdPre;
-                }
-            }
-            $listLesson = $lr->getFindAllQuery()->getResult();
-            foreach($listLesson as $les){
-                if($les->getId() == $presence->getIdLesson()){
-                    $sp->setlesson($les);
-                    if($presence->getLate() > 0){
-                        $dt = new DateInterval("PT".$presence->getLate()."M");
-                        $dateLate = $les->setDateStart()->add($dt);
-                        $sp->setLate($dateLate);
+        //$presence = new Presence();
+        $id_lesson = $request->request->get("id_lesson");
+        $id_student = $request->request->get("id_student");
+        $present = $request->request->get("present") == "true" ? true : false;
+        $late = $request->request->get("late");
+        $entityManager = $this->getDoctrine()->getManager();
+        $sp = new StudentPresence();
+        $listStudent = $sr->getFindAllQuery()->getResult();
+        foreach($listStudent as $s){
+            if($s->getId() == $id_student){
+                $sp->setStudent($s);
+                $listSP = $spr->findAbsencesRetards($s);
+                foreach($listSP as $stdPre){
+                    if($stdPre->getlesson()->getId() == $id_lesson){
+                        $sp = $stdPre;
+                        break;
                     }
-                    break;
                 }
+                break;
             }
-            $listStudent = $sr->getFindAllQuery()->getResult();
-            foreach($listStudent as $s){
-                if($s->getId() == $presence->getIdStudent()){
-                    $sp->setStudent($s);
-                    break;
-                }
-            }
-            if($presence->getPresent() == "true"){
-                $sp->setPresent(true);
-            } else {
-                $sp->setPresent(false);
-            }
-            $entityManager->persist($sp);
-            $entityManager->flush();
-
         }
-
+        
+        $listLesson = $lr->getFindAllQuery();
+        foreach($listLesson as $les){
+            if($les->getId() == $id_lesson){
+                $sp->setlesson($les);
+                if($late > 0){
+                    $dt = new DateInterval("PT".$late."M");
+                    $dateLate = $les->setDateStart()->add($dt);
+                    $sp->setLate($dateLate);
+                }
+                break;
+            }
+        }
+        
+        $sp->setPresent($present);
+        $entityManager->persist($sp);
+        $entityManager->flush();
         //return $this->redirectToRoute('lesson_index');
+        //return $this->redirectToRoute('lesson_show',['id'=>1]);
+        return new Response();
     }
 
 }
