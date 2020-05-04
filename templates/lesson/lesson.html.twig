@@ -3,9 +3,9 @@
 {% block title %}{{ parent() }} - Feuille d'appel{% endblock %}
 
 {% block body %}
-
-        <div class="table-wrapper">
-            <div style="text-align:center">
+        <div class="table-wrapper"style="text-align:center">
+            <a href="/lesson"> &lt -- Retourn à la liste des créneaux</a>
+            <div>
                 <div class="table-title" >
                     <h1>Feuille d'appel</h1>
                 </div>
@@ -15,9 +15,9 @@
                 </div>
             </div>
             <div>
-                <table class="table table-bordered" style="margin: auto auto;">
+                <table class="table table-bordered rollcall" style="margin: auto auto;">
                     <thead>
-                        <tr >
+                        <tr class="line-rollcall">
                             <th >Etudiant</th>
                             <th >Présent</th>
                             <th >Absent</th>
@@ -34,7 +34,7 @@
                                     {% endif %}
                                 {% endfor %}
                             {% endif %}
-                            <tr >
+                            <tr class="line-rollcall">
                                 <form class="formPresence" method="POST" action="lesson/new">
                                     <td >
                                         {{student.firstname ~ ' ' ~ student.lastname}} 
@@ -43,23 +43,30 @@
                                     </td>
                                     {% if presence != null and presence.present == true %}
                                         <td >
-                                            <input type="radio" name="present" value="true" checked/>
+                                            <input type="radio" class="radio" id={{"presentRadio" ~ student.id}} name="present" value="true" checked/>
                                         </td>
                                         <td >
-                                            <input type="radio" name="present" value="false" />
+                                            <input type="radio" class="radio" id={{"absentRadio" ~ student.id}} name="present" value="false" />
                                         </td>
-                                        <td >
-                                            <input type="number" size=2 value=0 />
-                                        </td>
+                                        {% if presence.late != null %}
+                                            {% set late = date(presence.late).diff(date(lesson.dateStart))%}
+                                            <td >
+                                                <input type="number" size=4 value={{late.i}} min=0 />
+                                            </td>
+                                        {% else %}
+                                            <td >
+                                                <input type="number" size=4 value=0 min=0 />
+                                            </td>
+                                        {% endif %}
                                     {% else %}
                                         <td >
-                                            <input type="radio" name="present" value="true" />
+                                            <input type="radio" class="radio" id={{"presentRadio" ~ student.id}} name="present" value="true" />
                                         </td>
                                         <td >
-                                            <input type="radio" name="present"  value="false" checked/>
+                                            <input type="radio" class="radio" id={{"absentRadio" ~ student.id}} name="present"  value="false" checked/>
                                         </td>
                                         <td >
-                                            <input type="number" name="late" size=2 value=0 />
+                                            <input type="number" id={{"late" ~ student.id}} name="late" size=4 value=0 min=0 disabled/>
                                         </td>
                                     {% endif %}
                                 </form>
@@ -67,12 +74,11 @@
                         {% endfor %}
                     </tbody>
                 </table>
-                <button id="submit">Valider</button>
+                <button id="submit" style="margin: 10px 10px" class="btn btn-primary">Valider</button>
             </div>
         </div>
     <script>
         $('#submit').click(function (){
-            console.log("sendFormPresence");
             $(".formPresence").each(function(){
                 console.log("sendFormPresence each", this);
                 $.ajax({
@@ -81,6 +87,20 @@
                     data: $(this).serialize(),
                 });
             })
+            alert("Appel enregistré");
+        })
+
+        $(".radio").click(function(){
+            var id = $(this).attr('id');
+            if(id.indexOf("presentRadio") == 0){
+                var idField = id.replace("presentRadio", "late");
+                $('#'+idField).prop("disabled", false);
+            }
+            else if(id.indexOf("absentRadio") == 0){
+                var idField = id.replace("absentRadio", "late");
+                $('#'+idField).prop("disabled", true);
+                $('#'+idField).prop("value", 0);
+            }
         })
     </script>
 {% endblock %}

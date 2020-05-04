@@ -1,6 +1,5 @@
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<link rel="stylesheet" href="assets/css/style_student_homepage.css" />
-<link rel="stylesheet" href="assets/css/style_login.css" />
+
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script href="assets/js/student_homepage.js"></script>
@@ -18,7 +17,8 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
+<link rel="stylesheet" href="assets/css/style_student_homepage.css" />
+<link rel="stylesheet" href="assets/css/style_login.css" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>{% block title %}Heimdall{% endblock %}</title>
@@ -27,19 +27,13 @@
     {% block stylesheets %}{% endblock %}
 
 </head>
-<body>
+<body class="responsive">
 
     <div class="container">
-    <nav class="navbar navbar-expand-lg navbar-light bg-primary">
-                <a class="navbar-brand" href="#">{{user.firstName ~ ' ' ~ user.lastName}}</a>
-                <div class="navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav ml-auto">
-                        <li class="nav-item">
-                            <a class="btn btn-danger" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" href="{{ path('app_logout') }}">Déconnexion</a>
-                        </li>
-                    </ul>
-                </div> 
-            </nav>
+        <nav class="navbar navbar-expand-lg navbar-light bg-primary">
+            <a class="navbar-brand n" href="#">{{user.firstName ~ ' ' ~ user.lastName}}</a>
+            <a class="btn btn-danger" type="button" href="{{ path('app_logout') }}">Déconnexion</a>
+        </nav>
 {% block body %}{% endblock %}
 
 </div>
