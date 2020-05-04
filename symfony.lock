@@ -586,8 +586,8 @@
             "ref": "7b6180725839c090cd8dbd069a3947b0dca1bae0"
         },
         "files": [
-            "assets/css/app.css",
             "assets/js/app.js",
+            "assets/css/app.css",
             "config/packages/assets.yaml",
             "config/packages/prod/webpack_encore.yaml",
             "config/packages/webpack_encore.yaml",
