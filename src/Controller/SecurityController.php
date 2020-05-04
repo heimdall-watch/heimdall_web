@@ -17,10 +17,19 @@ class SecurityController extends AbstractController
      */
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
+        /*
         if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-            return $this->redirectToRoute('dashboard');
+            if($this->getUser()->hasRole('ROLE_TEACHER')){
+                return $this->redirectToRoute('lesson_index');
+            }
+            else if($this->getUser()->hasRole('ROLE_STUDENT')){
+                return $this->redirectToRoute('student_user_index');
+            }
+            else{
+                return $this->redirectToRoute('dashboard');
+            }
         }
-
+        */
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
         // last username entered by the user

@@ -1,0 +1,29 @@
+{% extends 'responsive.html.twig' %}
+
+{% block title %}{{ parent() }} - Liste des créneaux{% endblock %}
+
+{% block body %}
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-8">
+                        <h1>Liste des créneaux</b></h1>
+                    </div>
+                </div>
+            </div>
+            {% for lesson in pagination %}
+                <div>
+                    <p>{{ lesson.name }} - {{lesson.classGroup.name}}</p>
+                    <p>{{ lesson.dateStart|date('d-m-Y h:m') }} à {{ lesson.dateEnd|date('d-m-Y h:m') }}</p>
+                    <p><a href={{"/lesson/" ~ lesson.id}}>Faire l'appel</a></p>
+                    {% if lesson.dateStart >= date() and lesson.dateEnd <= date() %}
+                        
+                    {% endif %}
+                </div>
+            {% else %}
+                <tr>
+                    <td colspan="7">Aucun cours pour le moment.</td>
+                </tr>
+            {% endfor %}
+        </div>
+{% endblock %}
