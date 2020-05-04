@@ -12,6 +12,7 @@ use App\Repository\LessonRepository;
 use App\Repository\TeacherRepository;
 use App\Repository\StudentRepository;
 use App\Repository\StudentPresenceRepository;
+use App\Security\CheckAccessRights;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Knp\Component\Pager\PaginatorInterface;
 use Port\Csv\CsvReader;
@@ -35,19 +36,20 @@ class StudentUserController extends AbstractController
 {
 
     /**
-     * @Route("/", name="student_user_index", methods={"GET"})
+     * @Route("/", name="student_user_index", methods={"POST", "GET"})
      */
-    public function index(Request $request, PaginatorInterface $paginator, StudentRepository $stuRepos, StudentPresenceRepository $repository, TeacherRepository $teaRepo): Response
+    public function index(Request $request, PaginatorInterface $paginator, StudentPresenceRepository $repository, TeacherRepository $teaRepo): Response
     {
-        $students = $stuRepos->getFindAllQuery()->getResult();
-        $stu = $students[0];
-        $query = $repository->findAbsencesRetards($stu);
+        CheckAccessRights::hasStudentRole($this->getUser());
+        $student = $this->getUser();
+        $query = $repository->findAbsencesRetards($student);
         $pagination = $paginator->paginate(
             $query,
             $request->query->getInt('page', 1),
             10
         );
         return $this->render('student_user/index.html.twig', [
+            'user' => $student,
             'pagination' => $pagination
         ]);
     }
@@ -57,6 +59,7 @@ class StudentUserController extends AbstractController
      */
     public function new(Request $request, StudentRepository $sr, StudentPresenceRepository $spr,LessonRepository $lr): Response
     {
+        CheckAccessRights::hasStudentRole($this->getUser());
         $entityManager = $this->getDoctrine()->getManager();
         $sp = new StudentPresence();
         

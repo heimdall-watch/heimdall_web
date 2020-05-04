@@ -13,6 +13,7 @@ use App\Repository\LessonRepository;
 use App\Repository\TeacherRepository;
 use App\Repository\StudentRepository;
 use App\Repository\StudentPresenceRepository;
+use App\Security\CheckAccessRights;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Knp\Component\Pager\PaginatorInterface;
 use Port\Csv\CsvReader;
@@ -40,30 +41,23 @@ class LessonController extends AbstractController
      */
     public function index(Request $request, PaginatorInterface $paginator, LessonRepository $repository, TeacherRepository $teaRepo): Response
     {
-        /*
-        $teachers = $teaRepo->getFindAllQuery();
-        //var_dump($teachers);
-        $teacher = $teachers[0];
-        if($teacher == null){
-            $pagination = null;
-        } else{
-            $query = $repository->findNextLesson($teacher);
+        CheckAccessRights::hasTeacherRole($this->getUser());
+        $teacher = $this->getUser();
+        $query = $repository->findNextLesson($teacher);
 
-            $pagination = $paginator->paginate(
-                $query,
-                $request->query->getInt('page', 1),
-                10
-            );
-        }
-        */
+        $pagination = $paginator->paginate(
+            $query,
+            $request->query->getInt('page', 1),
+            10
+        );
         
-        $query = $repository->getFindAllQuery();
         $pagination = $paginator->paginate(
             $query,
             $request->query->getInt('page', 1),
             10
         );
         return $this->render('lesson/index.html.twig', [
+            'user' => $teacher,
             'pagination' => $pagination
         ]);
     }
@@ -73,6 +67,7 @@ class LessonController extends AbstractController
      */
     public function show(Lesson $lesson): Response
     {
+        CheckAccessRights::hasTeacherRole($this->getUser());
         return $this->render('lesson/lesson.html.twig', [
             'lesson' => $lesson,
         ]);
@@ -83,7 +78,7 @@ class LessonController extends AbstractController
      */
     public function new(Request $request, StudentRepository $sr, StudentPresenceRepository $spr,LessonRepository $lr): Response
     {
-        //$presence = new Presence();
+        CheckAccessRights::hasTeacherRole($this->getUser());
         $id_lesson = $request->request->get("id_lesson");
         $id_student = $request->request->get("id_student");
         $present = $request->request->get("present") == "true" ? true : false;

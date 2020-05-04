@@ -16,6 +16,12 @@ class DashboardController extends AbstractController
      */
     public function index()
     {
+        if($this->getUser()->hasRole('ROLE_TEACHER')){
+            return $this->redirectToRoute('lesson_index');
+        }
+        else if($this->getUser()->hasRole('ROLE_STUDENT')){
+            return $this->redirectToRoute('student_user_index');
+        }
         CheckAccessRights::hasAdminOrSuperAdminRole($this->getUser());
 
         $em = $this->getDoctrine()->getManager();

@@ -16,6 +16,22 @@ class CheckAccessRights
         return true;
     }
 
+    public static function hasTeacherRole(User $user){
+        if (!$user->hasRole('ROLE_TEACHER')) {
+            throw new UserException('You need permissions to perform this action. Contact an admin.', 403);
+        }
+
+        return true;
+    }
+
+    public static function hasStudentRole(User $user){
+        if (!$user->hasRole('ROLE_STUDENT')) {
+            throw new UserException('You need permissions to perform this action. Contact an admin.', 403);
+        }
+
+        return true;
+    }
+
     public static function hasSuperAdminRole(User $user)
     {
         if ($user->hasRole('ROLE_SUPER_ADMIN')) {
