@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 class CheckAccessRights
 {
     public static function hasAdminOrSuperAdminRole(User $user) {
-        if ($user->hasRole('ROLE_TEACHER') || $user->hasRole('ROLE_STUDENT')) {
+        if (!($user->hasRole('ROLE_SUPER_ADMIN') || $user->hasRole('ROLE_ADMIN'))) {
             throw new UserException('You need permissions to perform this action. Contact an admin.', 403);
         }
 
@@ -34,7 +34,7 @@ class CheckAccessRights
 
     public static function hasSuperAdminRole(User $user)
     {
-        if ($user->hasRole('ROLE_SUPER_ADMIN')) {
+        if (!$user->hasRole('ROLE_SUPER_ADMIN')) {
             throw new UserException('You need permissions to perform this action. Contact an admin.', 403);
         }
 
