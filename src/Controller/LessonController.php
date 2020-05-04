@@ -57,7 +57,10 @@ class LessonController extends AbstractController
             10
         );
         return $this->render('lesson/index.html.twig', [
+<<<<<<< HEAD
             'user' => $teacher,
+=======
+>>>>>>> 2b40cd593dcc816b3582e48c9f312da96cecb7de
             'pagination' => $pagination
         ]);
     }
@@ -67,7 +70,10 @@ class LessonController extends AbstractController
      */
     public function show(Lesson $lesson): Response
     {
+<<<<<<< HEAD
         CheckAccessRights::hasTeacherRole($this->getUser());
+=======
+>>>>>>> 2b40cd593dcc816b3582e48c9f312da96cecb7de
         return $this->render('lesson/lesson.html.twig', [
             'lesson' => $lesson,
         ]);
