@@ -2,21 +2,21 @@
 
 namespace App\Repository;
 
-use App\Entity\RollCall;
+use App\Entity\Lesson;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * @method RollCall|null find($id, $lockMode = null, $lockVersion = null)
- * @method RollCall|null findOneBy(array $criteria, array $orderBy = null)
- * @method RollCall[]    findAll()
- * @method RollCall[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Lesson|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Lesson|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Lesson[]    findAll()
+ * @method Lesson[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class RollCallRepository extends ServiceEntityRepository
+class LessonRepository extends ServiceEntityRepository
 {
     public function __construct(RegistryInterface $registry)
     {
-        parent::__construct($registry, RollCall::class);
+        parent::__construct($registry, Lesson::class);
     }
 
     public function findLastWeek($user)

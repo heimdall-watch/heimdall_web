@@ -16,6 +16,15 @@ class ClassGroupType extends AbstractType
             ->add('name', TextType::class, [
                 'label' => 'Nom',
             ])
+            ->add('university', TextType::class, [
+                'label' => 'Université',
+            ])
+            ->add('UFR', TextType::class, [
+                'label' => 'UFR',
+            ])
+            ->add('formation', TextType::class, [
+                'label' => 'Formation',
+            ])
         ;
     }
 
