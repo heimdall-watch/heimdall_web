@@ -36,6 +36,19 @@ class StudentPresenceRepository extends ServiceEntityRepository
             ;
     }
 
+    public function findAllPresenceStudent($user)
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.student = :student')
+            //->andWhere('u.present = false OR u.late is not NULL')
+            ->setParameter('student',$user)
+            ->leftJoin('u.lesson', 'r')
+            ->orderBy('r.dateStart', 'DESC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
     public function findPending()
     {
         return $this->createQueryBuilder('u')

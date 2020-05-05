@@ -1,6 +1,5 @@
 .responsive{
   background-color: #56baed !important;
-  text-align: center;
 }
 
 .responsive > tr, td{
@@ -12,7 +11,7 @@
   color: #60a0ff;
 }
 
-.rollcall{
+.center{
     text-align: center;
 }
 
@@ -20,10 +19,19 @@
     border: 1px solid #60a0ff;
     border-radius: 25px;
     text-align: center;
+    max-width:500px;
 }
 
 .margin10{
     margin: 10px 10px;
+}
+
+.margin10auto{
+    margin: 10px auto;
+}
+
+.inputNumber{
+    max-width:50px;
 }
 
 .table-wrapper {
