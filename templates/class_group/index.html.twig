@@ -3,23 +3,26 @@
 {% block title %}{{ parent() }} - Liste des classes{% endblock %}
 
 {% block container %}
-    <h1>Liste des classes ({{ pagination.totalItemCount }})</h1>
+    <div class="flex-container sub-navbar">
+        <div class="flex-title flex-1">
+            <h3 class="title-spacing">Liste des classes ({{ pagination.totalItemCount }})</h3>
+        </div>
 
-    <div class="pull-left">
-        {{ knp_pagination_filter(pagination, {
-            'class.name': 'Nom',
-        }, {'button': 'Rechercher'}) }}
+        <div class="flex-container align-items--center  ">
+            {{ knp_pagination_filter(pagination, {
+                'class.name': 'Nom',
+            }, {'button': 'Rechercher'}) }}
+            <div class="button">
+                 <a href="{{ path('class_group_new') }}" class="btn btn-success button-new-classgroup"><i class="fa fa-plus"></i> Nouvelle</a>
+            </div>
+        </div>
     </div>
-
-    <div class="pull-right">
-        <a href="{{ path('class_group_new') }}" class="btn btn-success"><i class="fa fa-plus"></i> Nouvelle</a>
-    </div>
-
     <table class="table">
         <thead>
         <tr>
             <th>{{ knp_pagination_sortable(pagination, 'Nom', 'class.name') }}</th>
             <th>Actions</th>
+            <th>Export CSV</th>
 
         </tr>
         </thead>
@@ -35,6 +38,15 @@
                        href="{{ path('class_group_edit', {'id': class.id}) }}"><i class="fa fa-edit"
                                                                                   aria-hidden="true"></i></a>
                     {% include 'ui/_delete_form.html.twig' with { id: class.id, path: 'class_group_delete', min: true } %}
+                </td>
+                <td class="flex-container align-items--center flex-1">
+                    <select name="mois" class="select2">
+                        {% for month in months %}
+                            <option value="{{month}}">{{ month }}</option>
+                        {% endfor %}
+                    </select>
+                    <a class="btn btn-primary btn-xs csv-download-button" title="télécharger le csv" data-toggle="tooltip"
+                        href="{{ path('class_group_export_csv', {'id': class.id}) }}">Télécharger le CSV</a>
                 </td>
             </tr>
         {% else %}

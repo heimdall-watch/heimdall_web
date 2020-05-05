@@ -1,16 +1,104 @@
 @import "~bootstrap/scss/bootstrap";
-
 @import "simple-sidebar.css";
 @import "style_student_homepage.css";
-
 @import "~font-awesome";
-
 @import '~bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css';
-
 @import '~select2';
 @import '~select2-bootstrap4-theme';
 
-html,
-body {
-  height: 100%;
+
+.title-spacing {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.button-new-classgroup {
+  margin-left: 11px;
+  margin-bottom: 7px;
+}
+
+.csv-download-button {
+  margin-left: 5% !important;
+}
+
+.sub-navbar {
+  padding-bottom: 20px;
+}
+
+//Some helpers, feel free to add more
+.flex {
+  &-1 {
+    flex: 1;
+  }
+  &-2 {
+    flex: 2;
+  }
+  &-3 {
+    flex: 3;
+  }
+}
+
+.m {
+  &-left-5 {
+    margin-left: 5px;
+  }
+  &-left-10 {
+    margin-left: 10px;
+  }
+  &-right-5 {
+    margin-right: 5px;
+  }
+  &-right-10 {
+    margin-right: 10px;
+  }
+  &-bottom-5 {
+    margin-bottom: 5px;
+  }
+  &-bottom-10 {
+    margin-bottom: 10px;
+  }
+  &-top-5 {
+    margin-bottom: 5px;
+  }
+  &-top-10 {
+    margin-bottom: 10px;
+  }
+}
+
+.p {
+  &-left-5 {
+    padding-left: 5px;
+  }
+  &-left-10 {
+    padding-left: 10px;
+  }
+  &-right-5 {
+    padding-right: 5px;
+  }
+  &-right-10 {
+    padding-right: 10px;
+  }
+  &-bottom-5 {
+    padding-bottom: 5px;
+  }
+  &-bottom-10 {
+    padding-bottom: 10px;
+  }
+  &-top-5 {
+    padding-bottom: 5px;
+  }
+  &-top-10 {
+    padding-bottom: 10px;
+  }
+}
+
+.flex-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.align-items {
+  &--center {
+    align-items: center;
+  }
 }
