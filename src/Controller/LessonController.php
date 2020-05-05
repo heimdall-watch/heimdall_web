@@ -44,18 +44,13 @@ class LessonController extends AbstractController
         CheckAccessRights::hasTeacherRole($this->getUser());
         $teacher = $this->getUser();
         $query = $repository->findNextLesson($teacher);
+        //$query = $repository->getFindAllQuery();
+        $pagination = $paginator->paginate(
+            $query,
+            $request->query->getInt('page', 1),
+            10
+        );
 
-        $pagination = $paginator->paginate(
-            $query,
-            $request->query->getInt('page', 1),
-            10
-        );
-        
-        $pagination = $paginator->paginate(
-            $query,
-            $request->query->getInt('page', 1),
-            10
-        );
         return $this->render('lesson/index.html.twig', [
             'user' => $teacher,
             'pagination' => $pagination
@@ -68,17 +63,19 @@ class LessonController extends AbstractController
     public function show(Lesson $lesson): Response
     {
         CheckAccessRights::hasTeacherRole($this->getUser());
+        $teacher = $this->getUser();
         return $this->render('lesson/lesson.html.twig', [
+            'user' => $teacher,
             'lesson' => $lesson,
         ]);
     }
     
     /**
-     * @Route("/new", name="admin_new", methods={"POST"})
+     * @Route("/new", name="presence_new", methods={"POST"})
      */
     public function new(Request $request, StudentRepository $sr, StudentPresenceRepository $spr,LessonRepository $lr): Response
     {
-        CheckAccessRights::hasTeacherRole($this->getUser());
+        //CheckAccessRights::hasTeacherRole($this->getUser());
         $id_lesson = $request->request->get("id_lesson");
         $id_student = $request->request->get("id_student");
         $present = $request->request->get("present") == "true" ? true : false;
