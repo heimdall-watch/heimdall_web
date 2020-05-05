@@ -2,12 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use JMS\Serializer\Annotation as Serializer;
-use PhpOffice\PhpSpreadsheet\Shared\Date;
-use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\Validator\Constraints as Assert;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 
 /**
@@ -22,6 +18,11 @@ class Admin extends User
      */
     private $classGroups;
 
+    public function __construct()
+    {
+        $this->classGroups = new ArrayCollection();
+    }
+
     public function getClassGroups()
     {
         return $this->classGroups;
@@ -30,6 +31,15 @@ class Admin extends User
     public function setClassGroups($classGroups): Admin
     {
         $this->classGroups = $classGroups;
+
+        return $this;
+    }
+
+    public function addClassGroup(ClassGroup $classGroup): self
+    {
+        if (!$this->classGroups->contains($classGroup)) {
+            $this->classGroups[] = $classGroup;
+        }
 
         return $this;
     }
