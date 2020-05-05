@@ -3,8 +3,8 @@
 {% block title %}{{ parent() }} - Feuille d'appel{% endblock %}
 
 {% block body %}
-        <div class="table-wrapper"style="text-align:center">
-            <a href="/lesson"> &lt -- Retourn à la liste des créneaux</a>
+        <div class="table-wrapper">
+            <a href="{{ path('lesson_index') }}"> &lt -- Retourn à la liste des créneaux</a>
             <div>
                 <div class="table-title" >
                     <h1>Feuille d'appel</h1>
@@ -74,7 +74,7 @@
                         {% endfor %}
                     </tbody>
                 </table>
-                <button id="submit" style="margin: 10px 10px" class="btn btn-primary">Valider</button>
+                <button id="submit" class="btn btn-primary margin10">Valider</button>
             </div>
         </div>
     <script>

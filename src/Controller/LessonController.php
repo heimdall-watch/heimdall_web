@@ -43,8 +43,8 @@ class LessonController extends AbstractController
     {
         CheckAccessRights::hasTeacherRole($this->getUser());
         $teacher = $this->getUser();
-        //$query = $repository->findNextLesson($teacher);
-        $query = $repository->getFindAllQuery();
+        $query = $repository->findNextLesson($teacher);
+        //$query = $repository->getFindAllQuery();
         $pagination = $paginator->paginate(
             $query,
             $request->query->getInt('page', 1),

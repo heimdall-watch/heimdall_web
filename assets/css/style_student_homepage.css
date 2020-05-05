@@ -1,5 +1,6 @@
 .responsive{
   background-color: #56baed !important;
+  text-align: center;
 }
 
 .responsive > tr, td{
@@ -15,8 +16,14 @@
     text-align: center;
 }
 
-.line-rollcall > td, .line-rollcall > th{
-    max-width:100px;
+.div-creneaux{
+    border: 1px solid #60a0ff;
+    border-radius: 25px;
+    text-align: center;
+}
+
+.margin10{
+    margin: 10px 10px;
 }
 
 .table-wrapper {
