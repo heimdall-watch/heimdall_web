@@ -16,9 +16,9 @@
                     <!-- COMPONENT START -->
                     <div class="form-group">
                         <div class="input-group input-file" name="Fichier1">
-                            <input type="text" class="form-control" placeholder='Choose a file...' />			
+                            <input type="text" class="form-control" placeholder='Choisissez un fichier' />
                             <span class="input-group-btn">
-                                <button class="btn btn-default btn-choose" type="button">Choose</button>
+                                <button class="btn btn-default btn-choose" type="button">Choisir un justificatif</button>
                             </span>
                 
                 
@@ -26,12 +26,13 @@
                     </div>
                     <!-- COMPONENT END -->
                     <div class="form-group">
-                        <button type="submit" class="btn btn-primary pull-right" disabled>Submit</button>
-                        <button type="reset" class="btn btn-danger">Reset</button>
+                        <a type="reset" id="reset" href="#" role="button" class="btn btn-danger">Changer l'excuse</a>
+                        <a type="submit" id="submit" href="#" role="button" class="btn btn-primary pull-right">Envoyer le justificatif</a>
                     </div>
                 </form>
             </div>
-            <table class="table table-bordered">
+
+            <table class="table table-bordered m-top-10">
                 <thead>
                     <tr>
                         <th>

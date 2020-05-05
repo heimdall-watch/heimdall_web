@@ -40,17 +40,7 @@ class Student extends User
     private $photoDescription;
 
     /**
-     * @Vich\UploadableField(mapping="students_photos", fileNameProperty="photo")
-     * @var File
-     * @Assert\File(
-     *      maxSize="5242880",
-     *      mimeTypes = {
-     *          "image/png",
-     *          "image/jpeg",
-     *          "image/jpg",
-     *      }
-     * )
-     * @Serializer\Exclude()
+     * @ORM\Column(type="string", nullable=true)
      */
     private $photoFile;
 
@@ -113,7 +103,7 @@ class Student extends User
         return $this;
     }
 
-    public function setPhotoFile(File $photo = null)
+    public function setPhotoFile($photo = null)
     {
         $this->photoFile = $photo;
 
@@ -121,13 +111,16 @@ class Student extends User
             $this->updatedAt = new \DateTime();
         }
 
-
-
         return $this;
     }
 
     //TODO: MAKE THIS WORK
     public function getPhotoFile()
+    {
+        return $this->photoFile;
+    }
+
+    public function getPhoto()
     {
         return $this->photoFile;
     }
