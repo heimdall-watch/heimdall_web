@@ -35,6 +35,8 @@ class TeacherController extends AbstractController
         CheckAccessRights::hasAdminOrSuperAdminRole($this->getUser());
 
         $data = [];
+        $teachers = $this->getDoctrine()->getRepository(Teacher::class);
+
         $importForm = $this->createForm(TeacherImportType::class, $data);
         $importForm->handleRequest($request);
 
@@ -169,6 +171,7 @@ class TeacherController extends AbstractController
     private function parseCsv(FormInterface $importForm)
     {
         $em = $this->getDoctrine()->getManager();
+        $teachers = $this->getDoctrine()->getRepository(Teacher::class);
 
         $data = $importForm->getData();
         $classGroup = $data['classGroup'];
@@ -202,6 +205,14 @@ class TeacherController extends AbstractController
                 'email' => $row[$data['email'] - 1],
                 'classGroup' => $classGroup,
             ];
+
+            $teacher = $teachers->findOneBy([
+                'username' => $userArray['username'],
+                'email' => $userArray['email']
+            ]);
+            if (!empty($teacher)) {
+                continue;
+            }
 
             $teacher = new Teacher();
             $teacher->addClassGroup($classGroup)

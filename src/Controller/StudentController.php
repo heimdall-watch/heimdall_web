@@ -34,6 +34,7 @@ class StudentController extends AbstractController
         CheckAccessRights::hasAdminOrSuperAdminRole($this->getUser());
 
         $em = $this->getDoctrine()->getManager();
+        $students = $this->getDoctrine()->getRepository(Student::class);
         $data = [];
         $importForm = $this->createForm(StudentImportType::class, $data);
         $importForm->handleRequest($request);
@@ -76,6 +77,14 @@ class StudentController extends AbstractController
                         'email' => $row[$data['email']-1],
                         'classGroup' => $classGroup,
                     ];
+
+                    $student = $students->findOneBy([
+                        'username' => $associatedRow['username'],
+                        'email' => $associatedRow['email']
+                    ]);
+                    if (!empty($student)) {
+                        continue;
+                    }
 
                     $student = new Student();
                     $student->setClassGroup($classGroup)
