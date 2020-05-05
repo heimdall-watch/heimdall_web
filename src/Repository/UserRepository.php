@@ -23,7 +23,7 @@ class UserRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('user');
 
-        return $qb->getQuery();
+        return $qb->getQuery()->getResult();
     }
 
     // /**

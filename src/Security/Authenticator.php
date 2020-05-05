@@ -84,8 +84,18 @@ class Authenticator extends AbstractFormLoginAuthenticator
         if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
             return new RedirectResponse($targetPath);
         }
-
-        return new RedirectResponse($this->urlGenerator->generate('dashboard'));
+        if($token->getUser()->hasRole('ROLE_TEACHER')){
+            return new RedirectResponse($this->urlGenerator->generate('lesson_index'));
+        }
+        else if($token->getUser()->hasRole('ROLE_STUDENT')){
+            return new RedirectResponse($this->urlGenerator->generate('student_user_index'));
+        }
+        else if($token->getUser()->hasRole('ROLE_SUPER_ADMIN') || $token->getUser()->hasRole('ROLE_ADMIN')){
+            return new RedirectResponse($this->urlGenerator->generate('dashboard'));
+        }
+        else{
+            return new RedirectResponse($this->urlGenerator->generate('app_login'));
+        }
     }
 
     protected function getLoginUrl()
