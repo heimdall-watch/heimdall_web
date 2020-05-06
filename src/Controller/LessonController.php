@@ -84,7 +84,6 @@ class LessonController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
         $sp = new StudentPresence();
         $listStudent = $sr->getFindAllQuery()->getResult();
-        $result = ''.$late;
         foreach($listStudent as $s){
             if($s->getId() == $id_student){
                 $sp->setStudent($s);
@@ -107,9 +106,7 @@ class LessonController extends AbstractController
                 if($late > 0){
                     $dt = new DateInterval('PT'.$late.'M');
                     $dateLate = clone $les->getDateStart();
-                    $result = $result.' dateLateBef'.$dateLate->format('Y-m-d h:m');
                     $dateLate->add($dt);
-                    $result = $result.' dateLateAf'.$dateLate->format('Y-m-d h:m');
                     $sp->setLate($dateLate);
                 }
                 break;
@@ -121,7 +118,7 @@ class LessonController extends AbstractController
             $entityManager->persist($sp);
         }
         $entityManager->flush();
-        return new Response($result);
+        return new Response();
     }
 
 }

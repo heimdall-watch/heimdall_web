@@ -139,7 +139,7 @@ class ClassGroupController extends AbstractController
     }
 
     /**
-     * @Route("{id}/generate/csv", name="class_group_export_csv")
+     * @Route("{id}/generate/csv", name="class_group_export_csv", methods={"POST"})
      * @throws \App\Exception\UserException
      */
     public function exportAbsenceCsv(Request $request, ClassGroup $group = null)
@@ -147,17 +147,16 @@ class ClassGroupController extends AbstractController
         CheckAccessRights::hasAdminOrSuperAdminRole($this->getUser());
 
         $em = $this->getDoctrine()->getManager();
-        $group = $em->getRepository(ClassGroup::class)->find(7);
+        //$group = $em->getRepository(ClassGroup::class)->find(7);
 
-        $month = 'Janvier' ;
+        $month = $request->request->get("mois");
         $formatedMonth = $this->getFormatedMonth($month);
         $recap = [];
 
         $students = $group->getStudents();
         /** @var Student $student */
         foreach ($students as $student) {
-            $studentPresences = $student->getPresences();
-
+            $studentPresences = $student->getPresences()->getValues();
             $studentPresencesForMonth = array_filter($studentPresences, function ($presence) use ($formatedMonth) {
                 /** @var StudentPresence $presence */
                 return $presence->getlesson()->getDateStart()->format('n') === $formatedMonth;
