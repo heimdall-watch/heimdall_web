@@ -3,16 +3,12 @@
 {% block title %}{{ parent() }} - Liste des créneaux{% endblock %}
 
 {% block body %}
-        <div class="table-wrapper">
+        <div class="table-wrapper center">
             <div class="table-title">
-                <div class="row">
-                    <div class="col-sm-8">
-                        <h1>Liste des créneaux</b></h1>
-                    </div>
-                </div>
+                <h1>Liste des créneaux</h1>
             </div>
             {% for lesson in pagination %}
-                <div class="div-creneaux margin10">
+                <div class="div-creneaux margin10auto">
                     <p>{{ lesson.name }} - {{lesson.classGroup.name}}</p>
                     <p>{{ lesson.dateStart|date('d-m-Y h:m') }} à {{ lesson.dateEnd|date('d-m-Y h:m') }}</p>
                     <p><a href={{"/lesson/" ~ lesson.id}}>Faire l'appel</a></p>

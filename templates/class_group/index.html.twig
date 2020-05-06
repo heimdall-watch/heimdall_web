@@ -20,10 +20,10 @@
     <table class="table">
         <thead>
         <tr>
-            <th>{{ knp_pagination_sortable(pagination, 'Nom', 'class.name') }}</th>
-            <th>Actions</th>
-            <th>Export CSV</th>
-
+            <th style="width:30%">{{ knp_pagination_sortable(pagination, 'Nom', 'class.name') }}</th>
+            <th style="width:20%">Actions</th>
+            <th style="width:30%">Export CSV</th>
+            <th style="width:20%"></th>
         </tr>
         </thead>
         <tbody>
@@ -39,14 +39,17 @@
                                                                                   aria-hidden="true"></i></a>
                     {% include 'ui/_delete_form.html.twig' with { id: class.id, path: 'class_group_delete', min: true } %}
                 </td>
-                <td class="flex-container align-items--center flex-1">
-                    <select name="mois" class="select2">
-                        {% for month in months %}
-                            <option value="{{month}}">{{ month }}</option>
-                        {% endfor %}
-                    </select>
-                    <a class="btn btn-primary btn-xs csv-download-button" title="télécharger le csv" data-toggle="tooltip"
-                        href="{{ path('class_group_export_csv', {'id': class.id}) }}">Télécharger le CSV</a>
+                <td >
+                    <form action="{{ path('class_group_export_csv', {'id': class.id}) }}" method="POST">
+                        <select name="mois" class="select2" style="width:80%">
+                            {% for month in months %}
+                                <option value="{{month}}">{{ month }}</option>
+                            {% endfor %}
+                        </select>
+                </td>
+                <td>
+                        <input type="submit" class="btn btn-primary btn-xs" value="Télécharger le csv" />
+                    </form>
                 </td>
             </tr>
         {% else %}
