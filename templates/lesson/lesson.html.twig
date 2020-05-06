@@ -35,7 +35,7 @@
                                 {% endfor %}
                             {% endif %}
                             <tr class="line-rollcall">
-                                <form class="formPresence" method="POST" action="{{ path('lesson/new') }}">
+                                <form class="formPresence" method="POST" action="{{ path('presence_new') }}">
                                     <td >
                                         {{student.firstname ~ ' ' ~ student.lastname}} 
                                         <input type="hidden" name="id_student" value={{student.id}} />

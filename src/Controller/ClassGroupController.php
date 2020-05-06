@@ -145,7 +145,6 @@ class ClassGroupController extends AbstractController
     public function exportAbsenceCsv(Request $request, ClassGroup $group = null)
     {
         CheckAccessRights::hasAdminOrSuperAdminRole($this->getUser());
-
         $em = $this->getDoctrine()->getManager();
         //$group = $em->getRepository(ClassGroup::class)->find(7);
 
@@ -159,9 +158,8 @@ class ClassGroupController extends AbstractController
             $studentPresences = $student->getPresences()->getValues();
             $studentPresencesForMonth = array_filter($studentPresences, function ($presence) use ($formatedMonth) {
                 /** @var StudentPresence $presence */
-                return $presence->getlesson()->getDateStart()->format('n') === $formatedMonth;
+                return $presence->getlesson()->getDateStart()->format('n') == $formatedMonth;
             });
-
             /** @var StudentPresence $presence */
             foreach ($studentPresencesForMonth as $presence) {
                 $lesson = $presence->getlesson();
@@ -169,27 +167,24 @@ class ClassGroupController extends AbstractController
                 $isPresent = $presence->getPresent();
                 $isLate = $presence->getLate();
                 $studentIdentity = $student->getIdentity();
-
                 if (!$isPresent) {
                     $absenceDurationByDay = $lesson->getDuration();
                     if ($presence->getExcuseValidated()) {
-                        $recap[$month][$studentIdentity][$day]['absence']['justified'] = 'justifié';
-                        $recap[$month][$studentIdentity][$day]['absence']['justified']['time'] += $absenceDurationByDay;
-
+                        $line = array($month, $studentIdentity, $day, 'Absence', 'Justifié', $absenceDurationByDay);
+                        array_push($recap, $line);
                     } else {
-                        $recap[$month][$studentIdentity][$day]['absence']['unjustified'] = 'justifié';
-                        $recap[$month][$studentIdentity][$day]['absence']['unjustified']['time'] += $absenceDurationByDay;
+                        $line = array($month, $studentIdentity, $day, 'Absence', 'Injustifié', $absenceDurationByDay);
+                        array_push($recap, $line);
                     }
                 }
-
-                if ($isLate) {
-                    $lateness = $lesson->getDateStart()->diff($presence->getLate());
+                else if ($isLate) {
+                    $lateness = $lesson->getDateStart()->diff($presence->getLate())->format('%i');
                     if ($presence->getExcuseValidated()) {
-                        $recap[$month][$studentIdentity][$day]['lateness']['justified'] = 'justifié';
-                        $recap[$month][$studentIdentity][$day]['lateness']['justified']['time'] += $lateness;
+                        $line = array($month, $studentIdentity, $day, 'Retard', 'Justifié', $lateness);
+                        array_push($recap, $line);
                     } else {
-                        $recap[$month][$studentIdentity][$day]['lateness']['unjustified'] = 'justifié';
-                        $recap[$month][$studentIdentity][$day]['lateness']['unjustified']['time'] += $lateness;
+                        $line = array($month, $studentIdentity, $day, 'Retard', 'Injustifié', $lateness);
+                        array_push($recap, $line);
                     }
                 }
             }
@@ -202,7 +197,9 @@ class ClassGroupController extends AbstractController
 
         //columns
         $writer->writeItem(array('Mois', 'Etudiant', 'Jour', 'Absence/retard', 'Justifié/non justifié', 'Temps'));
-        $writer->writeItem($recap);
+        foreach($recap as $line){
+            $writer->writeItem($line);
+        }
         $writer->finish();
 
         $response = new BinaryFileResponse($filename);
