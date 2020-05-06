@@ -55,7 +55,7 @@ class StudentUserController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="admin_new", methods={"POST"})
+     * @Route("/new", name="student_user_new", methods={"POST"})
      */
     public function new(Request $request, StudentRepository $sr, StudentPresenceRepository $spr,LessonRepository $lr): Response
     {
