@@ -85,11 +85,11 @@ class HeimdallSendRecapCommand extends Command
     {
         $dataRecap = [];
 
-        foreach ($classGroup->getRollCalls() as $rollCall) {
-            $startDate = $rollCall->getDateStart()->format('Y-m-d H:i');
-            $endDate = $rollCall->getDateEnd()->format('Y-m-d H:i');
-            $teacherName = $rollCall->getTeacher()->getFirstname() . ' ' . $rollCall->getTeacher()->getLastname();
-            foreach ($rollCall->getStudentPresences() as $presence) {
+        foreach ($classGroup->getLessons() as $lesson) {
+            $startDate = $lesson->getDateStart()->format('Y-m-d H:i');
+            $endDate = $lesson->getDateEnd()->format('Y-m-d H:i');
+            $teacherName = $lesson->getTeacher()->getFirstname() . ' ' . $lesson->getTeacher()->getLastname();
+            foreach ($lesson->getStudentPresences() as $presence) {
                 $recap = [
                     'Début' => $startDate,
                     'Fin' => $endDate,

@@ -20,14 +20,14 @@ class Teacher extends User
     private $classGroups;
 
     /**
-     * @ORM\OneToMany(targetEntity="RollCall", mappedBy="teacher")
+     * @ORM\OneToMany(targetEntity="Lesson", mappedBy="teacher")
      */
-    private $rollCalls;
+    private $lessons;
 
     public function __construct()
     {
         $this->classGroups = new ArrayCollection();
-        $this->rollCalls = new ArrayCollection();
+        $this->lessons = new ArrayCollection();
     }
 
     public function teachToStudent(Student $student): bool
@@ -70,27 +70,27 @@ class Teacher extends User
     }
 
     /**
-     * @return Collection|RollCall[]
+     * @return Collection|Lesson[]
      */
-    public function getRollCalls(): Collection
+    public function getLessons(): Collection
     {
-        return $this->rollCalls;
+        return $this->lessons;
     }
 
-    public function addAttendance(RollCall $attendance): self
+    public function addAttendance(Lesson $attendance): self
     {
-        if (!$this->rollCalls->contains($attendance)) {
-            $this->rollCalls[] = $attendance;
+        if (!$this->lessons->contains($attendance)) {
+            $this->lessons[] = $attendance;
             $attendance->setTeacher($this);
         }
 
         return $this;
     }
 
-    public function removeAttendance(RollCall $attendance): self
+    public function removeAttendance(Lesson $attendance): self
     {
-        if ($this->rollCalls->contains($attendance)) {
-            $this->rollCalls->removeElement($attendance);
+        if ($this->lessons->contains($attendance)) {
+            $this->lessons->removeElement($attendance);
             // set the owning side to null (unless already changed)
             if ($attendance->getTeacher() === $this) {
                 $attendance->setTeacher(null);

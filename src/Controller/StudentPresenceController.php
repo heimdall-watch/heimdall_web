@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\StudentPresence;
+use App\Security\CheckAccessRights;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -15,9 +16,11 @@ class StudentPresenceController extends AbstractController
 {
     /**
      * @Route("/{id}/validate", name="student_presence_validate")
+     * @throws \App\Exception\UserException
      */
     public function validate(StudentPresence $studentPresence, Request $request)
     {
+        CheckAccessRights::hasAdminOrSuperAdminRole($this->getUser());
 
         if ($this->isCsrfTokenValid('validate' . $studentPresence->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();

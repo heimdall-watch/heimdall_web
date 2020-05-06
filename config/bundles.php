@@ -21,4 +21,5 @@ return [
     Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle::class => ['all' => true],
     Adelplace\OneSignalBundle\OneSignalBundle::class => ['all' => true],
     Knp\Bundle\PaginatorBundle\KnpPaginatorBundle::class => ['all' => true],
+    Rewieer\TaskSchedulerBundle\RewieerTaskSchedulerBundle::class => ['all' => true],
 ];

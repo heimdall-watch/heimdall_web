@@ -16,15 +16,33 @@ class ClassGroup
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Serializer\Groups({"Default", "GetRollcall", "Deserialization", "GetClass"})
+     * @Serializer\Groups({"Default", "Getlesson", "Deserialization", "GetClass"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=50)
-     * @Serializer\Groups({"Default", "GetRollcall", "Deserialization", "GetClass"})
+     * @Serializer\Groups({"Default", "Getlesson", "Deserialization", "GetClass"})
      */
     private $name;
+
+    /**
+     * @ORM\Column(type="string", length=50)
+     * @Serializer\Groups({"Default", "Getlesson", "Deserialization", "GetClass"})
+     */
+    private $university;
+
+    /**
+     * @ORM\Column(type="string", length=50)
+     * @Serializer\Groups({"Default", "Getlesson", "Deserialization", "GetClass"})
+     */
+    private $UFR;
+
+    /**
+     * @ORM\Column(type="string", length=50)
+     * @Serializer\Groups({"Default", "Getlesson", "Deserialization", "GetClass"})
+     */
+    private $formation;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Student", mappedBy="classGroup")
@@ -40,16 +58,22 @@ class ClassGroup
     private $teachers;
 
     /**
-     * @ORM\OneToMany(targetEntity="RollCall", mappedBy="classGroup")
+     * @ORM\OneToMany(targetEntity="Lesson", mappedBy="classGroup")
      * @Serializer\Groups({"Default", "Deserialization"})
      */
-    private $rollCalls;
+    private $lessons;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Admin", inversedBy="classGroups", cascade={"persist"})
+     * @Serializer\Groups({"Default", "Deserialization"})
+     */
+    private $admins;
 
     public function __construct()
     {
         $this->students = new ArrayCollection();
         $this->teachers = new ArrayCollection();
-        $this->rollCalls = new ArrayCollection();
+        $this->lessons = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -101,27 +125,75 @@ class ClassGroup
     }
 
     /**
-     * @return Collection|RollCall[]
+     * @return Collection|Lesson[]
      */
-    public function getRollCalls(): Collection
+    public function getLessons(): Collection
     {
-        return $this->rollCalls;
+        return $this->lessons;
     }
 
-    public function addAttendance(RollCall $attendance): self
+    public function getAdmins()
     {
-        if (!$this->rollCalls->contains($attendance)) {
-            $this->rollCalls[] = $attendance;
+        return $this->admins;
+    }
+
+    public function setAdmins($admins): ClassGroup
+    {
+        $this->admins = $admins;
+
+        return $this;
+    }
+
+    public function getUniversity()
+    {
+        return $this->university;
+    }
+
+    public function setUniversity($university): ClassGroup
+    {
+        $this->university = $university;
+
+        return $this;
+    }
+
+    public function getUFR()
+    {
+        return $this->UFR;
+    }
+
+    public function setUFR($UFR): ClassGroup
+    {
+        $this->UFR = $UFR;
+
+        return $this;
+    }
+
+    public function getFormation()
+    {
+        return $this->formation;
+    }
+
+    public function setFormation($formation): ClassGroup
+    {
+        $this->formation = $formation;
+
+        return $this;
+    }
+
+    public function addAttendance(Lesson $attendance): self
+    {
+        if (!$this->lessons->contains($attendance)) {
+            $this->lessons[] = $attendance;
             $attendance->setClassGroup($this);
         }
 
         return $this;
     }
 
-    public function removeAttendance(RollCall $attendance): self
+    public function removeAttendance(Lesson $attendance): self
     {
-        if ($this->rollCalls->contains($attendance)) {
-            $this->rollCalls->removeElement($attendance);
+        if ($this->lessons->contains($attendance)) {
+            $this->lessons->removeElement($attendance);
             // set the owning side to null (unless already changed)
             if ($attendance->getClassGroup() === $this) {
                 $attendance->setClassGroup(null);

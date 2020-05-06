@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Translation\Exception\NotFoundResourceException;
 use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
@@ -32,12 +33,11 @@ class Student extends User
      */
     private $presences;
 
-
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Serializer\Groups({"Default", "GetRollcall", "Deserialization", "GetClassStudents"})
+     * @Serializer\Groups({"Default", "Getlesson", "Deserialization", "GetClassStudents"})
      */
-    private $photo;
+    private $photoDescription;
 
     /**
      * @Vich\UploadableField(mapping="students_photos", fileNameProperty="photo")
@@ -82,6 +82,8 @@ class Student extends User
 
     /**
      * @return Collection|StudentPresence[]
+     *
+     * Carefull here : a presence can be an absence (????)
      */
     public function getPresences(): Collection
     {
@@ -123,20 +125,27 @@ class Student extends User
 
         return $this;
     }
+
+    //TODO: MAKE THIS WORK
     public function getPhotoFile()
     {
         return $this->photoFile;
     }
 
-    public function setPhoto($photo)
+    /**
+     * @return mixed
+     */
+    public function getPhotoDescription()
     {
-        $this->photo = $photo;
-        return $this;
+        return $this->photoDescription;
     }
 
-    public function getPhoto()
+    /**
+     * @param mixed $photoDescription
+     */
+    public function setPhotoDescription($photoDescription): void
     {
-        return $this->photo;
+        $this->photoDescription = $photoDescription;
     }
 
     /**
@@ -155,6 +164,12 @@ class Student extends User
     {
         $this->updatedAt = $updatedAt;
         return $this;
+    }
+
+    /** Return the concatenation between firstname and lastname */
+    public function getIdentity() : String
+    {
+        return $this->getFirstname() . ' ' . $this->getLastname();
     }
 
 }
