@@ -3,7 +3,7 @@
 {% block title %}{{ parent() }} - Feuille d'appel{% endblock %}
 
 {% block body %}
-        <div class="table-wrapper">
+        <div class="table-wrapper center">
             <a href="{{ path('lesson_index') }}"> &lt -- Retourn à la liste des créneaux</a>
             <div>
                 <div class="table-title" >
@@ -15,7 +15,7 @@
                 </div>
             </div>
             <div>
-                <table class="table table-bordered rollcall" style="margin: auto auto;">
+                <table class="table table-bordered center">
                     <thead>
                         <tr class="line-rollcall">
                             <th >Etudiant</th>
@@ -35,7 +35,7 @@
                                 {% endfor %}
                             {% endif %}
                             <tr class="line-rollcall">
-                                <form class="formPresence" method="POST" action="lesson/new">
+                                <form class="formPresence" method="POST" action="{{ path('presence_new') }}">
                                     <td >
                                         {{student.firstname ~ ' ' ~ student.lastname}} 
                                         <input type="hidden" name="id_student" value={{student.id}} />
@@ -51,11 +51,11 @@
                                         {% if presence.late != null %}
                                             {% set late = date(presence.late).diff(date(lesson.dateStart))%}
                                             <td >
-                                                <input type="number" size=4 value={{late.i}} min=0 />
+                                                <input type="number" id={{"late" ~ student.id}} class="inputNumber" name="late" value={{late.i}} min=0 />
                                             </td>
                                         {% else %}
                                             <td >
-                                                <input type="number" size=4 value=0 min=0 />
+                                                <input type="number" id={{"late" ~ student.id}} class="inputNumber" name="late" value=0 min=0 />
                                             </td>
                                         {% endif %}
                                     {% else %}
@@ -66,7 +66,7 @@
                                             <input type="radio" class="radio" id={{"absentRadio" ~ student.id}} name="present"  value="false" checked/>
                                         </td>
                                         <td >
-                                            <input type="number" id={{"late" ~ student.id}} name="late" size=4 value=0 min=0 disabled/>
+                                            <input type="number" class="inputNumber" id={{"late" ~ student.id}} name="late" value=0 min=0 disabled/>
                                         </td>
                                     {% endif %}
                                 </form>
@@ -94,10 +94,12 @@
             var id = $(this).attr('id');
             if(id.indexOf("presentRadio") == 0){
                 var idField = id.replace("presentRadio", "late");
+                console.log("presentRadio", idField, $('#'+idField));
                 $('#'+idField).prop("disabled", false);
             }
             else if(id.indexOf("absentRadio") == 0){
                 var idField = id.replace("absentRadio", "late");
+                console.log("absentRadio", idField, $('#'+idField))
                 $('#'+idField).prop("disabled", true);
                 $('#'+idField).prop("value", 0);
             }

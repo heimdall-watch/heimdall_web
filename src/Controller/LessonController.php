@@ -29,7 +29,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Doctrine\ODM\PHPCR\Query\Query;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
-
+use DateTime;
+use DatePeriod;
+use DateInterval;
 /**
  * @Route("/lesson")
  */
@@ -43,14 +45,13 @@ class LessonController extends AbstractController
     {
         CheckAccessRights::hasTeacherRole($this->getUser());
         $teacher = $this->getUser();
-        $query = $repository->findNextLesson($teacher);
-        //$query = $repository->getFindAllQuery();
+        //$query = $repository->findNextLesson($teacher);
+        $query = $repository->getFindAllQuery();
         $pagination = $paginator->paginate(
             $query,
             $request->query->getInt('page', 1),
             10
         );
-
         return $this->render('lesson/index.html.twig', [
             'user' => $teacher,
             'pagination' => $pagination
@@ -75,21 +76,22 @@ class LessonController extends AbstractController
      */
     public function new(Request $request, StudentRepository $sr, StudentPresenceRepository $spr,LessonRepository $lr): Response
     {
-        //CheckAccessRights::hasTeacherRole($this->getUser());
         $id_lesson = $request->request->get("id_lesson");
         $id_student = $request->request->get("id_student");
         $present = $request->request->get("present") == "true" ? true : false;
-        $late = $request->request->get("late");
+        $late = (int)$request->request->get("late");
+        $persist = true;
         $entityManager = $this->getDoctrine()->getManager();
         $sp = new StudentPresence();
         $listStudent = $sr->getFindAllQuery()->getResult();
         foreach($listStudent as $s){
             if($s->getId() == $id_student){
                 $sp->setStudent($s);
-                $listSP = $spr->findAbsencesRetards($s);
+                $listSP = $spr->findAllPresenceStudent($s);
                 foreach($listSP as $stdPre){
                     if($stdPre->getlesson()->getId() == $id_lesson){
-                        $sp = $stdPre;
+                        $sp = $entityManager->getRepository(StudentPresence::class)->find($stdPre->getId());
+                        $persist = false;
                         break;
                     }
                 }
@@ -102,8 +104,9 @@ class LessonController extends AbstractController
             if($les->getId() == $id_lesson){
                 $sp->setlesson($les);
                 if($late > 0){
-                    $dt = new DateInterval("PT".$late."M");
-                    $dateLate = $les->setDateStart()->add($dt);
+                    $dt = new DateInterval('PT'.$late.'M');
+                    $dateLate = clone $les->getDateStart();
+                    $dateLate->add($dt);
                     $sp->setLate($dateLate);
                 }
                 break;
@@ -111,7 +114,9 @@ class LessonController extends AbstractController
         }
         
         $sp->setPresent($present);
-        $entityManager->persist($sp);
+        if($persist == true){
+            $entityManager->persist($sp);
+        }
         $entityManager->flush();
         return new Response();
     }
