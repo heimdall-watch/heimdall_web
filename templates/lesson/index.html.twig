@@ -15,7 +15,7 @@
                 <div class="div-creneaux margin10">
                     <p>{{ lesson.name }} - {{lesson.classGroup.name}}</p>
                     <p>{{ lesson.dateStart|date('d-m-Y h:m') }} à {{ lesson.dateEnd|date('d-m-Y h:m') }}</p>
-                    <p><a href={{"/lesson/" ~ lesson.id}}>Faire l'appel</a></p>
+                    <p><a href="{{path('lesson_show',  {'id': idlesson.id})}}">Faire l'appel</a></p>
                     {% if lesson.dateStart >= date() and lesson.dateEnd <= date() %}
                         
                     {% endif %}

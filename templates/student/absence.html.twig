@@ -34,6 +34,7 @@
                                 data-excuse="{{ presence.excuseDescription }}"
                                 data-csrf="{{ csrf_token('validate' ~ presence.id) }}">Accéder au justificatif
                         </button>
+                         <!--<a href="{{ path('get_excuse_proof_photo', {'id': presence.id}) }}"> Télécharger </a>-->
                     {% endif %}
                 </td>
             </tr>

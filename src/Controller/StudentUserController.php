@@ -35,6 +35,8 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
 class StudentUserController extends AbstractController
 {
 
+    const IMAGE_FOLDER = "/home/www/heimdall_web/public/image/";
+
     /**
      * @Route("/", name="student_user_index", methods={"POST", "GET"})
      */
@@ -66,6 +68,35 @@ class StudentUserController extends AbstractController
         $entityManager->persist($sp);
         $entityManager->flush();
         return new Response();
+    }
+
+    /**
+     * @Route("/justify", name="justify_abs", methods={"POST"})
+    */
+    public function justify(Request $request, StudentRepository $sr, StudentPresenceRepository $spr,LessonRepository $lr): Response
+    {
+        $file = $request->files->get('justificatif');
+        if($file == null || $file->getRealPath() == null || !file_exists($file->getRealPath())){
+            echo 'file null';
+            return  new Response();
+        }
+        if(!file_exists("image")){
+            mkdir("image");
+        }
+        copy($file->getRealPath(), "image/".$file->getFilename());
+        $path = self::IMAGE_FOLDER.$file->getFilename();
+        //$path = $file->getFilename();
+        chmod($path, 0644);
+        $ids_abs = $request->request->get("ids_abs");
+        $ids_abs = preg_split("/[,]+/",$ids_abs);
+        foreach($ids_abs as $id){
+            if($id==null) continue;
+            $entityManager = $this->getDoctrine()->getManager();
+            $sp = $entityManager->getRepository(StudentPresence::class)->find($id);
+            $sp->setPhotoFile($path);
+            $entityManager->flush();
+        }
+        return $this->redirectToRoute('student_user_index');
     }
 
 }

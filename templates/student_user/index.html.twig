@@ -12,24 +12,11 @@
                 </div>
             </div>
             <div>
-                <form method="POST" action="#" enctype="multipart/form-data">
-                    <!-- COMPONENT START -->
-                    <div class="form-group">
-                        <div class="input-group input-file" name="Fichier1">
-                            <input type="text" class="form-control" placeholder='Choisissez un fichier' />
-                            <span class="input-group-btn">
-                                <button class="btn btn-default btn-choose" type="button">Choisir un justificatif</button>
-                            </span>
-                
-                
-                        </div>
-                    </div>
-                    <!-- COMPONENT END -->
-                    <div class="form-group">
-                        <a type="reset" id="reset" href="#" role="button" class="btn btn-danger">Changer l'excuse</a>
-                        <a type="submit" id="submit" href="#" role="button" class="btn btn-primary pull-right">Envoyer le justificatif</a>
-                    </div>
+                <form method="POST" action="{{ path('justify_abs') }}" id="form_abs" enctype="multipart/form-data">
+                    <input type="file" name="justificatif" class="form-control" placeholder='Choisissez un fichier' />
+                    <input type="hidden" value="" name="ids_abs" id="input_id_abs"/>
                 </form>
+                <button class="btn btn-default btn-choose" id="submit" type="button">Envoyer un justificatif</button>
             </div>
 
             <table class="table table-bordered m-top-10">
@@ -51,7 +38,7 @@
                         <tr>
                             <td>
                                 <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id={{stuPre.id}}>
+                                    <input type="checkbox" class="custom-control-input checkbox-absence" id={{stuPre.id}}>
                                     <label class="custom-control-label" for={{stuPre.id}}></label>
                                 </div>
                             </td>
@@ -63,4 +50,31 @@
                 </tbody>
             </table>
         </div>
+    <script>
+        $("#submit").click(function(){
+            $(".checkbox-absence").each(function(){
+                if($(this).prop("checked") == true){
+                    var value = $("#input_id_abs").prop("value");
+                    value += $(this).prop("id")+",";
+                    $("#input_id_abs").prop("value", value);
+                }
+            });
+            $("#form_abs").submit();
+        })
+
+        $("#checkall").change(function(){
+            console.log("checkall");
+            $(".checkbox-absence").each(function(){
+                console.log("checkbox-absence");
+                if($(this).prop("checked") == true){
+                    console.log("checkbox-absence");
+                    $(this).prop("checked", false);
+                } 
+                else {
+                    console.log("checkbox-absence");
+                    $(this).prop("checked", true);
+                }
+            })
+        })
+    </script>
 {% endblock %}                    
