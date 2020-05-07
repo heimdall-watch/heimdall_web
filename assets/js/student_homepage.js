@@ -1,3 +1,6 @@
+import $ from "jquery";
+window.$ = $;
+
 $(document).ready(function(){
 	$('[data-toggle="tooltip"]').tooltip();
 	var actions = $("table td:last-child").html();
@@ -57,12 +60,15 @@ $("#checkAll").click(function () {
     $(".custom-control-input").prop('checked', $(this).prop('checked'));
 });
 
+function getCheckedDates() {
+    return ;
+}
 
 function bs_input_file() {
     $(".input-file").before(
         function() {
             if ( ! $(this).prev().hasClass('input-ghost') ) {
-                var element = $("<input type='file' class='input-ghost' style='visibility:hidden; height:0'>");
+                var element = $("<input type='file' accept='.png, .jpg, .jpeg, .svg' class='input-ghost' id='input' style='visibility:hidden; height:0'>");
                 element.attr("name",$(this).attr("name"));
                 element.change(function(){
                     element.next(element).find('input').val((element.val()).split('\\').pop());
@@ -87,3 +93,42 @@ function bs_input_file() {
 $(function() {
     bs_input_file();
 });
+
+$('#submit').on('click', function () {
+    let image = $('#input')[0].files[0];
+    readFile(image, function(content) {
+        console.log('content: ' + content);
+        data.content = content;
+
+        sendData(data);
+    });
+});
+
+function readFile(file, cb) { // We pass a callback as parameter
+    var content = "";
+    var reader = new FileReader();
+
+    reader.onload = function(e) {
+        content = reader.result;
+        cb(content);
+    };
+
+    reader.readAsBinaryString(file);
+}
+
+var data = {};
+
+function sendData(data) {
+    $.ajax({
+        type: 'POST',
+        data: JSON.stringify(data),
+        contentType: 'application/json',
+        url: '/api/student/photo',
+        success: function (data) {
+
+        },
+        error: function () {
+            console.log('process error');
+        }
+    });
+}

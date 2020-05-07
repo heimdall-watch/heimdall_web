@@ -9,6 +9,7 @@ use App\Entity\User;
 use App\Form\StudentImageType;
 use App\HttpFoundation\File\ApiUploadedFile;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use http\Message\Body;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,6 +19,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Vich\UploaderBundle\Entity\File;
 use Vich\UploaderBundle\Handler\DownloadHandler;
 
 /**
@@ -52,35 +54,37 @@ class StudentController extends UserController
     }
 
     /**
-     * @Rest\Post("/photo", name="student_photo_set")
+     * @Route("/photo", name="student_photo_set", methods={"GET", "POST"})
      * @IsGranted("ROLE_STUDENT")
      *
      * @param Request $request
      *
      * @return mixed
+     * @throws \Exception
      */
     public function setPhoto(Request $request)
     {
+        $em = $this->getDoctrine()->getManager();
         /** @var Student $student */
         $student = $this->getUser();
+        $image = $request->request->get('content');
+        $encodedImage = base64_encode($image);
 
-        $form = $this->createForm(StudentImageType::class, $student);
+        $now = new \DateTime();
+        $fileName = 'images/' . trim($student->getLastname() . $now->format('Y-m-d') . '.jpg');
 
-        $file = new ApiUploadedFile($request->request->get('photoBase64'), $request->request->get('extension'));
+        //Ceci ne fonctionne pas, le fichier n'est pas un jpg comme déclaré précedemment
+        //2 teechniques possibles : Soit supprimer les 3 lignes suivantes et trouver comment dépasser la limite des 255 caracteres
+        //Soit completer les lignes suivantes pour pouvoir enregistrer les jpg et pouvoir les ouvrir en local
+        //Pour l'instant, elles sont enregistrés dans /public/images/
+        $file = fopen($fileName, 'wrb');
+        fwrite($file, $encodedImage);
+        fclose($file);
 
-        $form->submit(['photoFile' => ['file' => $file]]);
-
-        if (!$form->isSubmitted() || !$form->isValid()) {
-            throw new HttpException(Response::HTTP_BAD_REQUEST, "Envoi de la photo impossible");
-        }
-
-        $this->getDoctrine()->getManager()->flush();
-
-        if ($student->getPhoto() === null) {
-            throw new NotFoundHttpException("La photo n'existe pas");
-        }
-
-        return $this->generateUrl('api_student_get_photo', ['id' => $student->getId()], RouterInterface::ABSOLUTE_URL);
+        $student->setPhotoFile($fileName);
+        $em->persist($student);
+        $em->flush();
+        return null;
     }
 
     /**

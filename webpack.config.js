@@ -20,7 +20,6 @@ Encore
     .addEntry('app', './assets/js/app.js')
     .addEntry('proofModal', './assets/js/proofModal.js')
     .addStyleEntry('login', './assets/css/login.css')
-    //.addEntry('page1', './assets/js/page1.js')
     //.addEntry('page2', './assets/js/page2.js')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.

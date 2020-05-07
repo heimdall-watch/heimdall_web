@@ -57,17 +57,7 @@ class StudentPresence
     private $late;
 
     /**
-     * @Vich\UploadableField(mapping="excuses_photos", fileNameProperty="excuseProof")
-     * @var File
-     * @Assert\File(
-     *      maxSize="5242880",
-     *      mimeTypes = {
-     *          "image/png",
-     *          "image/jpeg",
-     *          "image/jpg",
-     *      }
-     * )
-     * @Serializer\Exclude()
+     *@ORM\Column(type="string", nullable=true)
      */
     private $photoFile;
 
@@ -191,9 +181,9 @@ class StudentPresence
         return $this->photoFile;
     }
 
-    public function setPhotoFile(File $excuseProof = null)
+    public function setPhotoFile($photoFile = null)
     {
-        $this->photoFile = $excuseProof;
+        $this->photoFile = $photoFile;
         return $this;
     }
 }
