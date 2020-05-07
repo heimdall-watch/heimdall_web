@@ -3,18 +3,55 @@
 {% block title %}{{ parent() }} - Liste des absences{% endblock %}
 
 {% block body %}
-        <div class="table-wrapper">
-            <div class="table-title">
-                <div class="row">
-                    <div class="col-sm-8">
-                        <h1>Absence étudiant</h1>
+    <div class="table-wrapper">
+        <div class="table-title">
+            <div >
+                <div>
+                    <h4>Bonjour {{user.firstName }}</h4>
+                    {% if pagination|length > 1 %}
+                    <p class="explaination">
+                        <span>Vous avez <strong>{{ pagination | length }}</strong> absences ou retards à justifier.</span>
+                        <br>
+                        <span>Veuillez soumettre vos justificatifs au format jpg, png ou jpeg, puis cocher les cases correspondantes.</span>
+                        <br>
+                        <span>Un administrateur traitera bientôt vos documents.</span>
+                    </p>
+                    {% elseif pagination|length == 1 %}
+                    <div class="explaination">
+                        <p>Vous avez <br>1</p> absence ou retard à justifier.</p>
+                        <p>Veuillez soumettre votre justificatif au format jpg, png ou jpeg, puis cocher la case correspondante.</p>
+                        <p>Un administrateur traitera bientôt vos documents.</p>
                     </div>
-                </div>
+                    {% else %}
+                    <div class="explaination">
+                        <p>Vous n'avez pas d'absence ou de retard à justifier.</p>
+                    </div>
+                    {% endif %}
             </div>
             <div>
                 <form method="POST" action="{{ path('justify_abs') }}" id="form_abs" enctype="multipart/form-data">
                     <input type="file" name="justificatif" class="form-control" placeholder='Choisissez un fichier' />
                     <input type="hidden" value="" name="ids_abs" id="input_id_abs"/>
+            </div>
+        </div>
+        <div>
+            <div class="justificatif">
+                <h5>Veuillez déposer une attestation : </h5>
+                <form method="POST" action="#" enctype="multipart/form-data">
+                    <!-- COMPONENT START -->
+                    <div class="form-group">
+                        <div class="input-group input-file" name="Fichier1">
+                            <input type="text" class="form-control" placeholder='Choose a file...' />
+                            <span class="input-group-btn">
+                                <button class="btn btn-default btn-choose" type="button">Choose</button>
+                            </span>
+                        </div>
+                    </div>
+                    <!-- COMPONENT END -->
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary pull-right" disabled>Submit</button>
+                        <button type="reset" class="btn btn-danger">Reset</button>
+                    </div>
                 </form>
                 <button class="btn btn-default btn-choose" id="submit" type="button">Envoyer un justificatif</button>
             </div>
@@ -50,6 +87,43 @@
                 </tbody>
             </table>
         </div>
+        <div class="table-creneau">
+        {% if pagination|length > 1 %}
+        <h5>Vos absences à justifier :</h5>
+        {% elseif pagination|length == 1 %}
+        <h5>Votre absence à justifier :</h5>
+        {% endif %}
+        <table class="table table-bordered ">
+            <thead>
+            <tr>
+                <th>
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="checkAll">
+                        <label class="custom-control-label" for="checkAll"></label>
+                    </div>
+                </th>
+                <th>Du</th>
+                <th>Au</th>
+                <th>Cours</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for stuPre in pagination %}
+                <tr>
+                    <td>
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id={{stuPre.id}}>
+                            <label class="custom-control-label" for={{stuPre.id}}></label>
+                        </div>
+                    </td>
+                    <td>{{ stuPre.lesson.dateStart|date('d-m-Y h:m') }}</td>
+                    <td>{{ stuPre.lesson.dateEnd|date('d-m-Y h:m') }}</td>
+                    <td>{{stuPre.lesson.name}}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        </div>
     <script>
         $("#submit").click(function(){
             $(".checkbox-absence").each(function(){
@@ -69,7 +143,7 @@
                 if($(this).prop("checked") == true){
                     console.log("checkbox-absence");
                     $(this).prop("checked", false);
-                } 
+                }
                 else {
                     console.log("checkbox-absence");
                     $(this).prop("checked", true);
@@ -77,4 +151,4 @@
             })
         })
     </script>
-{% endblock %}                    
+{% endblock %}

@@ -79,45 +79,4 @@ class HeimdallSendRecapCommand extends Command
 
         $io->success($nbSent . ' emails sent.');
     }
-
-    // TODO : Not working
-    private function getCsvForClass(ClassGroup $classGroup): string
-    {
-        $dataRecap = [];
-
-        foreach ($classGroup->getLessons() as $lesson) {
-            $startDate = $lesson->getDateStart()->format('Y-m-d H:i');
-            $endDate = $lesson->getDateEnd()->format('Y-m-d H:i');
-            $teacherName = $lesson->getTeacher()->getFirstname() . ' ' . $lesson->getTeacher()->getLastname();
-            foreach ($lesson->getStudentPresences() as $presence) {
-                $recap = [
-                    'Début' => $startDate,
-                    'Fin' => $endDate,
-                    'Professeur' => $teacherName,
-                    'Etudiant' => $presence->getStudent()->getFirstname() . ' ' . $presence->getStudent()->getLastname(),
-                    'Présence' => $presence->getLate() !== null ? 'Retard de ' . $presence->getLate() . 'm' :
-                        $presence->getPresent() ? 'Présent' : 'Absent',
-                    'Justification' => $presence->getExcuseValidated() ? 'Justifiée' : $presence->getExcuseProof() === null ? 'Non justifiée' : 'En attente de validation',
-                ];
-                $dataRecap[] = $recap;
-            }
-        }
-
-        if (!empty($dataRecap)) {
-
-            $fh = fopen('php://temp', 'rw');
-
-            fputcsv($fh, array_keys(current($dataRecap)));
-
-            foreach ($dataRecap as $row) {
-                fputcsv($fh, $row);
-            }
-            rewind($fh);
-            $csv = stream_get_contents($fh);
-            fclose($fh);
-
-            return $csv;
-        }
-        return null;
-    }
 }
