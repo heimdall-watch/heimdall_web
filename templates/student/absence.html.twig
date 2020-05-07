@@ -17,7 +17,7 @@
                 ? '<span class=\"badge badge-success\">Validé</span>'
                 : '<span class=\"badge badge-danger\">Refusé</span>' %}
             <tr>
-                <td>{{ presence.lesson.dateStart|date("Y-m-d H:i:s") }}</td>
+                <td class="">{{ presence.lesson.dateStart|date("Y-m-d H:i:s") }}</td>
                 <td>
                     <a href="{{ path('student_show', { 'id': presence.student.id }) }}">{{ presence.student.firstname ~ ' ' ~ presence.student.lastname }}</a>
                 </td>

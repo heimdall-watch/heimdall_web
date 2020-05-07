@@ -3,63 +3,57 @@
 {% block title %}ClassGroup{% endblock %}
 
 {% block container %}
-    <h1>ClassGroup</h1>
-
+    <h4>Classes</h4>
     <table class="table">
         <tbody>
             <tr>
-                <th>Id</th>
-                <th>Name</th>
+                <th>Nom</th>
 
             </tr>
             <tr>
-                <td>{{ class_group.id }}</td>
                 <td>{{ class_group.name }}</td>
             </tr>
         </tbody>
     </table>
 
-    <h1>Students</h1>
-    <ul>
-        <table class="table">
-            <tbody>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-            </tr>
+    <h4 >Etudiants</h4>
+    <table class="table">
+        <tbody>
+        <tr>
+            <th>Nom d'utilisateur</th>
+            <th>Prénom</th>
+            <th>Nom</th>
+        </tr>
         {% for student in class_group.students %}
-                <tr>
-                    <td>{{ student.id }}</td>
-                    <td>{{ student.username }}</td>
-                </tr>
-        {% endfor %}
-                </tbody>
-            </table>
-            <br>
-
-    </ul>
-
-    <h1>Teachers</h1>
-    <ul>
-
-
-        <table class="table">
-            <tbody>
             <tr>
-                <th>Id</th>
-                <th>Name</th>
+                <td>{{ student.username }}</td>
+                <td>{{ student.firstname }}</td>
+                <td>{{ student.lastname }}</td>
             </tr>
-            {% for teacher in class_group.teachers %}
-                <tr>
-                    <td>{{ teacher.id }}</td>
-                    <td>{{ teacher.username }}</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+        {% endfor %}
+        </tbody>
+    </table>
+    <br>
 
-            <br>
-    </ul>
+    <h4 class="">Professeurs</h4>
+    <table class="table">
+        <tbody>
+        <tr>
+            <th>Nom d'utilisateur</th>
+            <th>Prénom</th>
+            <th>Nom</th>
+        </tr>
+        {% for teacher in class_group.teachers %}
+            <tr>
+                <td>{{ teacher.username }}</td>
+                <td>{{ teacher.firstname }}</td>
+                <td>{{ teacher.lastname }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <br>
 
     <a href="{{ path('class_group_index') }}" class="btn btn-secondary">Retour à la liste</a>
 
