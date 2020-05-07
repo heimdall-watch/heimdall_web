@@ -60,10 +60,6 @@ $("#checkAll").click(function () {
     $(".custom-control-input").prop('checked', $(this).prop('checked'));
 });
 
-function getCheckedDates() {
-    return ;
-}
-
 function bs_input_file() {
     $(".input-file").before(
         function() {

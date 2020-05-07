@@ -1,3 +1,6 @@
+import $ from "jquery";
+window.$ = $;
+
 $('#modalJustif').on('show.bs.modal', function (event) {
     var button = $(event.relatedTarget);
     var justif = button.data('justif');

@@ -28,72 +28,16 @@
                     </div>
                     {% endif %}
             </div>
-            <div>
-                <form method="POST" action="{{ path('justify_abs') }}" id="form_abs" enctype="multipart/form-data">
-                    <input type="file" name="justificatif" class="form-control" placeholder='Choisissez un fichier' />
-                    <input type="hidden" value="" name="ids_abs" id="input_id_abs"/>
-            </div>
         </div>
         <div>
-            <div class="justificatif">
-                <h5>Veuillez déposer une attestation : </h5>
-                <form method="POST" action="#" enctype="multipart/form-data">
-                    <!-- COMPONENT START -->
-                    <div class="form-group">
-                        <div class="input-group input-file" name="Fichier1">
-                            <input type="text" class="form-control" placeholder='Choose a file...' />
-                            <span class="input-group-btn">
-                                <button class="btn btn-default btn-choose" type="button">Choose</button>
-                            </span>
-                        </div>
-                    </div>
-                    <!-- COMPONENT END -->
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-primary pull-right" disabled>Submit</button>
-                        <button type="reset" class="btn btn-danger">Reset</button>
-                    </div>
-                </form>
-                <button class="btn btn-default btn-choose" id="submit" type="button">Envoyer un justificatif</button>
-            </div>
-
-            <table class="table table-bordered m-top-10">
-                <thead>
-                    <tr>
-                        <th>
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="checkAll">
-                                <label class="custom-control-label" for="checkAll"></label>
-                            </div>
-                        </th>
-                        <th>Du</th>
-                        <th>Au</th>
-                        <th>Cours</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for stuPre in pagination %}
-                        <tr>
-                            <td>
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input checkbox-absence" id={{stuPre.id}}>
-                                    <label class="custom-control-label" for={{stuPre.id}}></label>
-                                </div>
-                            </td>
-                            <td>{{ stuPre.lesson.dateStart|date('d-m-Y h:m') }}</td>
-                            <td>{{ stuPre.lesson.dateEnd|date('d-m-Y h:m') }}</td>
-                            <td>{{stuPre.lesson.name}}</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            <form method="POST" action="{{ path('justify_abs') }}" id="form_abs" enctype="multipart/form-data">
+                <input type="file" name="justificatif" class="form-control" placeholder='Choisissez un fichier' />
+                <input type="hidden" value="" name="ids_abs" id="input_id_abs"/>
+            </form>
+            <button class="btn btn-default btn-choose" id="submit" type="button">Envoyer un justificatif</button>
         </div>
-        <div class="table-creneau">
-        {% if pagination|length > 1 %}
-        <h5>Vos absences à justifier :</h5>
-        {% elseif pagination|length == 1 %}
-        <h5>Votre absence à justifier :</h5>
-        {% endif %}
-        <table class="table table-bordered ">
+
+        <table class="table table-bordered m-top-10">
             <thead>
             <tr>
                 <th>
@@ -112,7 +56,7 @@
                 <tr>
                     <td>
                         <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id={{stuPre.id}}>
+                            <input type="checkbox" class="custom-control-input checkbox-absence" id={{stuPre.id}}>
                             <label class="custom-control-label" for={{stuPre.id}}></label>
                         </div>
                     </td>
@@ -123,7 +67,7 @@
             {% endfor %}
             </tbody>
         </table>
-        </div>
+    </div>
     <script>
         $("#submit").click(function(){
             $(".checkbox-absence").each(function(){
@@ -135,7 +79,6 @@
             });
             $("#form_abs").submit();
         })
-
         $("#checkall").change(function(){
             console.log("checkall");
             $(".checkbox-absence").each(function(){
