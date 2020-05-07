@@ -29,13 +29,18 @@
                     </div>
                 </div>
                 <div class="flex-container">
-                    <div class="flex1">
-                        <p><strong>Matière</strong> : {{ lesson.name }}</p>
-                        <p><strong>Promotion</strong> : {{ lesson.classGroup.name }}</p>
-                    </div>
-                    <div class="flex1 description-date ">
-                        <p><strong>Date de début</strong> : {{ lesson.dateStart|date('d-m-Y h:m') }}</p>
-                        <p><strong>Date de fin</strong> : {{ lesson.dateEnd|date('d-m-Y h:m') }}</p>
+                    <div class="flex-container flex-1 align-items--center">
+                        <div class="flex1">
+                            <p><strong>Matière</strong> : {{ lesson.name }}</p>
+                            <p><strong>Promotion</strong> : {{ lesson.classGroup.name }}</p>
+                        </div>
+                        <div class="flex1 description-date ">
+                            <p><strong>Date de début</strong> : {{ lesson.dateStart|date('d-m-Y h:m') }}</p>
+                            <p><strong>Date de fin</strong> : {{ lesson.dateEnd|date('d-m-Y h:m') }}</p>
+                        </div>
+                        <div style="margin-left: auto">
+                            <button id="submit" class="btn btn-success">Valider l'appel</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -99,7 +104,6 @@
                         {% endfor %}
                     </tbody>
                 </table>
-                <button id="submit" class="btn btn-primary margin10">Valider</button>
             </div>
         </div>
     <script>
