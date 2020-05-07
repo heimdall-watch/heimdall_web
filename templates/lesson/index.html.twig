@@ -3,17 +3,22 @@
 {% block title %}{{ parent() }} - Liste des créneaux{% endblock %}
 
 {% block body %}
-        <div class="table-wrapper center">
-            <div class="table-title">
-                <h1>Liste des créneaux</h1>
-            </div>
+        <div class="table-wrapper">
+            <h4 class="creneau-title">Liste des créneaux</h4>
             {% for lesson in pagination %}
-                <div class="div-creneaux margin10auto">
-                    <p>{{ lesson.name }} - {{lesson.classGroup.name}}</p>
-                    <p>{{ lesson.dateStart|date('d-m-Y h:m') }} à {{ lesson.dateEnd|date('d-m-Y h:m') }}</p>
-                    <p><a href="{{path('lesson_show',  {'id': idlesson.id})}}">Faire l'appel</a></p>
+                <div class="div-creneaux margin10auto flex-container align-items--center">
+                    <div class="div-creneaux-left flex-1 m-right-10">
+                        <p><strong>Matière</strong> : {{ lesson.name }}</p>
+                        <p><strong>Promotion</strong> : {{ lesson.classGroup.name }}</p>
+                        <p><strong>Date de début</strong> : {{ lesson.dateStart|date('d-m-Y h:m') }}</p>
+                        <p><strong>Date de fin</strong> : {{ lesson.dateEnd|date('d-m-Y h:m') }}</p>
+                    </div>
+                    <div class="div-creneaux-right">
+                        <a  class="btn btn-primary" href={{"/lesson/" ~ lesson.id}}>Faire l'appel</a>
+                    </div>
+
                     {% if lesson.dateStart >= date() and lesson.dateEnd <= date() %}
-                        
+
                     {% endif %}
                 </div>
             {% else %}

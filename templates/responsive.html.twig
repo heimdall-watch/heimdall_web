@@ -26,20 +26,21 @@
 
 </head>
 <body>
-
-<div class="container">
-    <nav class="navbar navbar-expand-lg navbar-light bg-primary">
-        <a class="navbar-brand" href="#">{{user.firstName ~ ' ' ~ user.lastName}}</a>
-        <div class="navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="btn btn-danger" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" href="{{ path('app_logout') }}">Déconnexion</a>
-                </li>
-            </ul>
+<div class="responsive">
+    <div class="navbar">
+        <div class="navbar--left">
+            <span>{{user.firstName ~ ' ' ~ user.lastName}}</span>
+            {% if 'ROLE_TEACHER' in user.roles %}
+                <a class="navbar--item" href="{{ path('lesson_index') }}"> Liste des créneaux</a>
+            {% endif %}
         </div>
-    </nav>
-    {% block body %}{% endblock %}
-    {{ encore_entry_script_tags('app') }}
+        <div class="navbar--right">
+            <a class="navbar--disconnect" href="{{ path('app_logout') }}">Déconnexion</a>
+        </div>
+    </div>
+    <div class="container">
+        {% block body %}{% endblock %}
+    </div>
 </div>
 {% block javascripts %}{% endblock %}
 </body>
