@@ -4,11 +4,11 @@
 namespace App\EventListener;
 
 
-use App\Entity\RollCall;
+use App\Entity\Lesson;
 use OneSignal\OneSignal;
 use Psr\Log\LoggerInterface;
 
-class RollCallListener
+class LessonListener
 {
     private $api;
     private $logger;
@@ -19,15 +19,15 @@ class RollCallListener
         $this->logger = $logger;
     }
 
-    public function postPersist(RollCall $rollCall)
+    public function postPersist(Lesson $lesson)
     {
-            foreach ($rollCall->getStudentPresences() as $studentPresence) {
+            foreach ($lesson->getStudentPresences() as $studentPresence) {
                 try {
                     if (($studentPresence->getPresent() === false || $studentPresence->getLate() !== null) && !empty($studentPresence->getStudent()->getDevices())) {
                         $notif = [
                             'contents' => [
-                                'en' => 'You are ' . ($studentPresence->getPresent() === false ? 'absent' : 'late') . ' to the class of ' . $rollCall->getTeacher()->getFirstname() . ' ' . $rollCall->getTeacher()->getLastName(),
-                                'fr' => 'Vous êtes ' . ($studentPresence->getPresent() === false ? 'absent' : 'en retard') . ' au cours de ' . $rollCall->getTeacher()->getFirstname() . ' ' . $rollCall->getTeacher()->getLastName(),
+                                'en' => 'You are ' . ($studentPresence->getPresent() === false ? 'absent' : 'late') . ' to the class of ' . $lesson->getTeacher()->getFirstname() . ' ' . $lesson->getTeacher()->getLastName(),
+                                'fr' => 'Vous êtes ' . ($studentPresence->getPresent() === false ? 'absent' : 'en retard') . ' au cours de ' . $lesson->getTeacher()->getFirstname() . ' ' . $lesson->getTeacher()->getLastName(),
                             ],
                             'include_player_ids' => $studentPresence->getStudent()->getDevices()
                         ];

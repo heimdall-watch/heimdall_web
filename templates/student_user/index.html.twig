@@ -1,0 +1,97 @@
+{% extends 'responsive.html.twig' %}
+
+{% block title %}{{ parent() }} - Liste des absences{% endblock %}
+
+{% block body %}
+    <div class="table-wrapper">
+        <div class="table-title">
+            <div >
+                <div>
+                    <h4>Bonjour {{user.firstName }}</h4>
+                    {% if pagination|length > 1 %}
+                    <p class="explaination">
+                        <span>Vous avez <strong>{{ pagination | length }}</strong> absences ou retards à justifier.</span>
+                        <br>
+                        <span>Veuillez soumettre vos justificatifs au format jpg, png ou jpeg, puis cocher les cases correspondantes.</span>
+                        <br>
+                        <span>Un administrateur traitera bientôt vos documents.</span>
+                    </p>
+                    {% elseif pagination|length == 1 %}
+                    <div class="explaination">
+                        <p>Vous avez <br>1</p> absence ou retard à justifier.</p>
+                        <p>Veuillez soumettre votre justificatif au format jpg, png ou jpeg, puis cocher la case correspondante.</p>
+                        <p>Un administrateur traitera bientôt vos documents.</p>
+                    </div>
+                    {% else %}
+                    <div class="explaination">
+                        <p>Vous n'avez pas d'absence ou de retard à justifier.</p>
+                    </div>
+                    {% endif %}
+            </div>
+        </div>
+        <div>
+            <form method="POST" action="{{ path('justify_abs') }}" id="form_abs" enctype="multipart/form-data">
+                <input type="file" name="justificatif" class="form-control" placeholder='Choisissez un fichier' />
+                <input type="hidden" value="" name="ids_abs" id="input_id_abs"/>
+            </form>
+            <button class="btn btn-default btn-choose" id="submit" type="button">Envoyer un justificatif</button>
+        </div>
+
+        <table class="table table-bordered m-top-10">
+            <thead>
+            <tr>
+                <th>
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="checkAll">
+                        <label class="custom-control-label" for="checkAll"></label>
+                    </div>
+                </th>
+                <th>Du</th>
+                <th>Au</th>
+                <th>Cours</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for stuPre in pagination %}
+                <tr>
+                    <td>
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input checkbox-absence" id={{stuPre.id}}>
+                            <label class="custom-control-label" for={{stuPre.id}}></label>
+                        </div>
+                    </td>
+                    <td>{{ stuPre.lesson.dateStart|date('d-m-Y h:m') }}</td>
+                    <td>{{ stuPre.lesson.dateEnd|date('d-m-Y h:m') }}</td>
+                    <td>{{stuPre.lesson.name}}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <script>
+        $("#submit").click(function(){
+            $(".checkbox-absence").each(function(){
+                if($(this).prop("checked") == true){
+                    var value = $("#input_id_abs").prop("value");
+                    value += $(this).prop("id")+",";
+                    $("#input_id_abs").prop("value", value);
+                }
+            });
+            $("#form_abs").submit();
+        })
+        $("#checkall").change(function(){
+            console.log("checkall");
+            $(".checkbox-absence").each(function(){
+                console.log("checkbox-absence");
+                if($(this).prop("checked") == true){
+                    console.log("checkbox-absence");
+                    $(this).prop("checked", false);
+                }
+                else {
+                    console.log("checkbox-absence");
+                    $(this).prop("checked", true);
+                }
+            })
+        })
+    </script>
+{% endblock %}

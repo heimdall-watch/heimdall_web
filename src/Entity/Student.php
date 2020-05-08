@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Translation\Exception\NotFoundResourceException;
 use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
@@ -32,25 +33,14 @@ class Student extends User
      */
     private $presences;
 
-
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Serializer\Groups({"Default", "GetRollcall", "Deserialization", "GetClassStudents"})
+     * @Serializer\Groups({"Default", "Getlesson", "Deserialization", "GetClassStudents"})
      */
-    private $photo;
+    private $photoDescription;
 
     /**
-     * @Vich\UploadableField(mapping="students_photos", fileNameProperty="photo")
-     * @var File
-     * @Assert\File(
-     *      maxSize="5242880",
-     *      mimeTypes = {
-     *          "image/png",
-     *          "image/jpeg",
-     *          "image/jpg",
-     *      }
-     * )
-     * @Serializer\Exclude()
+     * @ORM\Column(type="string", nullable=true)
      */
     private $photoFile;
 
@@ -82,6 +72,8 @@ class Student extends User
 
     /**
      * @return Collection|StudentPresence[]
+     *
+     * Carefull here : a presence can be an absence (????)
      */
     public function getPresences(): Collection
     {
@@ -111,7 +103,7 @@ class Student extends User
         return $this;
     }
 
-    public function setPhotoFile(File $photo = null)
+    public function setPhotoFile($photo = null)
     {
         $this->photoFile = $photo;
 
@@ -119,24 +111,34 @@ class Student extends User
             $this->updatedAt = new \DateTime();
         }
 
-
-
         return $this;
     }
+
+    //TODO: MAKE THIS WORK
     public function getPhotoFile()
     {
         return $this->photoFile;
     }
 
-    public function setPhoto($photo)
-    {
-        $this->photo = $photo;
-        return $this;
-    }
-
     public function getPhoto()
     {
-        return $this->photo;
+        return $this->photoFile;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPhotoDescription()
+    {
+        return $this->photoDescription;
+    }
+
+    /**
+     * @param mixed $photoDescription
+     */
+    public function setPhotoDescription($photoDescription): void
+    {
+        $this->photoDescription = $photoDescription;
     }
 
     /**
@@ -155,6 +157,12 @@ class Student extends User
     {
         $this->updatedAt = $updatedAt;
         return $this;
+    }
+
+    /** Return the concatenation between firstname and lastname */
+    public function getIdentity() : String
+    {
+        return $this->getFirstname() . ' ' . $this->getLastname();
     }
 
 }

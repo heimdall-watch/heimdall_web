@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Import teachers{% endblock %}
+
+{% block container %}
+    <h1>Importer des professeurs</h1>
+
+    {{ form_start(import_form) }}
+    {{ form_widget(import_form.file, {'attr': {'accept': mime_types}}) }}
+    {{ form_rest(import_form) }}
+    <button class="btn btn-success">{{ button_label|default('Import') }}</button>
+    {# TODO Submit on file selected #}
+    {{ form_end(import_form) }}
+
+{% endblock %}

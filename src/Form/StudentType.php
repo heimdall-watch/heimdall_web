@@ -24,7 +24,6 @@ class StudentType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $url = $this->router->generate('student_get_photo', ['id' => $options['userId']]);
         $builder
             ->add('username', TextType::class, [
                 'label' => 'Numéro étudiant'
@@ -36,13 +35,6 @@ class StudentType extends AbstractType
                 'label' => 'Nom'
             ])
             ->add('email', EmailType::class, [])
-            ->add('photoFile', VichImageType::class, [
-                'label' => 'Photo',
-                'required' => false,
-                'allow_delete' => true,
-                'image_uri' => $url,
-                'download_uri' => $url,
-            ])
             ->add('classGroup', EntityType::class, [
                 'label' => 'Classe',
                 'class' => ClassGroup::class,

@@ -3,7 +3,7 @@
 {% block title %}{{ parent() }} - Liste des professeurs{% endblock %}
 
 {% block container %}
-    <h1>Liste des professeurs ({{ pagination.totalItemCount }})</h1>
+    <h3 class="m-bottom-10 m-top-10">Liste des professeurs</h3>
 
     <div class="pull-left">
         {{ knp_pagination_filter(pagination, {
@@ -15,7 +15,7 @@
 
     <div class="pull-right">
         <a href="{{ path('teacher_new') }}" class="btn btn-success"><i class="fa fa-plus"></i> Nouveau</a>
-        {#        <a href="{{ path('teacher_import') }}" class="btn btn-primary"><i class="fa fa-upload"></i> Importer</a>#}
+        <a href="{{ path('teacher_import') }}" class="btn btn-primary"><i class="fa fa-upload"></i> Importer</a>
     </div>
 
     <table class="table">

@@ -3,8 +3,7 @@
 {% block title %}{{ parent() }} - Liste des alertes programmées{% endblock %}
 
 {% block container %}
-    <h1>Liste des alertes programmées ({{ pagination.totalItemCount }})</h1>
-
+    <h3>Liste des alertes programmées</h3>
     <div class="pull-left">
         {{ knp_pagination_filter(pagination, {
             'alert.email': 'Email',
@@ -13,8 +12,9 @@
     </div>
 
     <div class="pull-right">
-        <a href="{{ path('email_alert_new') }}" class="btn btn-success"><i class="fa fa-plus"></i> Nouvelle</a>
+        <a href="{{ path('email_alert_new') }}" class="btn btn-success"><i class="fa fa-plus"></i> Nouvelle"</a>
     </div>
+
 
     <table class="table">
         <thead>

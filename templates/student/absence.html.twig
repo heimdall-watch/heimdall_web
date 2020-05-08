@@ -17,12 +17,12 @@
                 ? '<span class=\"badge badge-success\">Validé</span>'
                 : '<span class=\"badge badge-danger\">Refusé</span>' %}
             <tr>
-                <td>{{ presence.rollcall.dateStart|date("Y-m-d H:i:s") }}</td>
+                <td class="">{{ presence.lesson.dateStart|date("Y-m-d H:i:s") }}</td>
                 <td>
                     <a href="{{ path('student_show', { 'id': presence.student.id }) }}">{{ presence.student.firstname ~ ' ' ~ presence.student.lastname }}</a>
                 </td>
-                <td>{{ presence.present ? 'Retard de ' ~ presence.late ~ 'm' : 'Absence de ' ~ presence.rollcall.duration ~ 'h' }}</td>
-                <td>{{ presence.excuse ? presence.excuseLabel : '<span class="badge badge-danger">Non justifié</span>' }}</td>
+                <td>{{ presence.present ? 'Retard de ' ~ presence.late|date("Y-m-d H:i:s") ~ 'm' : 'Absence de ' ~ presence.lesson.duration ~ 'h' }}</td>
+                <td>{{ presence.excuseValidated ? presence.excuseDescription : '<span class="badge badge-danger">Non justifié</span>' }}</td>
                 <td>
                     {% if presence.excuseProof is not null %}
                         {{ status|raw }}<br>
@@ -31,9 +31,10 @@
                                 data-status="{{ status|escape }}"
                                 data-justif="{{ path('get_excuse_proof_photo', {'id': presence.id}) }}"
                                 {% if presence.excuseValidated is not null %}data-validate="{{ presence.excuseValidated == true ? '1' : '0' }}"{% endif %}
-                                data-excuse="{{ presence.excuseLabel }}"
+                                data-excuse="{{ presence.excuseDescription }}"
                                 data-csrf="{{ csrf_token('validate' ~ presence.id) }}">Accéder au justificatif
                         </button>
+                         <!--<a href="{{ path('get_excuse_proof_photo', {'id': presence.id}) }}"> Télécharger </a>-->
                     {% endif %}
                 </td>
             </tr>

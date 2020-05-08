@@ -2,8 +2,10 @@
 
 namespace App\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
@@ -14,22 +16,20 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  */
 class StudentPresence
 {
-    const EXCUSES = ['sick', 'family', 'transport', 'work', 'other'];
-
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Serializer\Groups({"Default", "GetRollcall", "Deserialization", "GetStudentPresences"})
+     * @Serializer\Groups({"Default", "Getlesson", "Deserialization", "GetStudentPresences"})
      */
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="RollCall", inversedBy="studentPresences")
+     * @ORM\ManyToOne(targetEntity="Lesson", inversedBy="studentPresences")
      * @ORM\JoinColumn(nullable=false)
      * @Serializer\Groups({"Default", "Deserialization", "GetStudentPresences"})
      */
-    private $rollCall;
+    private $lesson;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Student", inversedBy="presences")
@@ -42,49 +42,40 @@ class StudentPresence
 
     /**
      * @ORM\Column(type="boolean")
-     * @Serializer\Groups({"Default", "GetRollcall", "Deserialization", "GetStudentPresences"})
+     * @Serializer\Groups({"Default", "Getlesson", "Deserialization", "GetStudentPresences"})
      * @Assert\Type("boolean")
      */
     private $present;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
-     * @Serializer\Groups({"Default", "GetRollcall", "Deserialization", "GetStudentPresences"})
-     * @Assert\Type("integer")
+     * @ORM\Column(type="datetime", nullable=true)
+     * @var \DateTime
+     * @Serializer\Groups({"Default", "Getlesson", "Deserialization", "GetStudentPresences"})
+     * @Assert\DateTime()
      * @Assert\GreaterThan(0)
      */
     private $late;
 
     /**
-     * @Vich\UploadableField(mapping="excuses_photos", fileNameProperty="excuseProof")
-     * @var File
-     * @Assert\File(
-     *      maxSize="5242880",
-     *      mimeTypes = {
-     *          "image/png",
-     *          "image/jpeg",
-     *          "image/jpg",
-     *      }
-     * )
-     * @Serializer\Exclude()
+     *@ORM\Column(type="string", nullable=true)
      */
     private $photoFile;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Serializer\Groups({"Default", "GetRollcall", "Deserialization", "GetStudentPresences"})
+     * @Serializer\Groups({"Default", "Getlesson", "Deserialization", "GetStudentPresences"})
      */
-    private $excuse; // TODO : Constantes + Possibilité d'entrer un intitulé manuellement ?
+    private $excuseDescription; // TODO : Constantes + Possibilité d'entrer un intitulé manuellement ?
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Serializer\Groups({"Default", "GetRollcall", "Deserialization", "GetStudentPresences"})
+     * @Serializer\Groups({"Default", "Getlesson", "Deserialization", "GetStudentPresences"})
      */
     private $excuseProof; // TODO Lien vers le justificatif uploadé ?
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
-     * @Serializer\Groups({"Default", "GetRollcall", "Deserialization", "GetStudentPresences"})
+     * @Serializer\Groups({"Default", "Getlesson", "Deserialization", "GetStudentPresences"})
      * @Assert\Type("boolean")
      */
     private $excuseValidated;
@@ -94,21 +85,21 @@ class StudentPresence
         return $this->id;
     }
 
-    public function getRollcall(): ?RollCall
+    public function getlesson(): ?Lesson
     {
-        return $this->rollCall;
+        return $this->lesson;
     }
 
-    public function setRollcall(?RollCall $rollCall): self
+    public function setlesson(?Lesson $lesson): self
     {
-        $this->rollCall = $rollCall;
+        $this->lesson = $lesson;
 
         return $this;
     }
 
     /**
      * @Serializer\VirtualProperty("getStudent")
-     * @Serializer\Groups({"GetRollcall"})
+     * @Serializer\Groups({"Getlesson"})
      * @Serializer\Type("App\Entity\Student")
      * @Serializer\MaxDepth(1)
      * @return Student|null
@@ -137,43 +128,26 @@ class StudentPresence
         return $this;
     }
 
-    public function getLate(): ?int
+    public function getLate(): ?DateTime
     {
         return $this->late;
     }
 
-    public function setLate(?int $late): self
+    public function setLate(?DateTime $late): self
     {
         $this->late = $late;
 
         return $this;
     }
 
-    public function getExcuseLabel(): string
+    public function getExcuseDescription(): ?string
     {
-        switch ($this->excuse) {
-            case 'sick':
-                return 'Malade';
-            case 'family':
-                return 'Raison familiale';
-            case 'transport':
-                return 'Problème de transport';
-            case 'work':
-                return 'Raison professionnelle';
-            case 'other':
-            default:
-                return 'Autre raison';
-        }
+        return $this->excuseDescription;
     }
 
-    public function getExcuse(): ?string
+    public function setExcuseDescription(?string $excuseDescription): self
     {
-        return $this->excuse;
-    }
-
-    public function setExcuse(?string $excuse): self
-    {
-        $this->excuse = $excuse;
+        $this->excuseDescription = $excuseDescription;
 
         return $this;
     }
@@ -207,9 +181,9 @@ class StudentPresence
         return $this->photoFile;
     }
 
-    public function setPhotoFile(File $excuseProof = null)
+    public function setPhotoFile($photoFile = null)
     {
-        $this->photoFile = $excuseProof;
+        $this->photoFile = $photoFile;
         return $this;
     }
 }

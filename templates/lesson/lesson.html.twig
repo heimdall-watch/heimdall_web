@@ -1,0 +1,141 @@
+{% extends 'responsive.html.twig' %}
+
+{% block title %}{{ parent() }} - Feuille d'appel{% endblock %}
+
+{% block body %}
+        <div class="table-wrapper center">
+            <div>
+                <div class="table-title" >
+                    <h3>Feuille d'appel</h3>
+                    <div class="infobulle flex-container">
+                        <div class="flex-1">
+                            <h5 class="infobulle--title"><strong>Informations :</strong></h5>
+                            <p>
+                                <span>Vous trouverez dans cette page toutes les personnes participant à votre cours.</span><br>
+                                <span>Par défaut, tous les étudiants sont marqués absent. Vous pourrez  valider chacun d'entre en cliquant sur Présent.</span><br>
+                                <span>Le retard se déverouille Lorsqu'un étudiant est marqué présent. Veuillez écrire leur retard en minutes.</span><br>
+                            </p>
+                            <p>
+                                <span>Une fois votre appel ou votre cours terminée, cliquer sur Valider.</span><br>
+                                <span><strong>Attention</strong>, une fois votre appel validé, il est impossible de revenir dessus.</span>
+                            </p>
+                        </div>
+                        <div class="icon-right">
+                            <svg class="bi bi-layout-text-sidebar-reverse" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" d="M2 1h12a1 1 0 011 1v12a1 1 0 01-1 1H2a1 1 0 01-1-1V2a1 1 0 011-1zm12-1a2 2 0 012 2v12a2 2 0 01-2 2H2a2 2 0 01-2-2V2a2 2 0 012-2h12z" clip-rule="evenodd"/>
+                                <path fill-rule="evenodd" d="M5 15V1H4v14h1zm8-11.5a.5.5 0 00-.5-.5h-5a.5.5 0 000 1h5a.5.5 0 00.5-.5zm0 3a.5.5 0 00-.5-.5h-5a.5.5 0 000 1h5a.5.5 0 00.5-.5zm0 3a.5.5 0 00-.5-.5h-5a.5.5 0 000 1h5a.5.5 0 00.5-.5zm0 3a.5.5 0 00-.5-.5h-5a.5.5 0 000 1h5a.5.5 0 00.5-.5z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex-container">
+                    <div class="flex-container flex-1 align-items--center">
+                        <div class="flex1">
+                            <p><strong>Matière</strong> : {{ lesson.name }}</p>
+                            <p><strong>Promotion</strong> : {{ lesson.classGroup.name }}</p>
+                        </div>
+                        <div class="flex1 description-date ">
+                            <p><strong>Date de début</strong> : {{ lesson.dateStart|date('d-m-Y h:m') }}</p>
+                            <p><strong>Date de fin</strong> : {{ lesson.dateEnd|date('d-m-Y h:m') }}</p>
+                        </div>
+                        <div style="margin-left: auto">
+                            <button id="submit" class="btn btn-success">Valider l'appel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <table class="table table-bordered center">
+                    <thead>
+                        <tr class="line-rollcall">
+                            <th >Etudiant</th>
+                            <th >Présent</th>
+                            <th >Absent</th>
+                            <th >Retard</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for student in lesson.classGroup.students %}
+                            {% set presence = null %}
+                            {% if lesson.studentPresences != null %}
+                                {% for pres in lesson.studentPresences %}
+                                    {% if pres.student.id == student.id %}
+                                        {% set presence = pres %}
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                            <tr class="line-rollcall">
+                                <form class="formPresence" method="POST" action="{{ path('presence_new') }}">
+                                    <td >
+                                        {{student.firstname ~ ' ' ~ student.lastname}} 
+                                        <input type="hidden" name="id_student" value={{student.id}} />
+                                        <input type="hidden" name="id_lesson" value={{lesson.id}} />
+                                    </td>
+                                    {% if presence != null and presence.present == true %}
+                                        <td >
+                                            <input type="radio" class="radio" id={{"presentRadio" ~ student.id}} name="present" value="true" checked/>
+                                        </td>
+                                        <td >
+                                            <input type="radio" class="radio" id={{"absentRadio" ~ student.id}} name="present" value="false" />
+                                        </td>
+                                        {% if presence.late != null %}
+                                            {% set late = date(presence.late).diff(date(lesson.dateStart))%}
+                                            <td >
+                                                <input type="number" id={{"late" ~ student.id}} class="inputNumber" name="late" value={{late.i}} min=0 />
+                                            </td>
+                                        {% else %}
+                                            <td >
+                                                <input type="number" id={{"late" ~ student.id}} class="inputNumber" name="late" value=0 min=0 />
+                                            </td>
+                                        {% endif %}
+                                    {% else %}
+                                        <td >
+                                            <input type="radio" class="radio" id={{"presentRadio" ~ student.id}} name="present" value="true" />
+                                        </td>
+                                        <td >
+                                            <input type="radio" class="radio" id={{"absentRadio" ~ student.id}} name="present"  value="false" checked/>
+                                        </td>
+                                        <td >
+                                            <input type="number" class="inputNumber" id={{"late" ~ student.id}} name="late" value=0 min=0 disabled/>
+                                        </td>
+                                    {% endif %}
+                                </form>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    <script>
+        $('#submit').click(function (){
+            $(".formPresence").each(function(){
+                $.ajax({
+                    type: "POST",
+                    url: "new",
+                    data: $(this).serialize(),
+                });
+            })
+            alert("Appel enregistré");
+        })
+
+        $(".radio").click(function(){
+            var id = $(this).attr('id');
+            if(id.indexOf("presentRadio") == 0){
+                var idField = id.replace("presentRadio", "late");
+                $('#'+idField).prop("disabled", false);
+            }
+            else if(id.indexOf("absentRadio") == 0){
+                var idField = id.replace("absentRadio", "late");
+                $('#'+idField).prop("disabled", true);
+                $('#'+idField).prop("value", 0);
+            }
+        })
+
+        $('.formPresence').keydown(function (e) {
+            if (e.keyCode == 13) {
+                e.preventDefault();
+                return false;
+            }
+        });
+    </script>
+{% endblock %}

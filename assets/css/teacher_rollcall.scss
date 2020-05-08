@@ -1,0 +1,32 @@
+.div-creneaux {
+  border: 1px solid darkslategrey;
+  border-radius: 5px;
+  width: 80%;
+  background-color: #F2FCFC !important;
+  text-align: left;
+
+  &-left {
+    margin-left: 2% !important;
+    margin-top: 2% !important;
+  }
+
+  &-right {
+    margin-right: 5%;
+  }
+}
+
+.margin10 {
+  margin: 10px 10px;
+}
+
+.margin10auto {
+  margin: 10px auto;
+}
+
+.creneau-title {
+  margin-left: 5%;
+}
+
+.description-date {
+  margin-left: 5% !important;
+}
