@@ -41,11 +41,11 @@ services:
             - {name: 'doctrine.orm.entity_listener' , event: 'prePersist' , entity: 'App\Entity\User' }
             - {name: 'doctrine.orm.entity_listener' , event: 'preFlush' , entity: 'App\Entity\User' }
 
-    rollcall_listener:
-        class: App\EventListener\RollCallListener
+    lesson_listener:
+        class: App\EventListener\LessonListener
         arguments: ["@onesignal.api"]
         tags:
-          - {name: 'doctrine.orm.entity_listener' , event: 'postPersist' , entity: 'App\Entity\RollCall' }
+          - {name: 'doctrine.orm.entity_listener' , event: 'postPersist' , entity: 'App\Entity\Lesson' }
 
     serializer_handler.entity_id:
         class: App\Handler\EntityIdHandler

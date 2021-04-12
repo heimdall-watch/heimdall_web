@@ -18,13 +18,13 @@ abstract class User implements UserInterface
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Serializer\Groups({"Default", "GetRollcall", "Deserialization", "GetClassStudents"})
+     * @Serializer\Groups({"Default", "Getlesson", "Deserialization", "GetClassStudents"})
      */
     protected $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
-     * @Serializer\Groups({"Default", "GetRollcall", "Deserialization", "GetClassStudents"})
+     * @Serializer\Groups({"Default", "Getlesson", "Deserialization", "GetClassStudents"})
      */
     protected $username;
 
@@ -62,13 +62,13 @@ abstract class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=100)
-     * @Serializer\Groups({"Default", "GetRollcall", "Deserialization", "GetClassStudents"})
+     * @Serializer\Groups({"Default", "Getlesson", "Deserialization", "GetClassStudents"})
      */
     private $firstname;
 
     /**
      * @ORM\Column(type="string", length=100)
-     * @Serializer\Groups({"Default", "GetRollcall", "Deserialization", "GetClassStudents"})
+     * @Serializer\Groups({"Default", "Getlesson", "Deserialization", "GetClassStudents"})
      */
     private $lastname;
 

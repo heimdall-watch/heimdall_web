@@ -32,12 +32,11 @@ class Student extends User
      */
     private $presences;
 
-
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Serializer\Groups({"Default", "GetRollcall", "Deserialization", "GetClassStudents"})
+     * @Serializer\Groups({"Default", "Getlesson", "Deserialization", "GetClassStudents"})
      */
-    private $photo;
+    private $photoDescription;
 
     /**
      * @Vich\UploadableField(mapping="students_photos", fileNameProperty="photo")
@@ -82,6 +81,8 @@ class Student extends User
 
     /**
      * @return Collection|StudentPresence[]
+     *
+     * Carefull here : a presence can be an absence (????)
      */
     public function getPresences(): Collection
     {
@@ -123,20 +124,27 @@ class Student extends User
 
         return $this;
     }
+
+    //TODO: MAKE THIS WORK
     public function getPhotoFile()
     {
         return $this->photoFile;
     }
 
-    public function setPhoto($photo)
+    /**
+     * @return mixed
+     */
+    public function getPhotoDescription()
     {
-        $this->photo = $photo;
-        return $this;
+        return $this->photoDescription;
     }
 
-    public function getPhoto()
+    /**
+     * @param mixed $photoDescription
+     */
+    public function setPhotoDescription($photoDescription): void
     {
-        return $this->photo;
+        $this->photoDescription = $photoDescription;
     }
 
     /**

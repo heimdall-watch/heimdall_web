@@ -5,27 +5,42 @@ namespace App\DataFixtures;
 use App\Entity\Admin;
 use App\Entity\Auth\Client;
 use App\Entity\ClassGroup;
-use App\Entity\RollCall;
+use App\Entity\Lesson;
 use App\Entity\Student;
 use App\Entity\StudentPresence;
 use App\Entity\Teacher;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Persistence\ObjectManager;
 
 class DevFixtures extends Fixture
 {
 
     public function load(ObjectManager $manager)
-    {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           $this      and
+    {
         // Brahim
         $brahim = new Admin();
         $brahim->setUsername("Brahim")
             ->setFirstname("Brahim")
             ->setLastname("LASTNAME")
             ->setEmail("sosthen.gaillard@gmail.com")
-            ->setRoles(['ROLE_SUPER_ADMIN'])
+            ->setRoles(['ROLE_ADMIN'])
             ->setPlainPassword("brahim");
         $manager->persist($brahim);
+
+        // Brahim
+        $admin = new Admin();
+        $admin->setUsername("admin")
+            ->setFirstname("admin")
+            ->setLastname("admin")
+            ->setEmail("admin.admin@gmail.com")
+            ->setRoles(['ROLE_ADMIN'])
+            ->setPlainPassword("admin");
+        $manager->persist($brahim);
+
+        $admins = new ArrayCollection();
+        $admins->add($admin);
+        $admins->add($brahim);
 
         // Student 1
         $sosthen = new Student();
@@ -66,7 +81,11 @@ class DevFixtures extends Fixture
 
         // Group MIAGE
         $miage = new ClassGroup();
-        $miage->setName('M2 Classique');
+        $miage->setName('M2 Classique')
+            ->setFormation('Miage')
+            ->setUFR('SEGMI')
+            ->setUniversity("Paris Nanterre")
+            ->setAdmins($admins);
         $manager->persist($miage);
 
         // Group M2 APP
@@ -76,7 +95,11 @@ class DevFixtures extends Fixture
             ->addStudent($julie)
             ->addStudent($flo)
             ->addStudent($loic)
-            ->addStudent($samyh);
+            ->addStudent($samyh)
+            ->setFormation('Miage')
+            ->setUFR('SEGMI')
+            ->setUniversity("Paris Nanterre")
+            ->setAdmins($admins);
         $manager->persist($m2App);
 
         for ($i = 0; $i < 10; $i++) {
@@ -100,88 +123,116 @@ class DevFixtures extends Fixture
             ->setPlainPassword("jfpp");
         $manager->persist($jfpp);
 
-        // Rollcall 1
+        // lesson 1
         $date = new \DateTime();
-        $rollcallTest = new RollCall();
-        $rollcallTest->setClassGroup($m2App)
+        $lessonTest = new Lesson();
+        $lessonTest->setClassGroup($m2App)
                     ->setTeacher($jfpp)
+                    ->setName('IDD')
                     ->setDateStart(clone $date)
                     ->setDateEnd((clone $date)->modify('+ 2 hours'));
-        $manager->persist($rollcallTest);
+        $manager->persist($lessonTest);
 
-        // Rollcall 4
+        // lesson 4
         $date = new \DateTime('3 days ago');
-        $rollcallTest4 = new RollCall();
-        $rollcallTest4->setClassGroup($m2App)
+        $lessonTest4 = new Lesson();
+        $lessonTest4->setClassGroup($m2App)
             ->setTeacher($jfpp)
+            ->setName('GDA')
             ->setDateStart(clone $date)
             ->setDateEnd((clone $date)->modify('+ 2 hours'));
-        $manager->persist($rollcallTest4);
+        $manager->persist($lessonTest4);
 
-        // Rollcall 5
+        // lesson 5
         $date = new \DateTime('9 days ago');
-        $rollcallTest5 = new RollCall();
-        $rollcallTest5->setClassGroup($m2App)
+        $lessonTest5 = new Lesson();
+        $lessonTest5->setClassGroup($m2App)
             ->setTeacher($jfpp)
+            ->setName('MSI')
             ->setDateStart(clone $date)
             ->setDateEnd((clone $date)->modify('+ 3 hours'));
-        $manager->persist($rollcallTest5);
+        $manager->persist($lessonTest5);
 
-        // Rollcall 6
+        // lesson 6
         $date = new \DateTime('5 days ago');
-        $rollcallTest6 = new RollCall();
-        $rollcallTest6->setClassGroup($m2App)
+        $lessonTest6 = new Lesson();
+        $lessonTest6->setClassGroup($m2App)
             ->setTeacher($jfpp)
+            ->setName('PROCS')
             ->setDateStart(clone $date)
             ->setDateEnd((clone $date)->modify('+ 4 hours'));
-        $manager->persist($rollcallTest6);
+        $manager->persist($lessonTest6);
 
-        // Rollcall 2
+        // lesson 2
         $date = new \DateTime();
-        $rollcallTest2 = new RollCall();
-        $rollcallTest2->setClassGroup($m2App)
+        $lessonTest2 = new Lesson();
+        $lessonTest2->setClassGroup($m2App)
             ->setTeacher($jfpp)
+            ->setName('EBS')
             ->setDateStart($date)
             ->setDateEnd((clone $date)->modify('+ 6 hours'));
-        $manager->persist($rollcallTest2);
+        $manager->persist($lessonTest2);
 
-        // Rollcall 3
+        // lesson 3
         $date = new \DateTime();
-        $rollcallTest3 = new RollCall();
-        $rollcallTest3->setClassGroup($m2App)
+        $lessonTest3 = new Lesson();
+        $lessonTest3->setClassGroup($m2App)
             ->setTeacher($jfpp)
+            ->setName('Projet')
             ->setDateStart($date)
             ->setDateEnd((clone $date)->modify('+ 2 hours'));
-        $manager->persist($rollcallTest3);
+        $manager->persist($lessonTest3);
 
         // Student Presence 1
         $presenceTest1 = new StudentPresence();
         $presenceTest1->setStudent($sosthen)
                     ->setPresent(false)
-                    ->setRollcall($rollcallTest);
+                    ->setlesson($lessonTest);
         $manager->persist($presenceTest1);
 
         // Student Presence 2
         $presenceTest2 = new StudentPresence();
         $presenceTest2->setStudent($sosthen)
             ->setPresent(false)
-            ->setRollcall($rollcallTest2);
+            ->setlesson($lessonTest2);
         $manager->persist($presenceTest2);
 
         // Student Presence 3
         $presenceTest3 = new StudentPresence();
         $presenceTest3->setStudent($sosthen)
             ->setPresent(true)
-            ->setRollcall($rollcallTest3);
+            ->setlesson($lessonTest3);
         $manager->persist($presenceTest3);
 
-        // Student Presence 3
+        // Student Presence 4
         $presenceTest4 = new StudentPresence();
         $presenceTest4->setStudent($sosthen)
             ->setPresent(true)
-            ->setLate(20)
-            ->setRollcall($rollcallTest4);
+            ->setLate(new \DateTime())
+            ->setlesson($lessonTest4);
         $manager->persist($presenceTest4);
+
+        // Student Presence 5
+        $presenceTest5 = new StudentPresence();
+        $presenceTest5->setStudent($julie)
+            ->setPresent(true)
+            ->setLate(new \DateTime())
+            ->setlesson($lessonTest4)
+            ->setExcuseDescription("transport")
+            ->setExcuseProof("un papier de la sncf")
+            ->setExcuseValidated(FALSE);
+        $manager->persist($presenceTest5);
+
+        // Student Presence 6
+        $presenceTest6 = new StudentPresence();
+        $presenceTest6->setStudent($julie)
+            ->setPresent(true)
+            ->setLate(new \DateTime())
+            ->setlesson($lessonTest5)
+            ->setExcuseDescription("transport")
+            ->setExcuseProof("un papier de la sncf")
+            ->setExcuseValidated(TRUE);
+        $manager->persist($presenceTest6);
 
         $manager->flush();
     }

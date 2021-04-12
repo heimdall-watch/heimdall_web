@@ -2,12 +2,15 @@
 
 namespace App\Controller\Api;
 
+use App\Entity\Lesson;
 use App\Entity\Student;
+use App\Entity\StudentPresence;
 use App\Entity\User;
 use App\Form\StudentImageType;
 use App\HttpFoundation\File\ApiUploadedFile;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -73,7 +76,7 @@ class StudentController extends UserController
 
         $this->getDoctrine()->getManager()->flush();
 
-        if ($student->getPhotoFile() === null) {
+        if ($student->getPhoto() === null) {
             throw new NotFoundHttpException("La photo n'existe pas");
         }
 
@@ -95,4 +98,51 @@ class StudentController extends UserController
             throw $this->createAccessDeniedException('You do not have access to this photo.');
         }
     }
+
+    /**
+     * @Rest\Get("/{id}/attendances", name="get_attendances")
+     * @param Request $request
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function getStudentName(Request $request, int $id) {
+        $em = $this->getDoctrine()->getManager();
+
+        /** @var Student $student */
+        $student = $em->getRepository(Student::class)->find($id);
+
+        if ($student === null) {
+            return new JsonResponse('Student not found', 404);
+        }
+
+        $response = [];
+        $response['student']['id'] = $student->getId();
+        $response['student']['username'] = $student->getUsername();
+        $response['student']['firstname'] = $student->getFirstname();
+        $response['student']['lastname'] = $student->getLastname();
+        $response['student']['role'] = $student->getRoles();
+
+        /** @var StudentPresence $presences */
+        $presences = $student->getPresences();
+
+        /** @var StudentPresence $presence */
+        foreach ($presences as $presence) {
+            if (!$presence->getPresent() || ($presence->getPresent() && !is_null($presence->getLate()))) {
+                /** @var Lesson $lesson */
+                $lesson = $presence->getLesson();
+                $lessonName = $lesson->getName();
+                $response['student'][$lessonName]['id'] = $lesson->getId();
+                $response['student'][$lessonName]['schedule']['beginning'] = $lesson->getDateStart();
+                $response['student'][$lessonName]['schedule']['ending'] = $lesson->getDateEnd();
+                $response['student'][$lessonName]['attendance']['presence'] = $presence->getPresent();
+                $response['student'][$lessonName]['attendance']['excuse']['description'] = $presence->getExcuseDescription();
+                $response['student'][$lessonName]['attendance']['excuse']['proof'] = $presence->getExcuseProof();
+                $response['student'][$lessonName]['attendance']['excuse']['isValidated'] = $presence->getExcuseValidated();
+                $response['student'][$lessonName]['attendance']['delay'] = $presence->getLate();
+            }
+        }
+
+        return new JsonResponse($response, 500);
+    }
+
 }
